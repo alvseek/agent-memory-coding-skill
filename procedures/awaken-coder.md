@@ -12,10 +12,10 @@ Orchestrating overlay for **coding agents** (working in a repo). It composes the
 
 1. **Run core awakening** — invoke the memory core `/awaken-agent [domain]` (Phase 1 identity + Phase 2 **central** memory + report). This loads identity, reasoning, emotional, knowledge, the latest **central** episodic entry, and **central** project context.
 
-2. **Resolve localized home** — apply [Localized Home Resolution](localize-context.md#localized-home-resolution) for the current project (cwd). If the central map frontmatter has `home: project`:
-   - **Episodic** ([ADR-011](//@agent-memory/docs/adr/2026-07-21-localized-episodic-index-repo-authoritative.md)): read the repo index `.agents/session/index.md` (authoritative, newest-first); take its **top** entry → read that theme file from `.agents/session/`. **This supersedes** the central episodic the core loaded. **Reachability guard**: if `.agents/session/` is absent at cwd → report *"[project] is localized but not checked out here"* + skip open items.
-   - **Context** ([ADR-010](//@agent-memory/docs/adr/2026-07-13-work-product-memory-localization.md)): shared entries resolve to `<project-root>/docs/`, private to `<project-root>/.agents/knowledge/` (instead of the central paths the core loaded).
-   - For memory **writes** this session, follow [localized-memory-workflow.md](localized-memory-workflow.md).
+2. **Resolve localized home** — apply /localize-context for the current project (cwd). If the central map frontmatter has `home: project`:
+   - **Episodic**: read the repo index `.agents/session/index.md` (authoritative, newest-first); take its **top** entry → read that theme file from `.agents/session/`. **This supersedes** the central episodic the core loaded. **Reachability guard**: if `.agents/session/` is absent at cwd → report *"[project] is localized but not checked out here"* + skip open items.
+   - **Context**: shared entries resolve to `<project-root>/docs/`, private to `<project-root>/.agents/knowledge/` (instead of the central paths the core loaded).
+   - For memory **writes** this session, follow /localized-memory-workflow.
 
 3. **Orientation map** — attempt `shared-memory/[PROJECT-NAME]/fleet-agents.md` (silently skip if missing). Call `/map-orientation` (bare, load-only) to load the orientation map if it exists — never auto-create.
 

@@ -27,7 +27,7 @@ Create the directory if it doesn't exist:
 ### Step 3: Create Fleet Agents File
 
 Copy the template and replace the project name:
-- Source: `[AGENT-MEMORY-PATH]/agent-memory-coding-skill/templates/fleet-agents-template.md`
+- Source: `[path-to-agent-memory-coding-skill]/templates/fleet-agents-template.md`
 - Target: `[AGENT-MEMORY-PATH]/shared-memory/[project-name]/fleet-agents.md`
 
 Replace `{PROJECT-NAME}` with the actual project name.

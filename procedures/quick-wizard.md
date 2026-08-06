@@ -21,7 +21,7 @@ If no arguments provided, ask: "What feature or task should I create a Quick Wiz
 
 This is where the thinking happens. Follow the investigation checklist below IN ORDER. Each step from 3-7 produces decision items for the WAIT Options form.
 
-Read and follow the [WAIT Options format](//@agent-memory/agent-memory-coding-skill/procedures/wait-options.md) for collecting decisions.
+Read and follow the /wait-options for collecting decisions.
 
 **Investigation checklist (in order):**
 
@@ -48,13 +48,13 @@ After investigation, assess whether this task is suitable for Quick Wizard (dire
 - Task requires evaluating multiple solution approaches with formal comparison (high-wizard section F)
 - Task produces an architecture decision record (high-wizard sections F+G)
 
-**If escalating**: Tell [USER-NAME] "This task is complex enough to benefit from /high-wizard — escalating with the decisions I've already collected." Then execute [High Wizard Protocol](//@agent-memory/agent-memory-coding-skill/procedures/high-wizard.md) starting from Step 7 (decisions already collected). STOP HERE — do not continue with Quick Wizard steps.
+**If escalating**: Tell [USER-NAME] "This task is complex enough to benefit from /high-wizard — escalating with the decisions I've already collected." Then execute /high-wizard starting from Step 7 (decisions already collected). STOP HERE — do not continue with Quick Wizard steps.
 
 **If suitable for Quick Wizard**: Continue to Step 3.
 
 ### Step 3: Present WAIT Options
 
-Present the WAIT Options form to [USER-NAME] using the [WAIT Options format](//@agent-memory/agent-memory-coding-skill/procedures/wait-options.md).
+Present the WAIT Options form to [USER-NAME] using the /wait-options.
 Preamble: "I've investigated the codebase. Here are the decisions I need before proceeding"
 
 STOP. Present to [USER-NAME] for review. Do NOT proceed until decisions are confirmed.
@@ -84,7 +84,7 @@ After all steps are executed, run **static** code quality review by delegating t
 
 1. **Collect scope**: Identify all files created or modified during execution (from the plan's execution tracking — plan-mode steps or in-conversation tracking). This file list is the **caller-passed scope** for the delegated procedure.
 
-2. **Invoke `/analyze-code-quality`** following the [Analyze Code Quality procedure](//@agent-memory/agent-memory-coding-skill/procedures/analyze-code-quality.md) with these inputs:
+2. **Invoke `/analyze-code-quality`** following the /analyze-code-quality with these inputs:
    - `scope`: the file list collected above
    - `embedded_mode=true`: signals the procedure to skip standalone working-doc creation; findings get embedded into the QW plan's Quality Review section
 
@@ -92,7 +92,7 @@ The delegated procedure will:
 - Run **Scope Reconciliation** (its Step 3) — surface any git-diff vs tracked-scope discrepancies for [USER-NAME] to reconcile
 - **Discover quality standard** (its Step 4) — looks for `**/quality-standard.md`; if found, applies Dimension 8; if not, freeform
 - Walk quality dimensions against the reconciled scope (its Steps 5-6)
-- Present findings via [WAIT Options Quality Review variant](//@agent-memory/agent-memory-coding-skill/procedures/wait-options.md#quality-review-variant) (its Step 7) — preamble: *"Code quality review for implementation:"*
+- Present findings via /wait-options (its Step 7) — preamble: *"Code quality review for implementation:"*
 - **STOP** at the WAIT Options prompt — wait for [USER-NAME]'s response
 - Apply approved fixes and update the QW plan's Quality Review section (its Step 8)
 
@@ -104,7 +104,7 @@ After Quality Review is resolved, run **runtime** verification by delegating to 
 
 1. **Collect scope**: Identify all files created or modified during execution (from the plan's execution tracking — plan-mode steps or in-conversation tracking). This file list is the **caller-passed scope** for the delegated procedure.
 
-2. **Invoke `/integration-test`** following the [Integration Test procedure](//@agent-memory/agent-memory-coding-skill/procedures/integration-test.md) with these inputs:
+2. **Invoke `/integration-test`** following the /integration-test with these inputs:
    - `scope`: the file list collected above
    - `embedded_mode=true`: signals the procedure to write results into the QW plan's Final Integration Test section
 
@@ -112,7 +112,7 @@ The delegated procedure will:
 - **Detect qa/ instrument** (its Step 1) — stop + offer `/setup-qa-instrument` if missing
 - **Identify touched modules** and map to playbooks (its Step 2)
 - **Run R/I/A/O loop per module** (its Step 3): reset → seed → start → act scenarios → smoke → compare
-- Present findings via [WAIT Options Quality Review variant](//@agent-memory/agent-memory-coding-skill/procedures/wait-options.md#quality-review-variant) (its Step 4) — preamble: *"Runtime verification findings:"*
+- Present findings via /wait-options (its Step 4) — preamble: *"Runtime verification findings:"*
 - **STOP** at the WAIT Options prompt — wait for [USER-NAME]'s response
 - Apply approved fixes and re-run affected modules (its Step 5)
 - Log results into the QW plan's `## FINAL INTEGRATION TEST` section (its Step 6)
@@ -143,7 +143,7 @@ Use this structure when writing the plan in plan mode (or presenting in conversa
 [1-2 sentence description of what we're doing and why]
 
 ## Confirmed Decisions
-*Both asked-and-confirmed by [USER-NAME] AND written-through (Zone A/B decisions with reasoning) — see [What to Surface](wait-options.md#what-to-surface).*
+*Both asked-and-confirmed by [USER-NAME] AND written-through (Zone A/B decisions with reasoning) — see /wait-options.*
 
 | # | Decision | Chosen | Reason |
 |---|----------|--------|--------|

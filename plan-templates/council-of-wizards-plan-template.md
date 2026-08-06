@@ -5,7 +5,7 @@
 - **Date**: [YYYY-MM-DD]
 - **Agent**: [Agent Name]
 - **Feature**: [Brief description of the feature being delivered]
-- **Source Protocol**: `/council-of-wizards` — [Procedure](//@agent-memory/agent-memory-coding-skill/procedures/council-of-wizards.md)
+- **Source Protocol**: `/council-of-wizards` — /council-of-wizards
 
 *CRITICAL INSTRUCTION: To continue this plan: load the source protocol above, then inspect which sections below are filled vs unfilled to infer your current step.*
 

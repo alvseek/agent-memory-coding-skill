@@ -22,7 +22,7 @@ flow: "[Flow name]"
 >
 > This is a **flow doc** — it captures ONE flow's *behavior over time* (a sequence). It is NOT a data model (that's a domain/ERD doc) and NOT the component structure (that's an architecture doc).
 >
-> **Placement** (see [ADR-004](//@agent-memory/docs/adr/2026-07-06-docs-placement-contract.md)): a flow doc lives at the **Lowest Common Ancestor** of the files the flow actually runs through. A flow contained in one module co-locates in that module's `docs/flows/`; a flow that spans modules lives at their nearest common ancestor's `docs/flows/`. Never invent a parent folder.
+> **Placement**: a flow doc lives at the **Lowest Common Ancestor** of the files the flow actually runs through. A flow contained in one module co-locates in that module's `docs/flows/`; a flow that spans modules lives at their nearest common ancestor's `docs/flows/`. Never invent a parent folder.
 >
 > **Diagram**: Mermaid. Pick the grammar that fits — `sequenceDiagram` (multi-participant interaction, the default), `flowchart` (branch-heavy single-actor logic), `stateDiagram-v2` (lifecycle / state transitions). For a sharable render, extract the fenced block to `.mmd` and run `mmdc -i flow.mmd -o flow.svg` (vector; avoid raster PNG for dense diagrams).
 >

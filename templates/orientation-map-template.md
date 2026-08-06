@@ -167,9 +167,9 @@ For `type: orientation-map-link` entries: if the entry passes the role filter, A
 
 ## Localization (delete after first fill)
 
-A **consenting** project can graduate its map + structural context into its own repo via [`/localize-context`](../procedures/localize-context.md) (see [ADR-005](../../docs/adr/2026-07-06-project-local-memory-externalization.md)). After graduation:
+A **consenting** project can graduate its map + structural context into its own repo via /localize-context. After graduation:
 
 - The real map lives **in the project repo** at `<project-root>/docs/orientation-map.md` with frontmatter `source_of_truth: project`. Entry paths are **project-root-relative**.
 - Structural context moves **flat** to `<project-root>/docs/` (no `context/` subfolder); the root `AGENTS.md` gets a prose pointer to the map.
-- The **central** `shared-memory/[project]/context/orientation-map.md` becomes a thin **stub** with frontmatter `home: project` + `localized_path: docs/orientation-map.md`. It holds no real entries — it's the fleet breadcrumb + the machine-branch signal that [Localized Home Resolution](../procedures/localize-context.md#localized-home-resolution) keys off (resolved relative to the project cwd).
-- **Two lanes** ([ADR-010](../../docs/adr/2026-07-13-work-product-memory-localization.md)): code-describing artifacts → `docs/` (this map + structural context); **work-product memory** (episodic + project-scoped knowledge) → `.agents/` (opt-in). **Identity** (reasoning / emotion / RAS), **general** knowledge, and business / relationship memory stay fleet-private and central.
+- The **central** `shared-memory/[project]/context/orientation-map.md` becomes a thin **stub** with frontmatter `home: project` + `localized_path: docs/orientation-map.md`. It holds no real entries — it's the fleet breadcrumb + the machine-branch signal that /localize-context keys off (resolved relative to the project cwd).
+- **Two lanes**: code-describing artifacts → `docs/` (this map + structural context); **work-product memory** (episodic + project-scoped knowledge) → `.agents/` (opt-in). **Identity** (reasoning / emotion / RAS), **general** knowledge, and business / relationship memory stay fleet-private and central.

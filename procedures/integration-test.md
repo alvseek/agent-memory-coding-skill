@@ -67,7 +67,7 @@ For each touched module's playbook, run the full loop:
 
 ### Step 4: Present Findings
 
-Any failure becomes a **Critical** finding. Present via [WAIT Options Quality Review variant](//@agent-memory/agent-memory-coding-skill/procedures/wait-options.md#quality-review-variant).
+Any failure becomes a **Critical** finding. Present via /wait-options.
 Preamble: *"Runtime verification findings:"*
 
 **STOP**. Wait for [USER-NAME]'s response.

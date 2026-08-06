@@ -51,7 +51,7 @@ Do NOT send vague or open-ended prompts. Be specific about what you need and wha
 Run the script (blocking):
 
 ```bash
-bash "[AGENT-MEMORY-PATH]/agent-memory-coding-skill/scripts/ask-agent.sh" "[Name|UUID]" "[structured prompt]" "[theme]" "" "[model]"
+bash "[path-to-agent-memory-coding-skill]/scripts/ask-agent.sh" "[Name|UUID]" "[structured prompt]" "[theme]" "" "[model]"
 ```
 
 Pass empty string for the 4th arg (fleet-map — script auto-resolves it). Pass model as 5th arg; use empty string if no model was specified.

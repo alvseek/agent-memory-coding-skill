@@ -1,6 +1,6 @@
 # Generate Quality Standard
 
-Generate a **quality-standard.md** by copying the template into a project, investigating the codebase for conventions, and filling each of the 9 quality dimensions from code. The resulting file is used by Dimension 8 of the [Code Quality Analysis Template](//@agent-memory/agent-memory-coding-skill/plan-templates/code-quality-analysis-template.md) and discovered automatically by wizard protocols and `/analyze-code-quality`.
+Generate a **quality-standard.md** by copying the template into a project, investigating the codebase for conventions, and filling each of the 9 quality dimensions from code. The resulting file is used by Dimension 8 of the [Code Quality Analysis Template]([path-to-agent-memory-coding-skill]/plan-templates/code-quality-analysis-template.md) and discovered automatically by wizard protocols and `/analyze-code-quality`.
 
 ## Arguments
 
@@ -23,7 +23,7 @@ If no arguments provided, use default: `./docs/quality-standard.md`
 
 ### Step 2: Copy Template + Fill Header
 
-1. Read the [Quality Standard Template](//@agent-memory/agent-memory-coding-skill/templates/quality-standard-template.md)
+1. Read the [Quality Standard Template]([path-to-agent-memory-coding-skill]/templates/quality-standard-template.md)
 2. Copy it to the target location (create parent directories if needed)
 3. Fill the **Project Info** section:
    - **Project**: Detect from `package.json` name, `pyproject.toml` name, repo folder name, or ask
@@ -65,7 +65,7 @@ Scan the codebase to discover existing conventions AND identify what's missing. 
 
 ### Step 4: Present WAIT Options
 
-Present the investigation findings to [USER-NAME] using the [WAIT Options format](//@agent-memory/agent-memory-coding-skill/procedures/wait-options.md).
+Present the investigation findings to [USER-NAME] using the /wait-options.
 Preamble: "I've investigated the codebase. Here's what I found and what I recommend"
 
 Before the WAIT Options decisions, list **discovered conventions** (will be written into the standard) summarized per dimension. Then present **recommended additions** (gaps) as WAIT Options decisions, grouped by dimension.

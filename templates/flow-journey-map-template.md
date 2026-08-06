@@ -20,9 +20,9 @@ scope: "[Project / bounded area name]"
 
 > **Documentation Convention** *(delete this section after reading)*
 >
-> This is a **flow journey-map** — the *map altitude* of the flow lens (ADR-007): how flows chain into journeys, not one flow's internals. It is a **content map of the system**, distinct from the orientation map (which is navigation).
+> This is a **flow journey-map** — the *map altitude* of the flow lens: how flows chain into journeys, not one flow's internals. It is a **content map of the system**, distinct from the orientation map (which is navigation).
 >
-> **Placement** (see [ADR-004](//@agent-memory/docs/adr/2026-07-06-docs-placement-contract.md)): the journey-map is project-wide → root `docs/flows/journey-map.md`. The individual flow docs live in the same `docs/flows/` folder.
+> **Placement**: the journey-map is project-wide → root `docs/flows/journey-map.md`. The individual flow docs live in the same `docs/flows/` folder.
 >
 > **Diagram**: Mermaid `flowchart` — flows as nodes, edges = how one flow hands off to the next (`then` / `triggers` / `emits event`). Chains are often implicit (an event one flow emits, another consumes; a redirect on success). `[CONFIRM]` inferred chains.
 

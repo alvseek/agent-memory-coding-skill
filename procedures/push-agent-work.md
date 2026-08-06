@@ -15,7 +15,7 @@ Commit and push **only the agent's own work** — the agent-memory repo (whole) 
 
 > **In-scope repos.** The working project repo, its **owned git submodules** (recurse), and the agent-memory repo (`//@agent-memory/`) with its own submodules. A superproject's `git status` shows a dirty submodule only as a one-line gitlink — it does NOT reveal uncommitted files *inside* the submodule, and `git add` on the gitlink records only the pointer. So you MUST enter each owned submodule and commit/push agent-work **inside it first**, then commit the updated pointer in its superproject. Always process submodules **before** their superproject.
 
-> **Push-exclude list (check first).** Honor the shared [Push Exclude Policy](//@agent-memory/agent-memory-coding-skill/procedures/push-exclude-policy.md) — excluded repos/submodules are never committed or pushed and never counted against completion (`skipped (excluded)`).
+> **Push-exclude list (check first).** Honor the shared /push-exclude-policy — excluded repos/submodules are never committed or pushed and never counted against completion (`skipped (excluded)`).
 
 ### Step 1: Define the Agent-Work Set
 
@@ -23,7 +23,7 @@ Per in-scope repo, the **only** thing this command may commit:
 
 - **agent-memory repo** — entirely the agent's own repo → stage all (`git add -A`).
 - **In each in-scope project repo / owned submodule, stage ONLY**:
-  - `.agents/**` — always agent-owned (localized memory, [ADR-010](//@agent-memory/docs/adr/2026-07-13-work-product-memory-localization.md)).
+  - `.agents/**` — always agent-owned (localized memory).
   - files the agent created/edited **this session** — cross-check the newest episode's `Deliverables` / `Outcomes` plus your own Write/Edit history.
   - agent-produced files from **earlier sessions still uncommitted** — identify from prior episode deliverables and `.agents/` breadcrumbs.
 - 🚨 **NEVER `git add -A` in a project repo.** Stage the agent-work paths explicitly. Every other dirty file is the **user's** — leave it untouched, report it as `left for user`, never commit it.

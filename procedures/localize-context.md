@@ -1,6 +1,6 @@
 # Localize Context
 
-Graduate a **consenting** project's fleet-authored memory OUT of the central `@agent-memory` store and INTO the project's own repository — **structural context → `docs/`** (human-facing, always) and, **opt-in, work-product memory → `.agents/`** (agent-facing). One-time, forward-only. See [ADR-005](//@agent-memory/docs/adr/2026-07-06-project-local-memory-externalization.md) + [ADR-010](//@agent-memory/docs/adr/2026-07-13-work-product-memory-localization.md).
+Graduate a **consenting** project's fleet-authored memory OUT of the central `@agent-memory` store and INTO the project's own repository — **structural context → `docs/`** (human-facing, always) and, **opt-in, work-product memory → `.agents/`** (agent-facing). One-time, forward-only.
 
 **The load-bearing rule — identity stays, work-product travels:**
 - **Work-product travels** — *code-describing* structural context → `docs/`; *episodic + project-scoped knowledge* → `.agents/`.
@@ -20,11 +20,11 @@ Graduate a **consenting** project's fleet-authored memory OUT of the central `@a
 
 ## What Localizes (safety boundary)
 
-**Human lane → `docs/`** (always — ADR-004/005):
+**Human lane → `docs/`** (always):
 - Orientation map (`orientation-map.md`)
 - Structural project-context: architecture overviews, module docs, conventions, flow descriptions, ADR indexes
 
-**Agent lane → `.agents/`** (opt-in — ADR-010):
+**Agent lane → `.agents/`** (opt-in):
 - Episodic memory (`agent-[domain]/episodes/`, project-matched) → `.agents/session/`
 - Project-scoped knowledge (`agent-[domain]/knowledge-base/[project]/`) → `.agents/knowledge/`
 
@@ -48,9 +48,9 @@ Graduate a **consenting** project's fleet-authored memory OUT of the central `@a
    - Project root: the project's working directory on disk (cwd for the active project).
 3. **Guards**:
    - Central map missing → STOP + report: *"No orientation map for [PROJECT] yet — run `/map-orientation create` first, then localize."*
-   - Central map already has `home: project` → the **`docs/` structural lane is already localized**. Do NOT blanket-exit — branch on the **agent lane** (Step 6b, ADR-010):
+   - Central map already has `home: project` → the **`docs/` structural lane is already localized**. Do NOT blanket-exit — branch on the **agent lane** (Step 6b):
      - `<project-root>/.agents/session/` **exists** → both lanes already done → *"[PROJECT] is already fully localized (`docs/` + `.agents/`)."* Exit.
-     - `<project-root>/.agents/session/` **absent** → the docs lane is done but the agent lane was never graduated (e.g. the project was localized before ADR-010 added it). **Skip Steps 2–6 (docs lane already done) and jump straight to [Step 6b](#step-6b-graduate-work-product-memory-opt-in--agent-lane)** to offer graduating episodic + project-scoped knowledge. Report first: *"[PROJECT]'s `docs/` lane is already localized; picking up the newer agent lane (Step 6b)."*
+     - `<project-root>/.agents/session/` **absent** → the docs lane is done but the agent lane was never graduated (e.g. the project was localized before the agent lane was added). **Skip Steps 2–6 (docs lane already done) and jump straight to [Step 6b](#step-6b-graduate-work-product-memory-opt-in--agent-lane)** to offer graduating episodic + project-scoped knowledge. Report first: *"[PROJECT]'s `docs/` lane is already localized; picking up the newer agent lane (Step 6b)."*
 
 > `--status` mode stops here: report localized (map `home: project`) or central-only; if localized, also note whether the agent lane is present (`.agents/` exists), then exit.
 
@@ -105,10 +105,10 @@ Graduate a **consenting** project's fleet-authored memory OUT of the central `@a
 
 ## Step 6b: Graduate Work-Product Memory (opt-in — agent lane)
 
-The `docs/` structural lane (Steps 4–6) is done. Now offer the **agent lane** — episodic + project-scoped knowledge → `.agents/` (see [ADR-010](//@agent-memory/docs/adr/2026-07-13-work-product-memory-localization.md)). This is a **separate** consent: welcoming AI into the repo (`AGENTS.md`) is not the same as publishing the fleet's session history.
+The `docs/` structural lane (Steps 4–6) is done. Now offer the **agent lane** — episodic + project-scoped knowledge → `.agents/`. This is a **separate** consent: welcoming AI into the repo (`AGENTS.md`) is not the same as publishing the fleet's session history.
 
 1. **Opt-in gate** — ask [USER-NAME]:
-   > *"Also graduate this project's **work-product memory** into `.agents/`? This moves episodic session logs + project-scoped knowledge (gathered across all agents) into `<project-root>/.agents/`, leaving a bounded per-project pointer centrally (episodic index becomes repo-authoritative — ADR-011). Identity (reasoning/emotion/RAS), general knowledge, and business/strategy stay fleet-private. Confirm, or skip to keep them central."*
+   > *"Also graduate this project's **work-product memory** into `.agents/`? This moves episodic session logs + project-scoped knowledge (gathered across all agents) into `<project-root>/.agents/`, leaving a bounded per-project pointer centrally (episodic index becomes repo-authoritative). Identity (reasoning/emotion/RAS), general knowledge, and business/strategy stay fleet-private. Confirm, or skip to keep them central."*
 
    If **skipped** → jump to Step 7 (the project is still localized for the `docs/` lane; the agent lane simply isn't graduated).
 
@@ -131,7 +131,7 @@ The `docs/` structural lane (Steps 4–6) is done. Now offer the **agent lane** 
 
 4. **Create layout**: `mkdir -p <project-root>/.agents/session <project-root>/.agents/knowledge`.
 
-5. **Move (copy-verify-delete)** — per ADR-010 merge rules; copy first, verify, THEN delete centrals (minimizes the loss window — not atomic across two repos):
+5. **Move (copy-verify-delete)** — per the merge rules; copy first, verify, THEN delete centrals (minimizes the loss window — not atomic across two repos):
    - **Episodic** (one target file per theme):
      - No collision → copy `agent-X/episodes/[theme].md` → `.agents/session/[theme].md`.
      - Same theme across agents → **merge**: stack sub-episodes newest-first into one `.agents/session/[theme].md` (never clobber).
@@ -142,7 +142,7 @@ The `docs/` structural lane (Steps 4–6) is done. Now offer the **agent lane** 
    - Delete each central original only after its target is verified.
 
 6. **Self-describe** (so external agents/tools reuse it without the fleet's central store):
-   - `.agents/README.md` — one-screen layout explainer: what `session/` + `knowledge/` hold, that they're fleet-authored work-product graduated per ADR-010, what `(agent: …)` attribution means, and that identity memory intentionally stays with the fleet.
+   - `.agents/README.md` — one-screen layout explainer: what `session/` + `knowledge/` hold, that they're fleet-authored work-product graduated, what `(agent: …)` attribution means, and that identity memory intentionally stays with the fleet.
    - `.agents/session/index.md` — `# [PROJECT] Session Log` + one line per theme file (newest-first: agents involved + one-line summary).
    - `.agents/knowledge/index.md` — `# [PROJECT] Project Knowledge` + one line per file (description + source agent(s)).
 
@@ -154,7 +154,7 @@ The `docs/` structural lane (Steps 4–6) is done. Now offer the **agent lane** 
    ```
 
 8. **Central traces** — in EACH contributing agent's `agent-memory-index.md` / knowledge index, leave a permanent trace (do NOT delete the memory of the work):
-   - Episodic ([ADR-011](//@agent-memory/docs/adr/2026-07-21-localized-episodic-index-repo-authoritative.md)): do **not** keep per-theme entries and do **not** repoint each one. Collapse them into **one** bounded pointer in a `## Localized Projects` subsection: `- [PROJECT](→ <project>/.agents/session/index.md) — localized YYYY-MM-DD (index in repo). Latest: [theme] (YYYY-MM-DD)`. The **repo** `.agents/session/index.md` is the authoritative newest-first index (MOVE-TO-TODAY applies there); the central pointer is a fleet-trace only, never the read source.
+   - Episodic: do **not** keep per-theme entries and do **not** repoint each one. Collapse them into **one** bounded pointer in a `## Localized Projects` subsection: `- [PROJECT](→ <project>/.agents/session/index.md) — localized YYYY-MM-DD (index in repo). Latest: [theme] (YYYY-MM-DD)`. The **repo** `.agents/session/index.md` is the authoritative newest-first index (MOVE-TO-TODAY applies there); the central pointer is a fleet-trace only, never the read source.
    - Knowledge: keep the repoint in the `# Core Knowledge Base` (or project-context) index (unchanged).
    - Traces are **permanent** — the fleet still remembers *what it did* even if the repo isn't checked out.
 
@@ -194,7 +194,7 @@ Summarize **both lanes**: `docs/` structural files moved vs stayed (with reasons
 
 ## Localized Home Resolution
 
-**The canonical rule** — defined here once, consumed by `/map-orientation` (all modes), `/update-project-context` (shared scope), and the **work-product memory** procedures (`/load-episodic`, `/update-episodic`, `/load-knowledge`, `/update-knowledge`, awakening, proactive loading) per [ADR-010](//@agent-memory/docs/adr/2026-07-13-work-product-memory-localization.md). Never applies to **identity** memory (reasoning, emotion, RAS), **general** (cross-project) knowledge, or business/strategy — those are always central.
+**The canonical rule** — defined here once, consumed by `/map-orientation` (all modes), `/update-project-context` (shared scope), and the **work-product memory** procedures (`/load-episodic`, `/update-episodic`, `/load-knowledge`, `/update-knowledge`, awakening, proactive loading). Never applies to **identity** memory (reasoning, emotion, RAS), **general** (cross-project) knowledge, or business/strategy — those are always central.
 
 Given a project:
 
@@ -205,8 +205,8 @@ Given a project:
      - `PROJECT_ROOT` = the project's working directory (cwd for the active project)
      - `MAP_PATH` = `<PROJECT_ROOT>/<localized_path>` (default `docs/orientation-map.md`)
      - `CONTEXT_DIR` = `<PROJECT_ROOT>/docs/`
-     - `SESSION_DIR` = `<PROJECT_ROOT>/.agents/session/` — localized **episodic**; its `index.md` is the authoritative episodic index-of-record ([ADR-011](//@agent-memory/docs/adr/2026-07-21-localized-episodic-index-repo-authoritative.md) — the central store keeps only a bounded `## Localized Projects` pointer) (ADR-010)
-     - `KNOWLEDGE_DIR` = `<PROJECT_ROOT>/.agents/knowledge/` — localized **project-scoped** knowledge (ADR-010)
+     - `SESSION_DIR` = `<PROJECT_ROOT>/.agents/session/` — localized **episodic**; its `index.md` is the authoritative episodic index-of-record (the central store keeps only a bounded `## Localized Projects` pointer)
+     - `KNOWLEDGE_DIR` = `<PROJECT_ROOT>/.agents/knowledge/` — localized **project-scoped** knowledge
      - `SOURCE_OF_TRUTH` = `project`
    - else → **(central)**
      - `MAP_PATH` = `shared-memory/[project]/context/orientation-map.md`
@@ -215,29 +215,29 @@ Given a project:
      - `KNOWLEDGE_DIR` = `agent-[domain]/knowledge-base/[project]/` (per-agent central — unchanged)
      - `SOURCE_OF_TRUTH` = `central`
 4. Consumers operate on the resolved `(MAP_PATH, CONTEXT_DIR, SESSION_DIR, KNOWLEDGE_DIR)`. Resolution keys off **cwd**, never an absolute or cross-store relative path — this is what makes localization machine-portable across the different filesystem locations of the fleet store vs a client repo.
-5. **Reachability guard (localized only)**: if `home: project` but the needed resolved dir (`SESSION_DIR` / `KNOWLEDGE_DIR` / `MAP_PATH`) does not exist on disk, the project is localized but its bundle isn't checked out at cwd → **report** *"[PROJECT] is localized but `.agents/` (or `docs/`) isn't here — wrong cwd, or the bundle isn't checked out"* and **STOP**. Never fall back to a central write — that silently re-forks the single home (ADR-010).
+5. **Reachability guard (localized only)**: if `home: project` but the needed resolved dir (`SESSION_DIR` / `KNOWLEDGE_DIR` / `MAP_PATH`) does not exist on disk, the project is localized but its bundle isn't checked out at cwd → **report** *"[PROJECT] is localized but `.agents/` (or `docs/`) isn't here — wrong cwd, or the bundle isn't checked out"* and **STOP**. Never fall back to a central write — that silently re-forks the single home.
 
 ---
 
 ## Non-Goals (this iteration)
 
 - **De-localization / reversal** — forward-only. Add a reverse flow only if a real engagement needs it.
-- **Localizing identity memory** (reasoning, emotion, RAS), **general** (cross-project) knowledge, or **business / strategy / relationship** context — the preserved safety boundary; these never localize. (ADR-010 narrowed ADR-005's boundary to identity-vs-work-product: episodic + project-scoped knowledge now DO localize, into `.agents/`.)
+- **Localizing identity memory** (reasoning, emotion, RAS), **general** (cross-project) knowledge, or **business / strategy / relationship** context — the preserved safety boundary; these never localize. (The boundary is identity-vs-work-product: episodic + project-scoped knowledge DO localize, into `.agents/`.)
 - **Sub-map fractal localization** — the root map + its context localize; existing sub-maps keep their placement.
 
 ## Integration With Other Procedures
 
-- **[map-orientation](map-orientation.md)** — consumes Localized Home Resolution in its Prelude (all modes read/write the resolved `MAP_PATH`/`CONTEXT_DIR`). `.agents/` is a hidden folder, so its C2 scan already skips it — the agent lane never pollutes the map.
-- **[update-project-context](memory/update-project-context.md) / [load-project-context](memory/load-project-context.md)** — shared scope resolves to `docs/`; **private scope resolves to `.agents/knowledge/`** when localized (ADR-010). These are the real project-scoped knowledge writer/reader.
-- **[update-episodic](memory/update-episodic.md) / [load-episodic](memory/load-episodic.md)** — episodic files **and the index** resolve to `SESSION_DIR` when localized; the repo `.agents/session/index.md` is the read/write/archive index-of-record, and central keeps one bounded `## Localized Projects` pointer ([ADR-011](//@agent-memory/docs/adr/2026-07-21-localized-episodic-index-repo-authoritative.md)).
-- **[update-knowledge](memory/update-knowledge.md) / [load-knowledge](memory/load-knowledge.md)** — general knowledge stays central; project-scoped resolves to `KNOWLEDGE_DIR` (`.agents/knowledge/`) via `/update-project-context`.
-- **[wrap-up](wrap-up.md)** — inherits via `/map-orientation --session-touched` + `/update-episodic` (no direct change).
-- **[awaken-agent](awaken-agent.md)** — Phase 2 resolves the localized **shared context-index** (`docs/`), **episodic** (`.agents/session/`), and **private project knowledge** (`.agents/knowledge/`) via Localized Home Resolution; the orientation map is resolved separately by `/map-orientation` (bare) at load.
+- **/map-orientation** — consumes Localized Home Resolution in its Prelude (all modes read/write the resolved `MAP_PATH`/`CONTEXT_DIR`). `.agents/` is a hidden folder, so its C2 scan already skips it — the agent lane never pollutes the map.
+- **/update-project-context / /load-project-context** — shared scope resolves to `docs/`; **private scope resolves to `.agents/knowledge/`** when localized. These are the real project-scoped knowledge writer/reader.
+- **/update-episodic / /load-episodic** — episodic files **and the index** resolve to `SESSION_DIR` when localized; the repo `.agents/session/index.md` is the read/write/archive index-of-record, and central keeps one bounded `## Localized Projects` pointer.
+- **/update-knowledge / /load-knowledge** — general knowledge stays central; project-scoped resolves to `KNOWLEDGE_DIR` (`.agents/knowledge/`) via `/update-project-context`.
+- **/wrap-up** — inherits via `/map-orientation --session-touched` + `/update-episodic` (no direct change).
+- **/awaken-agent** — Phase 2 resolves the localized **shared context-index** (`docs/`), **episodic** (`.agents/session/`), and **private project knowledge** (`.agents/knowledge/`) via Localized Home Resolution; the orientation map is resolved separately by `/map-orientation` (bare) at load.
 
 ## Anti-Patterns
 
-1. **Moving IDENTITY memory into a repo** — reasoning, emotion, RAS, **general** (cross-project) knowledge, and business/strategy/relationship never localize. (Episodic + project-scoped knowledge DO — into `.agents/` — per ADR-010.)
-2. **Dual home** — leaving a full central map AND an in-project map. Central must become a stub. Same for work-product: content **and the episodic index** move to `.agents/`; central keeps only a stub / bounded pointer, never a full mirror ([ADR-011](//@agent-memory/docs/adr/2026-07-21-localized-episodic-index-repo-authoritative.md)).
+1. **Moving IDENTITY memory into a repo** — reasoning, emotion, RAS, **general** (cross-project) knowledge, and business/strategy/relationship never localize. (Episodic + project-scoped knowledge DO — into `.agents/`.)
+2. **Dual home** — leaving a full central map AND an in-project map. Central must become a stub. Same for work-product: content **and the episodic index** move to `.agents/`; central keeps only a stub / bounded pointer, never a full mirror.
 3. **Boolean consent flag in `AGENTS.md`** — use presence + a prose pointer; a boolean duplicates filesystem state and can lie.
 4. **Absolute or cross-store relative paths in the stub** — breaks portability; resolution keys off cwd.
 5. **Auto-moving ambiguous files** — classification pauses for confirmation; never move on assumption.

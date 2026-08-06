@@ -2,7 +2,7 @@
 
 Shared contract for the **bare discovery mode** of the four doc generators (`/generate-readme`, `/generate-flow-docs`, `/generate-domain-docs`, `/generate-architecture-docs`). This file is the single source of truth for *how discovery behaves*; each generator references it and supplies only its **lens-specific unit-scan**. Format, status-join, the relevance floor, and map-as-pick are defined once here so they cannot drift across the four skills.
 
-Per [ADR-008](//@agent-memory/docs/adr/2026-07-09-discovery-first-generation.md): bare invocation **discovers** (lists a documented-vs-not inventory) instead of auto-generating; the human then generates one deep-dive at a time. The whole-system map is a pick, not the bare default.
+Bare invocation **discovers** (lists a documented-vs-not inventory) instead of auto-generating; the human then generates one deep-dive at a time. The whole-system map is a pick, not the bare default.
 
 ---
 
@@ -50,8 +50,8 @@ Uniform across all four lenses:
 **Disk is authoritative for existence; the orientation map enriches status.**
 
 1. **Existence** — a unit is *documented* iff a deep-dive doc for it exists on disk (glob the lens's `docs/` folder — `docs/flows/`, `docs/domain/`, `docs/architecture/`, or the README location).
-2. **Richer status** — read the orientation map (via the `MAP_PATH` resolved by [map-orientation](map-orientation.md)'s Prelude) for each entry's `status` (useful / stale-but-valuable / unverified) and attach it.
-3. **Staleness flag** — if a doc exists on disk but is **absent from the map**, mark it `⚠ on disk, not in map` and suggest `/map-orientation --rescan`. (Discovery is how map staleness surfaces — ADR-008.)
+2. **Richer status** — read the orientation map (via the `MAP_PATH` resolved by /map-orientation's Prelude) for each entry's `status` (useful / stale-but-valuable / unverified) and attach it.
+3. **Staleness flag** — if a doc exists on disk but is **absent from the map**, mark it `⚠ on disk, not in map` and suggest `/map-orientation --rescan`. (Discovery is how map staleness surfaces.)
 4. **No map** — if `MAP_EXISTS = false`, discovery still works from disk alone; note that the map is missing.
 
 ## (c) Relevance Floor
@@ -59,12 +59,12 @@ Uniform across all four lenses:
 A unit earns a listed (non-collapsed) line only if a deep-dive would reveal **structure that isn't already obvious**. Each generator supplies a **cheap structural signal** (no full trace — that would defeat cheap discovery); units failing it are bucketed **trivial** and collapsed.
 
 - **Cheap, not deep** — decide from light signals (participant / entity / component count, branch presence), never by generating the doc.
-- **Collapse, never drop** — trivial units appear as one summarizing line with a count + reason. The human can override and document any of them. (No silent caps — ADR-008.)
+- **Collapse, never drop** — trivial units appear as one summarizing line with a count + reason. The human can override and document any of them. (No silent caps.)
 - **The floor is the lower bound** — each lens's existing **readability ceiling** (README 500 lines; domain / architecture ~15–20; the map altitudes' equivalent) is the *upper* bound that splits oversized units. Discovery is bounded on both ends.
 
 ## (d) Map As a Pick
 
-The whole-system **map altitude** (`flow-journey-map` / `domain-context-map` / `architecture-map`; for README, the project `docs/README.md`) is offered as the `[M]` inventory item — **never auto-synthesized on bare**. Picking `[M]` runs the map synthesis that the generator relocated out of bare. (Supersedes ADR-007's bare→map default.)
+The whole-system **map altitude** (`flow-journey-map` / `domain-context-map` / `architecture-map`; for README, the project `docs/README.md`) is offered as the `[M]` inventory item — **never auto-synthesized on bare**. Picking `[M]` runs the map synthesis that the generator relocated out of bare. (Supersedes the earlier bare→map default.)
 
 ## (e) Discovery Is a Proposal
 
@@ -83,7 +83,7 @@ This contract fixes the shared behavior; each generator defines its lens-specifi
 | **Cheap relevance signal** | the light structural test for the floor |
 | **Map pick** | which map-altitude artifact `[M]` synthesizes |
 
-Reference values (the authoritative list lives in each generator + the [doc-generation family ADRs](//@agent-memory/docs/adr/2026-07-07-doc-generation-family-architecture.md)):
+Reference values (the authoritative list lives in each generator):
 
 | Lens | Unit | Disk scan | Cheap relevance floor | `[M]` map |
 |---|---|---|---|---|
@@ -92,7 +92,7 @@ Reference values (the authoritative list lives in each generator + the [doc-gene
 | Architecture (aspect) | an architectural concern | seed the aspect checklist + mark from signals | lone config / no multi-component → "not detected" | `architecture-map` |
 | README | a documentable scope | glob README locations + scan module folders | empty / trivial module | project `docs/README.md` |
 
-> **Architecture note**: the **aspect** axis is name-addressed and uses this discovery menu (bare). The **subsystem** axis is scope-addressed — a folder path, with **no discovery menu** (the repo tree is the menu). See [generate-architecture-docs](generate-architecture-docs.md).
+> **Architecture note**: the **aspect** axis is name-addressed and uses this discovery menu (bare). The **subsystem** axis is scope-addressed — a folder path, with **no discovery menu** (the repo tree is the menu). See /generate-architecture-docs.
 
 ---
 
@@ -110,6 +110,5 @@ Discovery does NOT run the orientation map's write modes and does NOT generate a
 
 ## Integration
 
-- **[map-orientation](map-orientation.md)** — supplies documented-status (`MAP_PATH`, per-entry `status`). Discovery reads it; a disk/map mismatch flags a stale map.
+- **/map-orientation** — supplies documented-status (`MAP_PATH`, per-entry `status`). Discovery reads it; a disk/map mismatch flags a stale map.
 - **The four generators** — reference this contract for their bare discovery mode.
-- **[ADR-008](//@agent-memory/docs/adr/2026-07-09-discovery-first-generation.md)** — the decision this contract implements.

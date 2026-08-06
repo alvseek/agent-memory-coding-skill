@@ -2,7 +2,7 @@
 
 Maintain a per-project index of orientation artifacts (READMEs, architecture docs, flow diagrams, ADRs, sub-project maps) with staleness + role tracking.
 
-Map file: `shared-memory/[PROJECT-NAME]/context/orientation-map.md`. Format: [orientation-map-template.md](../templates/orientation-map-template.md).
+Map file: `shared-memory/[PROJECT-NAME]/context/orientation-map.md`. Format: [orientation-map-template.md]([path-to-agent-memory-coding-skill]/templates/orientation-map-template.md).
 
 ---
 
@@ -22,8 +22,8 @@ Map file: `shared-memory/[PROJECT-NAME]/context/orientation-map.md`. Format: [or
 
 1. **Identify project** — match cwd against known project mappings (`shared-memory/[project]/` existence + `shared-memory/integrations/external-integrations.md` task-system mapping). If a project-name arg is passed, use it. If neither: skip silently.
 2. **Compute central map path** — `//@agent-memory/shared-memory/[PROJECT-NAME]/context/orientation-map.md`. Record `CENTRAL_MAP_EXISTS`.
-3. **Resolve localized home** — apply the [Localized Home Resolution](localize-context.md#localized-home-resolution) rule:
-   - `CENTRAL_MAP_EXISTS` **and** its frontmatter has `home: project` → the project is **localized** (see [ADR-005](//@agent-memory/docs/adr/2026-07-06-project-local-memory-externalization.md)). Set:
+3. **Resolve localized home** — apply the /localize-context rule:
+   - `CENTRAL_MAP_EXISTS` **and** its frontmatter has `home: project` → the project is **localized**. Set:
      - `MAP_PATH` = `<project-root>/<localized_path>` (default `docs/orientation-map.md`; `project-root` = cwd)
      - `CONTEXT_DIR` = `<project-root>/docs/`
      - `SOURCE_OF_TRUTH` = project
@@ -89,7 +89,7 @@ Orientation map loaded: [MAP_PATH]
 
 **Scan scope**: project root (depth 1), **all `**/docs/` folders recursive** (any depth, bounded by the skip-list below), optional submodule roots (depth 1 each). The recursive `**/docs/` glob is what catches co-located module docs (e.g. `src/orders/docs/`) per the Placement Contract.
 
-> **Placement Contract** (see [ADR-004](//@agent-memory/docs/adr/2026-07-06-docs-placement-contract.md)): docs follow **scope = location** — module docs co-locate in `[module]/docs/`; cross-cutting docs live at the **Lowest Common Ancestor** of what they interconnect (ADRs bias to root `/docs/adr/`). This map is the **navigation layer** — it indexes docs wherever they physically sit and is where flow/playbook ordering is imposed without moving files.
+> **Placement Contract**: docs follow **scope = location** — module docs co-locate in `[module]/docs/`; cross-cutting docs live at the **Lowest Common Ancestor** of what they interconnect (ADRs bias to root `/docs/adr/`). This map is the **navigation layer** — it indexes docs wherever they physically sit and is where flow/playbook ordering is imposed without moving files.
 
 **File patterns** (case-insensitive):
 - `README*.md`
@@ -173,7 +173,7 @@ Use `head -20` / first 500 chars only. Do NOT read full file content.
 
 ### C6: Write map (+ sub-maps)
 
-Copy [orientation-map-template.md](../templates/orientation-map-template.md) to the map path. Populate frontmatter:
+Copy [orientation-map-template.md]([path-to-agent-memory-coding-skill]/templates/orientation-map-template.md) to the map path. Populate frontmatter:
 
 ```yaml
 ---
@@ -283,11 +283,11 @@ Used by **Load Mode L2** when reading entries:
 
 ## Integration With Other Procedures
 
-- **[awaken-agent](awaken-agent.md)** — calls `/map-orientation` (bare, load-only) after project detection.
-- **[wrap-up](wrap-up.md)** — calls `/map-orientation --session-touched [paths]` for orientation docs the session touched. Silent no-op if map missing.
-- **[update-project-context](memory/update-project-context.md)** — preferred path when a session DISCOVERED an entry's status is wrong. Direct edit; mtime check picks it up on next awakening.
-- **[localize-context](localize-context.md)** — graduates a consenting project's map + structural context into its own repo (`docs/`). Sets the central map's `home: project` frontmatter that the Prelude resolves. After localization, all modes here operate on the in-project `MAP_PATH` transparently.
-- **[discovery-contract](discovery-contract.md)** — the four doc generators' bare **discovery mode** reads this map (per-entry `status`, via the resolved `MAP_PATH`) to mark units documented-vs-not. A doc on disk that is absent from the map surfaces there as a staleness flag (→ `--rescan`).
+- **/awaken-agent** — calls `/map-orientation` (bare, load-only) after project detection.
+- **/wrap-up** — calls `/map-orientation --session-touched [paths]` for orientation docs the session touched. Silent no-op if map missing.
+- **/update-project-context** — preferred path when a session DISCOVERED an entry's status is wrong. Direct edit; mtime check picks it up on next awakening.
+- **/localize-context** — graduates a consenting project's map + structural context into its own repo (`docs/`). Sets the central map's `home: project` frontmatter that the Prelude resolves. After localization, all modes here operate on the in-project `MAP_PATH` transparently.
+- **/discovery-contract** — the four doc generators' bare **discovery mode** reads this map (per-entry `status`, via the resolved `MAP_PATH`) to mark units documented-vs-not. A doc on disk that is absent from the map surfaces there as a staleness flag (→ `--rescan`).
 
 ---
 

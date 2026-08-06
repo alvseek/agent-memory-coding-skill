@@ -23,7 +23,7 @@ domain: "[Scope / bounded-context name]"
 >
 > This is a **domain doc** — it captures ONE data model's *structure at rest* (entities + relationships). It is NOT a behavior sequence (that's a flow doc) and NOT the component/deployment structure (that's an architecture doc).
 >
-> **Placement** (see [ADR-004](//@agent-memory/docs/adr/2026-07-06-docs-placement-contract.md)): a domain doc lives at the **Lowest Common Ancestor** of the entity files it covers. A model contained in one module co-locates in that module's `docs/domain/`; a model shared across modules lives at their nearest common ancestor's `docs/domain/`. Never invent a parent folder.
+> **Placement**: a domain doc lives at the **Lowest Common Ancestor** of the entity files it covers. A model contained in one module co-locates in that module's `docs/domain/`; a model shared across modules lives at their nearest common ancestor's `docs/domain/`. Never invent a parent folder.
 >
 > **Diagram**: Mermaid. `erDiagram` (default — entities + relationships + cardinality) for data/persistence models; `classDiagram` for behavior-rich OO domains (aggregates with methods, inheritance). Show **key fields + relationship-bearing fields**, not every column — the full schema lives in the migrations/entities you link to. For a sharable render, extract the fenced block to `.mmd` and run `mmdc -i model.mmd -o model.svg` (vector; avoid raster PNG for dense diagrams).
 >

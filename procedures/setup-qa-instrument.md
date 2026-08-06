@@ -2,7 +2,7 @@
 
 Establish a reliable QA feedback loop for a project. Investigates the project's existing reset/inject/act/observe pieces, identifies gaps, then codifies them into 4 artifact types: **playbook(s)**, **run-script framework**, **aggregation manifest**, and **config templates**. Works across any stack — the loop is universal, the implementations are project-specific.
 
-> *Output (`qa/` folder) is consumed by [`/integration-test`](integration-test.md) — the runtime verification procedure — invoked from the **Final Integration Test** step in [`/high-wizard`](high-wizard.md) (Step 17), [`/quick-wizard`](quick-wizard.md) (Step 8), and [`/pixel-wizard`](pixel-wizard.md) (Step 19), or standalone for ad-hoc runtime checks.*
+> *Output (`qa/` folder) is consumed by /integration-test — the runtime verification procedure — invoked from the **Final Integration Test** step in /high-wizard (Step 17), /quick-wizard (Step 8), and /pixel-wizard (Step 19), or standalone for ad-hoc runtime checks.*
 
 ## The Universal QA Loop
 

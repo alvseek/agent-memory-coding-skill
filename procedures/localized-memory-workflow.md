@@ -1,8 +1,8 @@
 # Localized Memory Workflow (coding overlay)
 
-The localized behavior lifted out of the memory-core primitives (Decision A). A coding agent applies this **only when the current project is localized** (`home: project`, per [Localized Home Resolution](localize-context.md#localized-home-resolution)). Otherwise the core's central behavior stands unchanged.
+The localized behavior lifted out of the memory-core primitives (Decision A). A coding agent applies this **only when the current project is localized** (`home: project`, per /localize-context). Otherwise the core's central behavior stands unchanged.
 
-Localization is **behavioral**, not just path-based (ADR-010/011): the repo owns the authoritative index, entries flat-merge across agents, and archives live repo-side. This doc is the override the coding agent follows for each memory operation on a localized project.
+Localization is **behavioral**, not just path-based: the repo owns the authoritative index, entries flat-merge across agents, and archives live repo-side. This doc is the override the coding agent follows for each memory operation on a localized project.
 
 ## Storage resolution
 
@@ -44,4 +44,4 @@ For a localized project, the storage-location resolver returns **repo-side** pat
 
 ## Graduation
 
-Promoting a project to localized (creating `.agents/` + moving memory in) is `/localize-context`'s job — see [localize-context.md](localize-context.md).
+Promoting a project to localized (creating `.agents/` + moving memory in) is `/localize-context`'s job — see /localize-context.

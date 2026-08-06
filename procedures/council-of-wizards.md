@@ -19,7 +19,7 @@ If no arguments provided, ask: "What feature should I create a Council of Wizard
 
 ### Step 1: Read Template
 
-Read the [Council of Wizards Plan Template](//@agent-memory/agent-memory-coding-skill/plan-templates/council-of-wizards-plan-template.md) file
+Read the [Council of Wizards Plan Template]([path-to-agent-memory-coding-skill]/plan-templates/council-of-wizards-plan-template.md) file
 
 ### Step 2: Check Date
 
@@ -36,7 +36,7 @@ cp {source} ./plans/[YYYY-MM-DD]-[project]-[feature]/core-plan.md
 
 ### Step 4: Fill Feature Info
 
-Fill the [Feature Info](//@agent-memory/agent-memory-coding-skill/plan-templates/council-of-wizards-plan-template.md#feature-info) section (Project, Date, Agent, Feature description)
+Fill the [Feature Info]([path-to-agent-memory-coding-skill]/plan-templates/council-of-wizards-plan-template.md#feature-info) section (Project, Date, Agent, Feature description)
 
 ### Step 5: Investigate Feature + Prepare WAIT Options
 
@@ -47,13 +47,13 @@ Investigate the feature to understand what [USER-NAME] wants delivered. This hap
 2. **Identify all parts** — What distinct pieces need to be built? (data models, APIs, UI, infrastructure, migrations, etc.)
 3. **Research context** — Scan relevant codebase, architecture, and existing patterns
 
-Read and follow the [WAIT Options format](//@agent-memory/agent-memory-coding-skill/procedures/wait-options.md) for collecting requirement decisions.
+Read and follow the /wait-options for collecting requirement decisions.
 
 Be exhaustive — missing a requirement here means a missing sub-plan later.
 
 ### Step 6: Present Requirements WAIT Options
 
-Present the requirements to [USER-NAME] using the [WAIT Options format](//@agent-memory/agent-memory-coding-skill/procedures/wait-options.md).
+Present the requirements to [USER-NAME] using the /wait-options.
 Preamble: "Based on my investigation, here's what I think you want"
 
 STOP. Present to [USER-NAME] for review. Do NOT fill any tables or proceed until [USER-NAME] confirms the requirements.
@@ -62,7 +62,7 @@ STOP. Present to [USER-NAME] for review. Do NOT fill any tables or proceed until
 
 After [USER-NAME] confirms the WAIT Options, fill the formal plan sections:
 
-1. **Fill Requirements Breakdown table** — Convert confirmed WAIT Options into the [Requirements Breakdown](//@agent-memory/agent-memory-coding-skill/plan-templates/council-of-wizards-plan-template.md#requirements-breakdown) table (R1, R2, R3... with descriptions)
+1. **Fill Requirements Breakdown table** — Convert confirmed WAIT Options into the [Requirements Breakdown]([path-to-agent-memory-coding-skill]/plan-templates/council-of-wizards-plan-template.md#requirements-breakdown) table (R1, R2, R3... with descriptions)
 
 2. **Fill Scope Gate** — Evaluate the confirmed requirements against the scope gate criteria:
 
@@ -71,7 +71,7 @@ After [USER-NAME] confirms the WAIT Options, fill the formal plan sections:
    - Feature requires **integration contracts** between parts (one plan produces what another consumes)
    - Scope is **too large for a single `/high-wizard`** to cover without losing detail
 
-   Fill the [Scope Gate](//@agent-memory/agent-memory-coding-skill/plan-templates/council-of-wizards-plan-template.md#scope-gate) section with assessment.
+   Fill the [Scope Gate]([path-to-agent-memory-coding-skill]/plan-templates/council-of-wizards-plan-template.md#scope-gate) section with assessment.
 
 3. **Present both** to [USER-NAME] for review.
 
@@ -94,16 +94,16 @@ Before decomposing into sub-plans, investigate the codebase and feature context 
 4. **Parallel strategy** — Which sub-plans can run concurrently? Any hard sequential dependencies?
 5. **Conflicts and constraints** — Are there requirements that must be in the same sub-plan? Cross-cutting concerns?
 
-Read and follow the [WAIT Options format](//@agent-memory/agent-memory-coding-skill/procedures/wait-options.md) for collecting decomposition decisions.
+Read and follow the /wait-options for collecting decomposition decisions.
 
 ### Step 9: Present Decomposition WAIT Options
 
-Present the decomposition decisions to [USER-NAME] using the [WAIT Options format](//@agent-memory/agent-memory-coding-skill/procedures/wait-options.md).
+Present the decomposition decisions to [USER-NAME] using the /wait-options.
 Preamble: "Here are the decomposition decisions I need before breaking this into sub-plans"
 
 STOP. Present to [USER-NAME] for review. Do NOT proceed to decomposition until decisions are confirmed.
 
-After confirmation, fill the [Confirmed Decisions](//@agent-memory/agent-memory-coding-skill/plan-templates/council-of-wizards-plan-template.md#confirmed-decisions) table with all confirmed decisions (with any changes [USER-NAME] made). Include the meaningful reasons — this IS the analysis record.
+After confirmation, fill the [Confirmed Decisions]([path-to-agent-memory-coding-skill]/plan-templates/council-of-wizards-plan-template.md#confirmed-decisions) table with all confirmed decisions (with any changes [USER-NAME] made). Include the meaningful reasons — this IS the analysis record.
 
 ### Step 10: Sub-Plan Decomposition
 
@@ -115,7 +115,7 @@ Group the confirmed requirements into sub-plans, **informed by the confirmed dec
 - Name sub-plan files inside the council folder: `SP-[N]-[subplan-name].md` (e.g., `SP-1-api-endpoints.md`)
 - Assign IDs: SP-1, SP-2, SP-3...
 
-Fill the [Sub-Plans Table](//@agent-memory/agent-memory-coding-skill/plan-templates/council-of-wizards-plan-template.md#sub-plans-table).
+Fill the [Sub-Plans Table]([path-to-agent-memory-coding-skill]/plan-templates/council-of-wizards-plan-template.md#sub-plans-table).
 
 **CRITICAL**: If any NEW decision is discovered during decomposition that was not covered in Step 9, STOP immediately. Present the new decision to [USER-NAME] with the same format (options + confidence + reason) before continuing. Do NOT write ahead on assumptions.
 
@@ -130,7 +130,7 @@ Identify what data, interfaces, or outputs flow between sub-plans. For each inte
    - **JSON Schema** — for data shape contracts
    - **Other YAML** — for custom contracts (config files, migration scripts, etc.)
 3. **Create contract file** — Write the YAML contract file at `contracts/[contract-name].yaml` inside the council folder
-4. **Fill contracts table** — Link each contract in the [Integration Contracts](//@agent-memory/agent-memory-coding-skill/plan-templates/council-of-wizards-plan-template.md#integration-contracts) table
+4. **Fill contracts table** — Link each contract in the [Integration Contracts]([path-to-agent-memory-coding-skill]/plan-templates/council-of-wizards-plan-template.md#integration-contracts) table
 
 Create the contracts directory inside the council folder if needed:
 `mkdir -p ./plans/[council-folder]/contracts`
@@ -148,7 +148,7 @@ Create a mermaid dependency graph showing sub-plan relationships.
 - Identify **parallel opportunities** — sub-plans with no dependency between them can run concurrently in separate agent sessions
 - Identify **critical path** — the longest sequential chain determines minimum total time
 
-Fill the [Dependency Graph](//@agent-memory/agent-memory-coding-skill/plan-templates/council-of-wizards-plan-template.md#dependency-graph) section with the mermaid diagram, parallel opportunities, and critical path.
+Fill the [Dependency Graph]([path-to-agent-memory-coding-skill]/plan-templates/council-of-wizards-plan-template.md#dependency-graph) section with the mermaid diagram, parallel opportunities, and critical path.
 
 **CRITICAL**: Same rule — if any NEW decision is discovered during dependency analysis, STOP immediately and present it before continuing.
 
@@ -178,7 +178,7 @@ STOP. Present to [USER-NAME] for review. Do NOT proceed until confirmed. If [USE
 
 ### Step 14: Fill Execution Log
 
-Create placeholder rows in the [Execution Log](//@agent-memory/agent-memory-coding-skill/plan-templates/council-of-wizards-plan-template.md#execution-log) for each sub-plan from the confirmed Sub-Plans Table.
+Create placeholder rows in the [Execution Log]([path-to-agent-memory-coding-skill]/plan-templates/council-of-wizards-plan-template.md#execution-log) for each sub-plan from the confirmed Sub-Plans Table.
 
 ### Step 15: Final Review
 
@@ -208,7 +208,7 @@ After [USER-NAME] instructs to start, execute sub-plans following the dependency
 ### Step 17: Feature Completion
 
 After all sub-plans are DONE:
-1. Run through the [Feature Completion Checklist](//@agent-memory/agent-memory-coding-skill/plan-templates/council-of-wizards-plan-template.md#feature-completion-checklist)
+1. Run through the [Feature Completion Checklist]([path-to-agent-memory-coding-skill]/plan-templates/council-of-wizards-plan-template.md#feature-completion-checklist)
 2. Verify all integration contracts (check "Verified" column)
 3. Present completion summary to [USER-NAME]
 

@@ -29,7 +29,7 @@ scope: "[Scope name — whole project, or the subsystem]"
 > - **architecture-map** (`doc_type: architecture-map`) — the WHOLE system as components/containers. A handful of boxes + how they connect. Not internals.
 > - **architecture-overview** (`doc_type: architecture-overview`) — ONE subsystem's internal structure (layers, key modules). Don't mix altitudes.
 >
-> **Placement** (see [ADR-004](//@agent-memory/docs/adr/2026-07-06-docs-placement-contract.md)): a map is project-root-scoped (`docs/architecture/`); an overview lives at its subsystem's LCA. Never invent a parent folder.
+> **Placement**: a map is project-root-scoped (`docs/architecture/`); an overview lives at its subsystem's LCA. Never invent a parent folder.
 >
 > **Diagram**: Mermaid. `flowchart` (default — component boxes + labelled dependency arrows) for most; `C4Context`/`C4Container` when the system has clear external actors + containers. Show *how components connect + deploy* (the value), not just a list. For a sharable render, extract the fenced block to `.mmd` and run `mmdc -i arch.mmd -o arch.svg`.
 >

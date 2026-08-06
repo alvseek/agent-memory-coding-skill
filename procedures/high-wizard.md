@@ -27,7 +27,7 @@ If no arguments provided, ask: "What feature or task should I create a High Wiza
 
 ### Step 1: Read Template
 
-Read the [High Wizard Plan Template](//@agent-memory/agent-memory-coding-skill/plan-templates/high-wizard-plan-template.md) file
+Read the [High Wizard Plan Template]([path-to-agent-memory-coding-skill]/plan-templates/high-wizard-plan-template.md) file
 
 ### Step 2: Check Date
 
@@ -41,13 +41,13 @@ Copy the template file to the `/plans` folder with the final name:
 
 ### Step 4: Fill Project Info
 
-Fill the [Project Info](//@agent-memory/agent-memory-coding-skill/plan-templates/high-wizard-plan-template.md#project-info) section only (Project, Date, Agent, Theme)
+Fill the [Project Info]([path-to-agent-memory-coding-skill]/plan-templates/high-wizard-plan-template.md#project-info) section only (Project, Date, Agent, Theme)
 
 ### Step 5: Investigate and Collect Decisions
 
 This is where the thinking happens - NOT in the plan document. Follow the investigation checklist below IN ORDER. Each step from 3-7 produces decision items for the WAIT Options form.
 
-Read and follow the [WAIT Options format](//@agent-memory/agent-memory-coding-skill/procedures/wait-options.md) for collecting decisions.
+Read and follow the /wait-options for collecting decisions.
 
 **Investigation checklist (in order):**
 
@@ -62,22 +62,22 @@ Read and follow the [WAIT Options format](//@agent-memory/agent-memory-coding-sk
 
 ### Step 6: Present WAIT Options
 
-Present the WAIT Options form to [USER-NAME] using the [WAIT Options format](//@agent-memory/agent-memory-coding-skill/procedures/wait-options.md).
+Present the WAIT Options form to [USER-NAME] using the /wait-options.
 Preamble: "I've investigated the codebase. Here are the decisions I need before planning"
 
 STOP. Present to [USER-NAME] for review. Do NOT write any plan sections until decisions are confirmed.
 
 ### Step 7: Fill Objectives + Success Criteria
 
-Fill the [Objectives](//@agent-memory/agent-memory-coding-skill/plan-templates/high-wizard-plan-template.md#objectives) and [Success Criteria](//@agent-memory/agent-memory-coding-skill/plan-templates/high-wizard-plan-template.md#success-criteria) sections
+Fill the [Objectives]([path-to-agent-memory-coding-skill]/plan-templates/high-wizard-plan-template.md#objectives) and [Success Criteria]([path-to-agent-memory-coding-skill]/plan-templates/high-wizard-plan-template.md#success-criteria) sections
 
 ### Step 8: Fill Scope
 
-Fill the [Scope](//@agent-memory/agent-memory-coding-skill/plan-templates/high-wizard-plan-template.md#scope) section (In Scope / Out of Scope)
+Fill the [Scope]([path-to-agent-memory-coding-skill]/plan-templates/high-wizard-plan-template.md#scope) section (In Scope / Out of Scope)
 
 ### Step 9: Fill Confirmed Decisions
 
-Record all confirmed decisions (with any changes [USER-NAME] made) in the [Confirmed Decisions](//@agent-memory/agent-memory-coding-skill/plan-templates/high-wizard-plan-template.md#confirmed-decisions) section. Include the meaningful reasons - this IS the analysis record.
+Record all confirmed decisions (with any changes [USER-NAME] made) in the [Confirmed Decisions]([path-to-agent-memory-coding-skill]/plan-templates/high-wizard-plan-template.md#confirmed-decisions) section. Include the meaningful reasons - this IS the analysis record.
 
 ### Step 10: Early Review
 
@@ -124,12 +124,12 @@ STOP. Present Step 10 to [USER-NAME] for review. Do NOT write the solution until
 
 ### Step 11: Fill Solution
 
-Fill the [Solution](//@agent-memory/agent-memory-coding-skill/plan-templates/high-wizard-plan-template.md#solution) section. Build directly from confirmed decisions.
+Fill the [Solution]([path-to-agent-memory-coding-skill]/plan-templates/high-wizard-plan-template.md#solution) section. Build directly from confirmed decisions.
 
 **Optional sections**: Only fill the optional sections (A-G) that were confirmed in Step 10. Remove unconfirmed optional section markers and their placeholder content from the plan file — do not leave empty optional sections.
 
 **ADR file creation**: If section G is confirmed, after filling all plan sections:
-1. Copy the [ADR Template](//@agent-memory/agent-memory-coding-skill/templates/adr-template.md) to the project's ADR location
+1. Copy the [ADR Template]([path-to-agent-memory-coding-skill]/templates/adr-template.md) to the project's ADR location
 2. Fill it using content from section F (Solution Options & Evaluation) and the Confirmed Decisions table
 3. Link the ADR back to this plan file
 4. Update the plan's section G with the ADR file path
@@ -138,7 +138,7 @@ Fill the [Solution](//@agent-memory/agent-memory-coding-skill/plan-templates/hig
 
 ### Step 12: Fill Implementation Phases
 
-Fill the [Implementation Phases](//@agent-memory/agent-memory-coding-skill/plan-templates/high-wizard-plan-template.md#implementation-phases) section.
+Fill the [Implementation Phases]([path-to-agent-memory-coding-skill]/plan-templates/high-wizard-plan-template.md#implementation-phases) section.
 
 **CRITICAL**: Same rule - if any NEW decision is discovered during writing, STOP immediately and present it before continuing.
 
@@ -185,7 +185,7 @@ After all implementation phases are done and logged, run **static** code quality
 
 1. **Collect scope**: Identify all files created or modified during implementation from this plan's Execution Log. This file list is the **caller-passed scope** for the delegated procedure.
 
-2. **Invoke `/analyze-code-quality`** following the [Analyze Code Quality procedure](//@agent-memory/agent-memory-coding-skill/procedures/analyze-code-quality.md) with these inputs:
+2. **Invoke `/analyze-code-quality`** following the /analyze-code-quality with these inputs:
    - `scope`: the file list collected above (from Execution Log)
    - `embedded_mode=true`: signals the procedure to skip standalone working-doc creation; findings get embedded into this plan's Quality Review section
 
@@ -193,7 +193,7 @@ The delegated procedure will:
 - Run **Scope Reconciliation** (its Step 3) — surface any git-diff vs Execution Log discrepancies for [USER-NAME] to reconcile
 - **Discover quality standard** (its Step 4) — looks for `**/quality-standard.md`; if found, applies Dimension 8; if not, freeform
 - Walk quality dimensions against the reconciled scope (its Steps 5-6)
-- Present findings via [WAIT Options Quality Review variant](//@agent-memory/agent-memory-coding-skill/procedures/wait-options.md#quality-review-variant) (its Step 7) — preamble: *"Code quality review for implementation:"*
+- Present findings via /wait-options (its Step 7) — preamble: *"Code quality review for implementation:"*
 - **STOP** at the WAIT Options prompt — wait for [USER-NAME]'s response
 - Apply approved fixes and update this plan's Quality Review section (its Step 8)
 
@@ -205,7 +205,7 @@ After Quality Review is resolved, run **runtime** verification by delegating to 
 
 1. **Collect scope**: Identify all files created or modified during implementation from this plan's Execution Log. This file list is the **caller-passed scope** for the delegated procedure.
 
-2. **Invoke `/integration-test`** following the [Integration Test procedure](//@agent-memory/agent-memory-coding-skill/procedures/integration-test.md) with these inputs:
+2. **Invoke `/integration-test`** following the /integration-test with these inputs:
    - `scope`: the file list collected above (from Execution Log)
    - `embedded_mode=true`: signals the procedure to write results into this plan's Final Integration Test section
 
@@ -213,7 +213,7 @@ The delegated procedure will:
 - **Detect qa/ instrument** (its Step 1) — stop + offer `/setup-qa-instrument` if missing
 - **Identify touched modules** and map to playbooks (its Step 2)
 - **Run R/I/A/O loop per module** (its Step 3): reset → seed → start → act scenarios → smoke → compare
-- Present findings via [WAIT Options Quality Review variant](//@agent-memory/agent-memory-coding-skill/procedures/wait-options.md#quality-review-variant) (its Step 4) — preamble: *"Runtime verification findings:"*
+- Present findings via /wait-options (its Step 4) — preamble: *"Runtime verification findings:"*
 - **STOP** at the WAIT Options prompt — wait for [USER-NAME]'s response
 - Apply approved fixes and re-run affected modules (its Step 5)
 - Log results into this plan's `## FINAL INTEGRATION TEST` section (its Step 6)

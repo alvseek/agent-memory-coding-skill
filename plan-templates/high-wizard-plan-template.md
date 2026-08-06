@@ -5,7 +5,7 @@
 - **Date**: [YYYY-MM-DD]
 - **Agent**: [Agent Name]
 - **Theme**: [Brief description of what we're building]
-- **Source Protocol**: `/high-wizard` — [Procedure](//@agent-memory/agent-memory-coding-skill/procedures/high-wizard.md)
+- **Source Protocol**: `/high-wizard` — /high-wizard
 
 *CRITICAL INSTRUCTION: To continue this plan: load the source protocol above, then inspect which sections below are filled vs unfilled to infer your current step.*
 
@@ -39,7 +39,7 @@
 ---
 
 ## **CONFIRMED DECISIONS**
-*These decisions were collected during investigation — both **asked-and-confirmed** by [USER-NAME] AND **written-through** (Zone A/B decisions made by the agent with reasoning, per [What to Surface](../procedures/wait-options.md#what-to-surface)). The reasons serve as the analysis record.*
+*These decisions were collected during investigation — both **asked-and-confirmed** by [USER-NAME] AND **written-through** (Zone A/B decisions made by the agent with reasoning, per /wait-options). The reasons serve as the analysis record.*
 
 | # | Decision | Chosen | Reason |
 |---|----------|--------|--------|
@@ -184,7 +184,7 @@
 
 <!-- OPTIONAL SECTION G: Include when task produces an architecture decision record -->
 ### ADR Output
-*When this section is confirmed, the procedure creates a separate ADR file using the [ADR Template](../templates/adr-template.md).*
+*When this section is confirmed, the procedure creates a separate ADR file using the [ADR Template]([path-to-agent-memory-coding-skill]/templates/adr-template.md).*
 
 - **ADR File**: [Path to created ADR file, filled by procedure Step 12]
 - **Decision Summary**: [1-sentence summary of the decision made in section F]

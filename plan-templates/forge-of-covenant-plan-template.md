@@ -7,7 +7,7 @@
 - **Vision**: [What are we creating and why — the core purpose]
 - **Target Users**: [Who is this for]
 - **Success Feeling**: [What does "done" look like for the user/creator — the motivating end state]
-- **Source Protocol**: `/forge-of-covenant` — [Procedure](//@agent-memory/agent-memory-coding-skill/procedures/forge-of-covenant.md)
+- **Source Protocol**: `/forge-of-covenant` — /forge-of-covenant
 
 *CRITICAL INSTRUCTION: To continue this plan: load the source protocol above, then inspect which sections below are filled vs unfilled to infer your current step.*
 

@@ -13,7 +13,7 @@ Commit and push changes in both the current working project and the agent-memory
 
 ## Procedure
 
-> **Push-exclude list (check first).** Honor the shared [Push Exclude Policy](//@agent-memory/agent-memory-coding-skill/procedures/push-exclude-policy.md) — excluded repos/submodules are never committed or pushed and never counted against completion (`skipped (excluded)`).
+> **Push-exclude list (check first).** Honor the shared /push-exclude-policy — excluded repos/submodules are never committed or pushed and never counted against completion (`skipped (excluded)`).
 
 ### Step 1: Push Project Files
 

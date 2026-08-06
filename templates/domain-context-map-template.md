@@ -22,9 +22,9 @@ scope: "[Project / bounded area name]"
 
 > **Documentation Convention** *(delete this section after reading)*
 >
-> This is a **domain context-map** — the *map altitude* of the domain lens (ADR-007): how bounded contexts relate, not one context's entities. It is a **content map of the system**, distinct from the orientation map (navigation).
+> This is a **domain context-map** — the *map altitude* of the domain lens: how bounded contexts relate, not one context's entities. It is a **content map of the system**, distinct from the orientation map (navigation).
 >
-> **Placement** (see [ADR-004](//@agent-memory/docs/adr/2026-07-06-docs-placement-contract.md)): project-wide → root `docs/domain/context-map.md`. The per-context ERDs live in the same `docs/domain/` folder.
+> **Placement**: project-wide → root `docs/domain/context-map.md`. The per-context ERDs live in the same `docs/domain/` folder.
 >
 > **Diagram**: Mermaid `flowchart` — contexts as nodes, edges labelled with the **DDD relationship pattern**: upstream/downstream (U/D), shared kernel, customer/supplier, conformist, anti-corruption layer (ACL), open-host service (OHS), published language. These are design intentions code doesn't always spell out — `[CONFIRM]` where the pattern isn't clear.
 

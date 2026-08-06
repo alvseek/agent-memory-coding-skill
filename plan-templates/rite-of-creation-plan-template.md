@@ -7,7 +7,7 @@
 - **Vision**: [What are we creating and why — the core purpose]
 - **Target Users**: [Who is this for]
 - **Success Feeling**: [What does "done" look like for the user/creator — the motivating end state]
-- **Source Protocol**: `/rite-of-creation` — [Procedure](//@agent-memory/agent-memory-coding-skill/procedures/rite-of-creation.md)
+- **Source Protocol**: `/rite-of-creation` — /rite-of-creation
 
 *CRITICAL INSTRUCTION: To continue this plan: load the source protocol above, then inspect which sections below are filled vs unfilled to infer your current step.*
 
