@@ -40,7 +40,7 @@ Bare discovers; you generate one at a time.
 
 ### Step 2: Copy Template
 
-1. Read the [README Template](//@agent-memory/control-files/templates/readme-template.md)
+1. Read the [README Template](//@agent-memory/agent-memory-coding-skill/templates/readme-template.md)
 2. Copy it to the target location
 3. Update the `# [Project Name]` heading with the actual project/module name
 4. Keep the `doc_type: 7q-readme` frontmatter — the orientation map keys on it (map-orientation C5)
@@ -117,6 +117,6 @@ Present the completed README to [USER-NAME]:
 
 ## Integration With Other Procedures
 
-- **[discovery-contract](//@agent-memory/control-files/procedures/discovery-contract.md)** — defines the bare **discovery mode** (Step 1D): inventory format, disk+map status-join, relevance floor, map-as-pick. Per [ADR-008](//@agent-memory/docs/adr/2026-07-09-discovery-first-generation.md), bare discovers; the project `docs/README.md` is the `[M]` pick, not the bare default.
-- **[generate-flow-docs](//@agent-memory/control-files/procedures/generate-flow-docs.md) / [generate-domain-docs](//@agent-memory/control-files/procedures/generate-domain-docs.md) / [generate-architecture-docs](//@agent-memory/control-files/procedures/generate-architecture-docs.md)** — sibling atomic doc generators. Same shape: resolve → investigate → fill → review.
-- **[map-orientation](//@agent-memory/control-files/procedures/map-orientation.md)** — classifies a generated README as `7q-readme` (via its `doc_type` frontmatter — C5), and supplies the documented-status that Step 1D discovery joins. This skill does **not** run the map — indexing is `/wrap-up` or an explicit `/map-orientation --rescan`.
+- **[discovery-contract](//@agent-memory/agent-memory-coding-skill/procedures/discovery-contract.md)** — defines the bare **discovery mode** (Step 1D): inventory format, disk+map status-join, relevance floor, map-as-pick. Per [ADR-008](//@agent-memory/docs/adr/2026-07-09-discovery-first-generation.md), bare discovers; the project `docs/README.md` is the `[M]` pick, not the bare default.
+- **[generate-flow-docs](//@agent-memory/agent-memory-coding-skill/procedures/generate-flow-docs.md) / [generate-domain-docs](//@agent-memory/agent-memory-coding-skill/procedures/generate-domain-docs.md) / [generate-architecture-docs](//@agent-memory/agent-memory-coding-skill/procedures/generate-architecture-docs.md)** — sibling atomic doc generators. Same shape: resolve → investigate → fill → review.
+- **[map-orientation](//@agent-memory/agent-memory-coding-skill/procedures/map-orientation.md)** — classifies a generated README as `7q-readme` (via its `doc_type` frontmatter — C5), and supplies the documented-status that Step 1D discovery joins. This skill does **not** run the map — indexing is `/wrap-up` or an explicit `/map-orientation --rescan`.

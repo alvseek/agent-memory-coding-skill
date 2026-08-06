@@ -19,7 +19,7 @@ End-of-session **full** orchestrator (coding/environment add-on): push the proje
 
 ### Step 1: Push the Project's Work (silent) — MANDATORY
 
-Push the agent's **project** work FIRST, so a merge request / PR can be opened immediately without waiting for the memory update that follows. Execute [Push Agent Work Protocol](//@agent-memory/control-files/procedures/push-agent-work.md) scoped to the **working project repo and its owned submodules only** — do NOT touch the agent-memory repo yet (this session's memory isn't written until Step 2, so pushing it now would miss it). The conservative rule still holds: stage only agent-produced project paths (never `git add -A`); the user's unrelated changes are left for the user.
+Push the agent's **project** work FIRST, so a merge request / PR can be opened immediately without waiting for the memory update that follows. Execute [Push Agent Work Protocol](//@agent-memory/agent-memory-coding-skill/procedures/push-agent-work.md) scoped to the **working project repo and its owned submodules only** — do NOT touch the agent-memory repo yet (this session's memory isn't written until Step 2, so pushing it now would miss it). The conservative rule still holds: stage only agent-produced project paths (never `git add -A`); the user's unrelated changes are left for the user.
 
 Tool calls visible (git commands); capture per-repo commit hashes + user-files-left counts for Step 5.
 
@@ -37,7 +37,7 @@ Silent no-op if no map exists or no orientation docs touched. Capture refresh co
 
 ### Step 4: Push Memory (silent) — MANDATORY
 
-Execute [Push Agent Work Protocol](//@agent-memory/control-files/procedures/push-agent-work.md) for the **agent-memory repo** (whole) plus any **project memory files** Steps 2–3 just wrote (localized `.agents/**` + refreshed `docs/` orientation/context docs). Invoking `/project-wrap-up` IS the authorization to commit + push. This captures the episodic / emotional / reasoning / knowledge writes that the Step 1 project push ran too early to include. Same scope discipline — never a blanket `git add -A` on the project (only the memory paths above); explicit `/push-all` / `/push-project` stay full-tree as a deliberate user choice.
+Execute [Push Agent Work Protocol](//@agent-memory/agent-memory-coding-skill/procedures/push-agent-work.md) for the **agent-memory repo** (whole) plus any **project memory files** Steps 2–3 just wrote (localized `.agents/**` + refreshed `docs/` orientation/context docs). Invoking `/project-wrap-up` IS the authorization to commit + push. This captures the episodic / emotional / reasoning / knowledge writes that the Step 1 project push ran too early to include. Same scope discipline — never a blanket `git add -A` on the project (only the memory paths above); explicit `/push-all` / `/push-project` stay full-tree as a deliberate user choice.
 
 Tool calls visible (git commands); capture per-repo commit hashes + agent-work-pushed status for Step 5.
 

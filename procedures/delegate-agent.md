@@ -57,7 +57,7 @@ Do NOT send vague or open-ended prompts. Be specific about the task, what "done"
 Run `ask-agent.sh` using the Bash tool with **`run_in_background: true`**:
 
 ```bash
-bash "[AGENT-MEMORY-PATH]/control-files/scripts/ask-agent.sh" "[Name|UUID]" "[structured prompt]" "[theme]" "" "[model]"
+bash "[AGENT-MEMORY-PATH]/agent-memory-coding-skill/scripts/ask-agent.sh" "[Name|UUID]" "[structured prompt]" "[theme]" "" "[model]"
 ```
 
 Pass empty string for the 4th arg (fleet-map — script auto-resolves it). Pass model as 5th arg; use empty string if no model was specified.
@@ -73,6 +73,6 @@ Do not block. Continue your own work.
 - **Name mode** (new awakening): first line of output file = UUID — save it for future `/ask-agent [UUID]` or `/delegate-agent [UUID]` calls. Remaining lines = agent's full response.
 - **UUID mode** (resume): output file contains the agent's full response only.
 
-To wrap up a completed session: `bash "[AGENT-MEMORY-PATH]/control-files/scripts/wrap-up-agent.sh" [UUID]`
+To wrap up a completed session: `bash "[AGENT-MEMORY-PATH]/agent-memory-coding-skill/scripts/wrap-up-agent.sh" [UUID]`
 
 ---

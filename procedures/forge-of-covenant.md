@@ -25,7 +25,7 @@ If no arguments provided, ask: "What project do you want to plan across multiple
 
 ### Step 1: Read Template
 
-Read the [Forge of Covenant Plan Template](//@agent-memory/control-files/plan-templates/forge-of-covenant-plan-template.md) file
+Read the [Forge of Covenant Plan Template](//@agent-memory/agent-memory-coding-skill/plan-templates/forge-of-covenant-plan-template.md) file
 
 ### Step 2: Check Date
 
@@ -42,7 +42,7 @@ cp {source} ./plans/[YYYY-MM-DD]-[project]-forge-of-covenant/grand-plan.md
 
 ### Step 4: Fill Project Header
 
-Fill the [Project Header](//@agent-memory/control-files/plan-templates/forge-of-covenant-plan-template.md#project-header) section (Project, Date, Agent Role, Vision, Target Users, Success Feeling)
+Fill the [Project Header](//@agent-memory/agent-memory-coding-skill/plan-templates/forge-of-covenant-plan-template.md#project-header) section (Project, Date, Agent Role, Vision, Target Users, Success Feeling)
 
 ### Step 5: 7Q Exploration
 
@@ -106,7 +106,7 @@ This understanding informs the WAIT Options in Step 6.
 
 Based on the exploration discussion (Step 5), prepare concrete decisions that need to be confirmed before planning milestones. These are PROJECT-LEVEL decisions.
 
-Read and follow the [WAIT Options format](//@agent-memory/control-files/procedures/wait-options.md) for collecting project-level decisions.
+Read and follow the [WAIT Options format](//@agent-memory/agent-memory-coding-skill/procedures/wait-options.md) for collecting project-level decisions.
 
 **Typical project-level decisions:**
 - Tech stack choices (languages, frameworks, cloud provider)
@@ -118,7 +118,7 @@ Read and follow the [WAIT Options format](//@agent-memory/control-files/procedur
 - Risk mitigation strategy (for any high-likelihood/high-impact risks identified)
 - Timeline targets (rough dates per milestone)
 
-Present the project decisions to [USER-NAME] using the [WAIT Options format](//@agent-memory/control-files/procedures/wait-options.md).
+Present the project decisions to [USER-NAME] using the [WAIT Options format](//@agent-memory/agent-memory-coding-skill/procedures/wait-options.md).
 Preamble: "Based on our exploration, here are the project decisions I need to confirm (WAIT Options Round 1):"
 
 STOP. Present to [USER-NAME] for review. Do NOT fill any tables or proceed until [USER-NAME] confirms the project decisions.
@@ -127,21 +127,21 @@ STOP. Present to [USER-NAME] for review. Do NOT fill any tables or proceed until
 
 After [USER-NAME] confirms the WAIT Options Round 1, fill the plan sections that were informed by the exploration:
 
-1. **Fill [Project Decisions](//@agent-memory/control-files/plan-templates/forge-of-covenant-plan-template.md#project-decisions)** — Record all confirmed decisions (with any changes [USER-NAME] made). Include the meaningful reasons — this IS the analysis record.
+1. **Fill [Project Decisions](//@agent-memory/agent-memory-coding-skill/plan-templates/forge-of-covenant-plan-template.md#project-decisions)** — Record all confirmed decisions (with any changes [USER-NAME] made). Include the meaningful reasons — this IS the analysis record.
 
-2. **Fill [What Are We Building?](//@agent-memory/control-files/plan-templates/forge-of-covenant-plan-template.md#what-are-we-building)** — Vision Statement, Purpose & Motivation, Core Idea from the Q1 exploration.
+2. **Fill [What Are We Building?](//@agent-memory/agent-memory-coding-skill/plan-templates/forge-of-covenant-plan-template.md#what-are-we-building)** — Vision Statement, Purpose & Motivation, Core Idea from the Q1 exploration.
 
-3. **Fill [Who's Involved?](//@agent-memory/control-files/plan-templates/forge-of-covenant-plan-template.md#whos-involved)** — Target Users, Stakeholders table, Team Structure from the Q2 exploration.
+3. **Fill [Who's Involved?](//@agent-memory/agent-memory-coding-skill/plan-templates/forge-of-covenant-plan-template.md#whos-involved)** — Target Users, Stakeholders table, Team Structure from the Q2 exploration.
 
-4. **Fill [What Does Success Look Like?](//@agent-memory/control-files/plan-templates/forge-of-covenant-plan-template.md#what-does-success-look-like)** — Success Feeling and Success Metrics table from the Q3 exploration. Include 3-7 measurable KPIs with both business and technical metrics.
+4. **Fill [What Does Success Look Like?](//@agent-memory/agent-memory-coding-skill/plan-templates/forge-of-covenant-plan-template.md#what-does-success-look-like)** — Success Feeling and Success Metrics table from the Q3 exploration. Include 3-7 measurable KPIs with both business and technical metrics.
 
-5. **Fill [What's The Technical Shape?](//@agent-memory/control-files/plan-templates/forge-of-covenant-plan-template.md#whats-the-technical-shape)** — Services & Components, Tech Stack, Architecture Overview from the Q4 exploration.
+5. **Fill [What's The Technical Shape?](//@agent-memory/agent-memory-coding-skill/plan-templates/forge-of-covenant-plan-template.md#whats-the-technical-shape)** — Services & Components, Tech Stack, Architecture Overview from the Q4 exploration.
 
-6. **Fill [What Are The Boundaries?](//@agent-memory/control-files/plan-templates/forge-of-covenant-plan-template.md#what-are-the-boundaries)** — Constraints, Non-Negotiables / Principles table, Timeline Pressure from the Q5 exploration. Remember: if a principle only applies to one milestone, it belongs in that milestone's plan.
+6. **Fill [What Are The Boundaries?](//@agent-memory/agent-memory-coding-skill/plan-templates/forge-of-covenant-plan-template.md#what-are-the-boundaries)** — Constraints, Non-Negotiables / Principles table, Timeline Pressure from the Q5 exploration. Remember: if a principle only applies to one milestone, it belongs in that milestone's plan.
 
-7. **Fill [What Could Go Wrong?](//@agent-memory/control-files/plan-templates/forge-of-covenant-plan-template.md#what-could-go-wrong)** — Risk Register table, External Dependencies, Known Unknowns from the Q6 exploration.
+7. **Fill [What Could Go Wrong?](//@agent-memory/agent-memory-coding-skill/plan-templates/forge-of-covenant-plan-template.md#what-could-go-wrong)** — Risk Register table, External Dependencies, Known Unknowns from the Q6 exploration.
 
-8. **Fill [How Do We Ship This?](//@agent-memory/control-files/plan-templates/forge-of-covenant-plan-template.md#how-do-we-ship-this)** — Release Strategy, First Usable Version, Milestone Vision from the Q7 exploration.
+8. **Fill [How Do We Ship This?](//@agent-memory/agent-memory-coding-skill/plan-templates/forge-of-covenant-plan-template.md#how-do-we-ship-this)** — Release Strategy, First Usable Version, Milestone Vision from the Q7 exploration.
 
 ---
 
@@ -153,7 +153,7 @@ After [USER-NAME] confirms the WAIT Options Round 1, fill the plan sections that
 
 Based on the confirmed project decisions and the Q7 (How Do We Ship This?) insights:
 
-Fill the [Milestone Roadmap](//@agent-memory/control-files/plan-templates/forge-of-covenant-plan-template.md#milestone-roadmap). Each row: M#, Name, Goal, Key Deliverables, Target Scope, Target Date, Status.
+Fill the [Milestone Roadmap](//@agent-memory/agent-memory-coding-skill/plan-templates/forge-of-covenant-plan-template.md#milestone-roadmap). Each row: M#, Name, Goal, Key Deliverables, Target Scope, Target Date, Status.
 
 *Remember: Each milestone = a versioned release that can contain multiple services (BE+FE+Mobile+Deploy+QA+Launch). Target Date can be rough (month/quarter) — precision improves during Covenant Reviews.*
 
@@ -186,7 +186,7 @@ STOP. Present to [USER-NAME] for review. Do NOT proceed until [USER-NAME] confir
 
 ### Step 10: Scope Gate + De-escalation
 
-Fill the [Scope Gate](//@agent-memory/control-files/plan-templates/forge-of-covenant-plan-template.md#scope-gate) section.
+Fill the [Scope Gate](//@agent-memory/agent-memory-coding-skill/plan-templates/forge-of-covenant-plan-template.md#scope-gate) section.
 
 **Forge of Covenant is needed when ALL of these are true:**
 - Project spans **multiple milestones/releases** (not just one)
@@ -220,11 +220,11 @@ For each milestone in the confirmed roadmap, discuss the detailed scope with [US
 - What protocol level fits? (RoC for complex milestones with multiple SDLC phases, CoW for multi-feature milestones, HW for simple milestones)
 - Any known technical debt that will be created?
 
-Read and follow the [WAIT Options format](//@agent-memory/control-files/procedures/wait-options.md) for collecting milestone-level decisions. These are decisions about HOW each milestone will be executed. Group decisions by milestone (M1, M2, etc.).
+Read and follow the [WAIT Options format](//@agent-memory/agent-memory-coding-skill/procedures/wait-options.md) for collecting milestone-level decisions. These are decisions about HOW each milestone will be executed. Group decisions by milestone (M1, M2, etc.).
 
 ### Step 12: Present Milestone WAIT Options (Round 3)
 
-Present the milestone planning decisions to [USER-NAME] using the [WAIT Options format](//@agent-memory/control-files/procedures/wait-options.md).
+Present the milestone planning decisions to [USER-NAME] using the [WAIT Options format](//@agent-memory/agent-memory-coding-skill/procedures/wait-options.md).
 Preamble: "Here are the milestone-level decisions (WAIT Options Round 3):"
 Group decisions by milestone (M1, M2, etc.).
 
@@ -234,15 +234,15 @@ STOP. Present to [USER-NAME] for review. Do NOT proceed until [USER-NAME] confir
 
 After [USER-NAME] confirms WAIT Options Round 3:
 
-1. **Fill [Milestone Decisions](//@agent-memory/control-files/plan-templates/forge-of-covenant-plan-template.md#milestone-decisions)** — Record all confirmed milestone-level decisions (with any changes [USER-NAME] made).
+1. **Fill [Milestone Decisions](//@agent-memory/agent-memory-coding-skill/plan-templates/forge-of-covenant-plan-template.md#milestone-decisions)** — Record all confirmed milestone-level decisions (with any changes [USER-NAME] made).
 
-2. **Fill [Deferral & Debt Tracker](//@agent-memory/control-files/plan-templates/forge-of-covenant-plan-template.md#deferral--debt-tracker)** — From the milestone discussions, record all items that were deferred or identified as debt.
+2. **Fill [Deferral & Debt Tracker](//@agent-memory/agent-memory-coding-skill/plan-templates/forge-of-covenant-plan-template.md#deferral--debt-tracker)** — From the milestone discussions, record all items that were deferred or identified as debt.
 
-3. **Update [What Could Go Wrong?](//@agent-memory/control-files/plan-templates/forge-of-covenant-plan-template.md#what-could-go-wrong)** — If milestone exploration revealed new risks, external dependencies, or known unknowns, update the Risk Register and sub-sections.
+3. **Update [What Could Go Wrong?](//@agent-memory/agent-memory-coding-skill/plan-templates/forge-of-covenant-plan-template.md#what-could-go-wrong)** — If milestone exploration revealed new risks, external dependencies, or known unknowns, update the Risk Register and sub-sections.
 
-4. **Fill [Milestone Dependency Graph](//@agent-memory/control-files/plan-templates/forge-of-covenant-plan-template.md#milestone-dependency-graph)** — Create the mermaid diagram showing milestone relationships. Identify parallel opportunities and critical path.
+4. **Fill [Milestone Dependency Graph](//@agent-memory/agent-memory-coding-skill/plan-templates/forge-of-covenant-plan-template.md#milestone-dependency-graph)** — Create the mermaid diagram showing milestone relationships. Identify parallel opportunities and critical path.
 
-5. **Fill [Execution Log](//@agent-memory/control-files/plan-templates/forge-of-covenant-plan-template.md#execution-log)** — Create placeholder rows for each milestone.
+5. **Fill [Execution Log](//@agent-memory/agent-memory-coding-skill/plan-templates/forge-of-covenant-plan-template.md#execution-log)** — Create placeholder rows for each milestone.
 
 6. **Present** the filled tracking sections (milestone decisions, deferral tracker, updated risks, dependency graph, execution log) to [USER-NAME].
 
@@ -310,18 +310,18 @@ mkdir -p ./plans/[covenant-folder]/M[N]-[milestone-name]
 After each milestone completes, conduct a **Covenant Review** before starting the next milestone.
 
 **Review process:**
-1. Add a new entry in the [Covenant Review Log](//@agent-memory/control-files/plan-templates/forge-of-covenant-plan-template.md#covenant-review-log) section
+1. Add a new entry in the [Covenant Review Log](//@agent-memory/agent-memory-coding-skill/plan-templates/forge-of-covenant-plan-template.md#covenant-review-log) section
 2. Discuss with [USER-NAME]:
    - What changed during this milestone? Any scope shifts?
-   - Are any items now deferred? Update the [Deferral & Debt Tracker](//@agent-memory/control-files/plan-templates/forge-of-covenant-plan-template.md#deferral--debt-tracker)
+   - Are any items now deferred? Update the [Deferral & Debt Tracker](//@agent-memory/agent-memory-coding-skill/plan-templates/forge-of-covenant-plan-template.md#deferral--debt-tracker)
    - Was any debt resolved? Mark it in the tracker
    - Are all principles/non-negotiables still upheld? Flag any at risk
-   - Did any risks materialize? Update [What Could Go Wrong?](//@agent-memory/control-files/plan-templates/forge-of-covenant-plan-template.md#what-could-go-wrong) (OPEN → OCCURRED / MITIGATED / CLOSED)
+   - Did any risks materialize? Update [What Could Go Wrong?](//@agent-memory/agent-memory-coding-skill/plan-templates/forge-of-covenant-plan-template.md#what-could-go-wrong) (OPEN → OCCURRED / MITIGATED / CLOSED)
    - Are there new risks for upcoming milestones? Add to the Risk Register
-   - Are success metrics on track? Check against [What Does Success Look Like?](//@agent-memory/control-files/plan-templates/forge-of-covenant-plan-template.md#what-does-success-look-like)
+   - Are success metrics on track? Check against [What Does Success Look Like?](//@agent-memory/agent-memory-coding-skill/plan-templates/forge-of-covenant-plan-template.md#what-does-success-look-like)
    - Do target dates for upcoming milestones need adjustment?
    - Do upcoming milestones need adjustment based on learnings?
-3. Update the [Milestone Roadmap](//@agent-memory/control-files/plan-templates/forge-of-covenant-plan-template.md#milestone-roadmap) if any changes were agreed
+3. Update the [Milestone Roadmap](//@agent-memory/agent-memory-coding-skill/plan-templates/forge-of-covenant-plan-template.md#milestone-roadmap) if any changes were agreed
 4. Update the Deferral & Debt Tracker with any new entries or resolutions
 5. Update the Risk Register with status changes and new risks
 
@@ -331,7 +331,7 @@ After each milestone completes, conduct a **Covenant Review** before starting th
 
 After all milestones are DONE and all Covenant Reviews completed:
 
-1. Run through the [Project Completion Checklist](//@agent-memory/control-files/plan-templates/forge-of-covenant-plan-template.md#project-completion-checklist)
+1. Run through the [Project Completion Checklist](//@agent-memory/agent-memory-coding-skill/plan-templates/forge-of-covenant-plan-template.md#project-completion-checklist)
 2. Verify all principles/non-negotiables were upheld
 3. Verify the Deferral & Debt Tracker has no unresolved items
 4. Present completion summary to [USER-NAME]

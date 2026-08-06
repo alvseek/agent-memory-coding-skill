@@ -44,7 +44,7 @@ Bare discovers; you generate one deep-dive at a time. The [`/generate-docs`](gen
 2. **Infer the relationships**: how contexts integrate — the DDD patterns: upstream/downstream (U/D), shared kernel, customer/supplier, conformist, anti-corruption layer (ACL), open-host service (OHS). Read cross-context references / imports / shared types. `[CONFIRM]` where the pattern is a design intention code doesn't spell out; `[NOT FOUND]` where an integration is expected but unclear.
 3. **Build the diagram**: a Mermaid `flowchart` — contexts as nodes, edges labelled with the DDD pattern + direction.
 4. **Place**: root `docs/domain/context-map.md` (project-wide; lives in the project tree per ADR-004).
-5. **Fill**: copy [domain-context-map-template.md](//@agent-memory/control-files/templates/domain-context-map-template.md), set `doc_type: domain-context-map`, fill the diagram + contexts + relationships + links to each context's ERD (note contexts lacking one). Fill-from-code, no fiction, typed markers.
+5. **Fill**: copy [domain-context-map-template.md](//@agent-memory/agent-memory-coding-skill/templates/domain-context-map-template.md), set `doc_type: domain-context-map`, fill the diagram + contexts + relationships + links to each context's ERD (note contexts lacking one). Fill-from-code, no fiction, typed markers.
 6. **Review**: show the map, group markers, state placement, note which contexts still lack a deep-dive ERD. **Done** — skip Steps 2–6.
 
 ### Step 1B: Resolve the context (deep-dive)
@@ -89,7 +89,7 @@ When in doubt, default to `erDiagram`.
 
 ### Step 5: Fill the doc
 
-1. Copy [domain-doc-template.md](//@agent-memory/control-files/templates/domain-doc-template.md) to the target path.
+1. Copy [domain-doc-template.md](//@agent-memory/agent-memory-coding-skill/templates/domain-doc-template.md) to the target path.
 2. Update the `domain:` frontmatter and the `# Domain: …` heading with the scope name. **Keep `doc_type: domain`** — the map keys on it.
 3. Remove the Convention preamble block (the blockquote marked "delete after reading").
 4. Fill from the extracted model:
@@ -99,7 +99,7 @@ When in doubt, default to `erDiagram`.
    - **Relationships & Invariants** — cardinalities + business rules (uniqueness, cascade, soft-delete, required FKs).
    - **Related** — owning module READMEs, the migrations folder, data-model ADRs.
 
-**Accuracy discipline** (inherited from [generate-readme](//@agent-memory/control-files/procedures/generate-readme.md)): fill from actual code, never invent an entity or relationship. Use `[TODO: ...]` (needs human input), `[CONFIRM: ...]` (found but unverified), `[NOT FOUND: ...]` (expected but missing). An incomplete domain doc is better than a fictional one.
+**Accuracy discipline** (inherited from [generate-readme](//@agent-memory/agent-memory-coding-skill/procedures/generate-readme.md)): fill from actual code, never invent an entity or relationship. Use `[TODO: ...]` (needs human input), `[CONFIRM: ...]` (found but unverified), `[NOT FOUND: ...]` (expected but missing). An incomplete domain doc is better than a fictional one.
 
 ### Step 6: Present for review
 
@@ -115,12 +115,12 @@ Present the domain doc to [USER-NAME]:
 
 ## Integration With Other Procedures
 
-- **[discovery-contract](//@agent-memory/control-files/procedures/discovery-contract.md)** — defines the bare **discovery mode** (Step 1D): inventory format, disk+map status-join, relevance floor, map-as-pick. Per [ADR-008](//@agent-memory/docs/adr/2026-07-09-discovery-first-generation.md), bare discovers; the context-map is the `[M]` pick, not the bare default.
-- **[generate-flow-docs](//@agent-memory/control-files/procedures/generate-flow-docs.md) / [generate-readme](//@agent-memory/control-files/procedures/generate-readme.md)** — sibling atomic doc generators. Same shape: resolve → extract/investigate → fill → review.
-- **[map-orientation](//@agent-memory/control-files/procedures/map-orientation.md)** — indexes the deep-dive as `domain-model` (`doc_type: domain`) and the map as `domain-context-map` (`doc_type: domain-context-map`), and supplies the documented-status that Step 1D discovery joins. This skill does **not** run the map — indexing is `/wrap-up` or an explicit `/map-orientation --rescan`.
+- **[discovery-contract](//@agent-memory/agent-memory-coding-skill/procedures/discovery-contract.md)** — defines the bare **discovery mode** (Step 1D): inventory format, disk+map status-join, relevance floor, map-as-pick. Per [ADR-008](//@agent-memory/docs/adr/2026-07-09-discovery-first-generation.md), bare discovers; the context-map is the `[M]` pick, not the bare default.
+- **[generate-flow-docs](//@agent-memory/agent-memory-coding-skill/procedures/generate-flow-docs.md) / [generate-readme](//@agent-memory/agent-memory-coding-skill/procedures/generate-readme.md)** — sibling atomic doc generators. Same shape: resolve → extract/investigate → fill → review.
+- **[map-orientation](//@agent-memory/agent-memory-coding-skill/procedures/map-orientation.md)** — indexes the deep-dive as `domain-model` (`doc_type: domain`) and the map as `domain-context-map` (`doc_type: domain-context-map`), and supplies the documented-status that Step 1D discovery joins. This skill does **not** run the map — indexing is `/wrap-up` or an explicit `/map-orientation --rescan`.
 - **The two altitudes** (see [ADR-007](//@agent-memory/docs/adr/2026-07-08-doc-altitudes-and-three-layer-map-model.md)): the **domain-context-map** is the *map altitude* (how bounded contexts relate); the **domain-model** ERD is the *deep-dive*. Both are content docs, separate from the orientation map (navigation), which indexes them.
 - **[`/generate-docs`](generate-docs.md) orchestrator** — composes this generator's `[M]` (context-map) path with the other atomic generators to synthesize the whole-system doc surface. See [ADR-006](//@agent-memory/docs/adr/2026-07-07-doc-generation-family-architecture.md) + [ADR-009](//@agent-memory/docs/adr/2026-07-09-generate-docs-orchestrator.md).
-- **Decision collection** — if Step 1B scope resolution is ambiguous, present the candidates using [wait-options](//@agent-memory/control-files/procedures/wait-options.md).
+- **Decision collection** — if Step 1B scope resolution is ambiguous, present the candidates using [wait-options](//@agent-memory/agent-memory-coding-skill/procedures/wait-options.md).
 
 ---
 

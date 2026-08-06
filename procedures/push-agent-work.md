@@ -15,7 +15,7 @@ Commit and push **only the agent's own work** — the agent-memory repo (whole) 
 
 > **In-scope repos.** The working project repo, its **owned git submodules** (recurse), and the agent-memory repo (`//@agent-memory/`) with its own submodules. A superproject's `git status` shows a dirty submodule only as a one-line gitlink — it does NOT reveal uncommitted files *inside* the submodule, and `git add` on the gitlink records only the pointer. So you MUST enter each owned submodule and commit/push agent-work **inside it first**, then commit the updated pointer in its superproject. Always process submodules **before** their superproject.
 
-> **Push-exclude list (check first).** Honor the shared [Push Exclude Policy](//@agent-memory/control-files/procedures/push-exclude-policy.md) — excluded repos/submodules are never committed or pushed and never counted against completion (`skipped (excluded)`).
+> **Push-exclude list (check first).** Honor the shared [Push Exclude Policy](//@agent-memory/agent-memory-coding-skill/procedures/push-exclude-policy.md) — excluded repos/submodules are never committed or pushed and never counted against completion (`skipped (excluded)`).
 
 ### Step 1: Define the Agent-Work Set
 

@@ -19,7 +19,7 @@ If no arguments provided, ask: "What project do you want to create from scratch?
 
 ### Step 1: Read Template
 
-Read the [Rite of Creation Plan Template](//@agent-memory/control-files/plan-templates/rite-of-creation-plan-template.md) file
+Read the [Rite of Creation Plan Template](//@agent-memory/agent-memory-coding-skill/plan-templates/rite-of-creation-plan-template.md) file
 
 ### Step 2: Check Date
 
@@ -36,7 +36,7 @@ cp {source} ./plans/[YYYY-MM-DD]-[project]-rite-of-creation/core-plan.md
 
 ### Step 4: Fill Project Vision
 
-Fill the [Project Vision](//@agent-memory/control-files/plan-templates/rite-of-creation-plan-template.md#project-vision) section (Project, Date, Agent Role, Vision, Target Users, Success Feeling)
+Fill the [Project Vision](//@agent-memory/agent-memory-coding-skill/plan-templates/rite-of-creation-plan-template.md#project-vision) section (Project, Date, Agent Role, Vision, Target Users, Success Feeling)
 
 ### Step 5: Investigate Project + Prepare WAIT Options Round 1
 
@@ -49,13 +49,13 @@ Investigate to understand what [USER-NAME] wants to build. This happens BEFORE a
 4. **Tech stack considerations** — What languages, frameworks, infrastructure fit this project?
 5. **Constraints and risks** — Budget, timeline, technical limitations, team capabilities?
 
-Read and follow the [WAIT Options format](//@agent-memory/control-files/procedures/wait-options.md) for collecting project-level decisions.
+Read and follow the [WAIT Options format](//@agent-memory/agent-memory-coding-skill/procedures/wait-options.md) for collecting project-level decisions.
 
 Be thorough — these are foundational decisions that shape every phase downstream.
 
 ### Step 6: Present Project WAIT Options (Round 1)
 
-Present the project decisions to [USER-NAME] using the [WAIT Options format](//@agent-memory/control-files/procedures/wait-options.md).
+Present the project decisions to [USER-NAME] using the [WAIT Options format](//@agent-memory/agent-memory-coding-skill/procedures/wait-options.md).
 Preamble: "Based on my investigation, here are the project decisions I need before planning"
 
 STOP. Present to [USER-NAME] for review. Do NOT fill any tables or proceed until [USER-NAME] confirms the project decisions.
@@ -64,7 +64,7 @@ STOP. Present to [USER-NAME] for review. Do NOT fill any tables or proceed until
 
 After [USER-NAME] confirms the WAIT Options Round 1, fill the formal plan sections:
 
-1. **Fill Project Decisions table** — Record all confirmed decisions (with any changes [USER-NAME] made) in the [Project Decisions](//@agent-memory/control-files/plan-templates/rite-of-creation-plan-template.md#project-decisions) section. Include the meaningful reasons — this IS the analysis record.
+1. **Fill Project Decisions table** — Record all confirmed decisions (with any changes [USER-NAME] made) in the [Project Decisions](//@agent-memory/agent-memory-coding-skill/plan-templates/rite-of-creation-plan-template.md#project-decisions) section. Include the meaningful reasons — this IS the analysis record.
 
 2. **Fill Phase Menu** — Based on the confirmed project decisions, propose which SDLC phases apply. For each of the 9 phases:
    - Mark ✓ (included) or — (skipped) with rationale
@@ -78,7 +78,7 @@ After [USER-NAME] confirms the WAIT Options Round 1, fill the formal plan sectio
    - Project scope spans **architecture + implementation + delivery**
    - **At least one phase requires Council-level coordination** (CoW) — if all phases are HW/QW, a single CoW suffices instead of RoC
 
-   Fill the [Scope Gate](//@agent-memory/control-files/plan-templates/rite-of-creation-plan-template.md#scope-gate) section with assessment.
+   Fill the [Scope Gate](//@agent-memory/agent-memory-coding-skill/plan-templates/rite-of-creation-plan-template.md#scope-gate) section with assessment.
 
 4. **Present all three** (decisions, phase menu, scope gate) to [USER-NAME] for review.
 
@@ -107,11 +107,11 @@ Before filling exit criteria and dependencies, investigate to collect decisions 
 4. **Role assignment** — Are the recommended roles appropriate for this project's context?
 5. **Conflicts and constraints** — Are there cross-phase concerns that need special handling?
 
-Read and follow the [WAIT Options format](//@agent-memory/control-files/procedures/wait-options.md) for collecting phase-level decisions.
+Read and follow the [WAIT Options format](//@agent-memory/agent-memory-coding-skill/procedures/wait-options.md) for collecting phase-level decisions.
 
 ### Step 9: Present Phase WAIT Options (Round 2)
 
-Present the phase planning decisions to [USER-NAME] using the [WAIT Options format](//@agent-memory/control-files/procedures/wait-options.md).
+Present the phase planning decisions to [USER-NAME] using the [WAIT Options format](//@agent-memory/agent-memory-coding-skill/procedures/wait-options.md).
 Preamble: "Here are the phase planning decisions I need before structuring the phases"
 
 STOP. Present to [USER-NAME] for review. Do NOT proceed until decisions are confirmed.
@@ -153,7 +153,7 @@ STOP. Present to [USER-NAME] for review. Do NOT proceed until confirmed. If [USE
 
 ### Step 12: Fill Execution Log
 
-Create placeholder rows in the [Execution Log](//@agent-memory/control-files/plan-templates/rite-of-creation-plan-template.md#execution-log) for each included phase from the confirmed Phase Menu. Remove rows for skipped phases.
+Create placeholder rows in the [Execution Log](//@agent-memory/agent-memory-coding-skill/plan-templates/rite-of-creation-plan-template.md#execution-log) for each included phase from the confirmed Phase Menu. Remove rows for skipped phases.
 
 ### Step 13: Self-Review + Auto-Fix
 
@@ -197,7 +197,7 @@ After [USER-NAME] instructs to start, execute phases following the dependency gr
 ### Step 16: Project Completion
 
 After all phases are DONE:
-1. Run through the [Project Completion Checklist](//@agent-memory/control-files/plan-templates/rite-of-creation-plan-template.md#project-completion-checklist)
+1. Run through the [Project Completion Checklist](//@agent-memory/agent-memory-coding-skill/plan-templates/rite-of-creation-plan-template.md#project-completion-checklist)
 2. Verify all phase exit criteria (Status column checked)
 3. Present completion summary to [USER-NAME]
 

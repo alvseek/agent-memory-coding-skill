@@ -35,7 +35,7 @@ Embedded mode flow: caller hands off control → this procedure runs Steps 1-8 w
 
 ### Step 1: Read Template + Create Working Document (Mode-Branched)
 
-Read the [Code Quality Analysis Template](//@agent-memory/control-files/plan-templates/code-quality-analysis-template.md) — used as a read-only checklist reference in both modes.
+Read the [Code Quality Analysis Template](//@agent-memory/agent-memory-coding-skill/plan-templates/code-quality-analysis-template.md) — used as a read-only checklist reference in both modes.
 
 **Mode branch**:
 
@@ -128,7 +128,7 @@ Read all files identified in Step 2 (standalone) or reconciled in Step 3 (`final
 
 ### Step 6: Analyze Quality Dimensions
 
-Walk through each quality dimension in the [Code Quality Analysis Template](//@agent-memory/control-files/plan-templates/code-quality-analysis-template.md). For each dimension:
+Walk through each quality dimension in the [Code Quality Analysis Template](//@agent-memory/agent-memory-coding-skill/plan-templates/code-quality-analysis-template.md). For each dimension:
 
 1. **Evaluate**: Check each item in the dimension against the code in scope
 2. **Mark**: Check off items that pass (`[x]`), leave unchecked items that fail or don't apply
@@ -148,7 +148,7 @@ Walk through each quality dimension in the [Code Quality Analysis Template](//@a
 
 ### Step 7: Present Findings
 
-Present findings to [USER-NAME] using the [WAIT Options Quality Review variant](//@agent-memory/control-files/procedures/wait-options.md#quality-review-variant).
+Present findings to [USER-NAME] using the [WAIT Options Quality Review variant](//@agent-memory/agent-memory-coding-skill/procedures/wait-options.md#quality-review-variant).
 Preamble: "Code quality review for [scope]:"
 
 STOP. Wait for [USER-NAME]'s response before fixing anything.

@@ -81,7 +81,7 @@ Use the nearest *existing* ancestor — never invent a parent folder. Create `do
 
 ### Step 5: Fill the doc
 
-1. Copy [architecture-doc-template.md](//@agent-memory/control-files/templates/architecture-doc-template.md) to the target path.
+1. Copy [architecture-doc-template.md](//@agent-memory/agent-memory-coding-skill/templates/architecture-doc-template.md) to the target path.
 2. Set `doc_type` per altitude (`architecture-map` or `architecture-overview`), update `scope:` + the `# Architecture: …` heading.
 3. Remove the Convention preamble block.
 4. Fill from the synthesis:
@@ -91,7 +91,7 @@ Use the nearest *existing* ancestor — never invent a parent folder. Create `do
    - **Dependencies & Boundaries** — how they connect, deployment topology, key cross-boundary contracts (the part only this doc gives).
    - **Related** — subsystem overviews (from a map), module READMEs, relevant flow/domain docs, architecture ADRs.
 
-**Accuracy discipline** (inherited from [generate-readme](//@agent-memory/control-files/procedures/generate-readme.md)): fill from actual structure, never invent a component or a connection. Use `[TODO]` / `[CONFIRM]` / `[NOT FOUND]`. An incomplete architecture doc is better than a fictional one.
+**Accuracy discipline** (inherited from [generate-readme](//@agent-memory/agent-memory-coding-skill/procedures/generate-readme.md)): fill from actual structure, never invent a component or a connection. Use `[TODO]` / `[CONFIRM]` / `[NOT FOUND]`. An incomplete architecture doc is better than a fictional one.
 
 ### Step 6: Present for review
 
@@ -107,12 +107,12 @@ Present the architecture doc to [USER-NAME]:
 
 ## Integration With Other Procedures
 
-- **[discovery-contract](//@agent-memory/control-files/procedures/discovery-contract.md)** — defines the bare **aspect discovery mode** (Step 1D): inventory format, disk+map status-join, relevance floor, map-as-pick. Per [ADR-008](//@agent-memory/docs/adr/2026-07-09-discovery-first-generation.md), bare discovers the aspect axis; the architecture-map is the `[M]` pick and subsystems stay path-addressed.
-- **[generate-flow-docs](//@agent-memory/control-files/procedures/generate-flow-docs.md) / [generate-domain-docs](//@agent-memory/control-files/procedures/generate-domain-docs.md) / [generate-readme](//@agent-memory/control-files/procedures/generate-readme.md)** — sibling atomic doc generators. Same shape: resolve → extract/synthesize → fill → review.
-- **[map-orientation](//@agent-memory/control-files/procedures/map-orientation.md)** — indexes the generated doc as `architecture-map` or `architecture-overview` (via the `doc_type` frontmatter), and supplies the documented-status that Step 1D discovery joins. This skill does **not** run the map — indexing is `/wrap-up` or an explicit `/map-orientation --rescan`.
+- **[discovery-contract](//@agent-memory/agent-memory-coding-skill/procedures/discovery-contract.md)** — defines the bare **aspect discovery mode** (Step 1D): inventory format, disk+map status-join, relevance floor, map-as-pick. Per [ADR-008](//@agent-memory/docs/adr/2026-07-09-discovery-first-generation.md), bare discovers the aspect axis; the architecture-map is the `[M]` pick and subsystems stay path-addressed.
+- **[generate-flow-docs](//@agent-memory/agent-memory-coding-skill/procedures/generate-flow-docs.md) / [generate-domain-docs](//@agent-memory/agent-memory-coding-skill/procedures/generate-domain-docs.md) / [generate-readme](//@agent-memory/agent-memory-coding-skill/procedures/generate-readme.md)** — sibling atomic doc generators. Same shape: resolve → extract/synthesize → fill → review.
+- **[map-orientation](//@agent-memory/agent-memory-coding-skill/procedures/map-orientation.md)** — indexes the generated doc as `architecture-map` or `architecture-overview` (via the `doc_type` frontmatter), and supplies the documented-status that Step 1D discovery joins. This skill does **not** run the map — indexing is `/wrap-up` or an explicit `/map-orientation --rescan`.
 - **The 3-layer model** ([ADR-007](//@agent-memory/docs/adr/2026-07-08-doc-altitudes-and-three-layer-map-model.md)): this doc is a **map-altitude content artifact** — cleanly separate from the *orientation map* (navigation), which indexes it. The orientation map maps *docs*; an architecture-map maps the *system*.
 - **[`/generate-docs`](generate-docs.md) orchestrator** — composes this generator's `[M]` (architecture-map) path with the other atomic generators to synthesize the whole-system doc surface. See [ADR-006](//@agent-memory/docs/adr/2026-07-07-doc-generation-family-architecture.md) + [ADR-009](//@agent-memory/docs/adr/2026-07-09-generate-docs-orchestrator.md).
-- **Decision collection** — if Step 1S / Step 1D resolution is ambiguous, present the candidates using [wait-options](//@agent-memory/control-files/procedures/wait-options.md).
+- **Decision collection** — if Step 1S / Step 1D resolution is ambiguous, present the candidates using [wait-options](//@agent-memory/agent-memory-coding-skill/procedures/wait-options.md).
 
 ---
 

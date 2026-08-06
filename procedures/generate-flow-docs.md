@@ -44,7 +44,7 @@ Bare discovers; you generate one deep-dive at a time. The [`/generate-docs`](gen
 2. **Infer the chains**: how one flow's outcome hands off to the next — an emitted event another flow consumes, a success redirect into another entrypoint, shared state. `[CONFIRM]` inferred chains; `[NOT FOUND]` where a handoff is expected but unclear.
 3. **Build the diagram**: a Mermaid `flowchart` — flows as nodes, edges labelled with the handoff (`then` / `triggers` / `emits …`).
 4. **Place**: root `docs/flows/journey-map.md` (project-wide; lives in the project tree per ADR-004).
-5. **Fill**: copy [flow-journey-map-template.md](//@agent-memory/control-files/templates/flow-journey-map-template.md), set `doc_type: flow-journey-map`, fill the diagram + named journeys + links to each flow's deep-dive (note flows lacking one). Fill-from-code, no fiction, typed markers.
+5. **Fill**: copy [flow-journey-map-template.md](//@agent-memory/agent-memory-coding-skill/templates/flow-journey-map-template.md), set `doc_type: flow-journey-map`, fill the diagram + named journeys + links to each flow's deep-dive (note flows lacking one). Fill-from-code, no fiction, typed markers.
 6. **Review**: show the map, group markers, state placement, note which flows still lack a deep-dive doc. **Done** — skip Steps 2–6.
 
 ### Step 1B: Resolve the target flow (deep-dive)
@@ -92,7 +92,7 @@ When in doubt, default to `sequenceDiagram`.
 
 ### Step 5: Fill the doc
 
-1. Copy [flow-doc-template.md](//@agent-memory/control-files/templates/flow-doc-template.md) to the target path.
+1. Copy [flow-doc-template.md](//@agent-memory/agent-memory-coding-skill/templates/flow-doc-template.md) to the target path.
 2. Update the `flow:` frontmatter and the `# Flow: ...` heading with the flow's name. **Keep `doc_type: flow`** — the orientation map keys on it.
 3. Remove the Convention preamble block (the blockquote marked "delete after reading").
 4. Fill from the trace:
@@ -104,7 +104,7 @@ When in doubt, default to `sequenceDiagram`.
    - **Preconditions & Notes** — preconditions, branch/error paths, external deps.
    - **Related** — links to the crossed modules' READMEs, sibling flows, relevant ADRs.
 
-**Accuracy discipline** (inherited from [generate-readme](//@agent-memory/control-files/procedures/generate-readme.md)): fill from actual code, never invent. Use `[TODO: ...]` (needs human input), `[CONFIRM: ...]` (found but unverified), `[NOT FOUND: ...]` (expected but missing). An incomplete flow doc is better than a fictional one.
+**Accuracy discipline** (inherited from [generate-readme](//@agent-memory/agent-memory-coding-skill/procedures/generate-readme.md)): fill from actual code, never invent. Use `[TODO: ...]` (needs human input), `[CONFIRM: ...]` (found but unverified), `[NOT FOUND: ...]` (expected but missing). An incomplete flow doc is better than a fictional one.
 
 ### Step 6: Present for review
 
@@ -120,12 +120,12 @@ Present the flow doc to [USER-NAME]:
 
 ## Integration With Other Procedures
 
-- **[discovery-contract](//@agent-memory/control-files/procedures/discovery-contract.md)** — defines the bare **discovery mode** (Step 1D): inventory format, disk+map status-join, relevance floor, map-as-pick. Per [ADR-008](//@agent-memory/docs/adr/2026-07-09-discovery-first-generation.md), bare discovers; the journey-map is the `[M]` pick, not the bare default.
-- **[generate-readme](//@agent-memory/control-files/procedures/generate-readme.md)** — sibling atomic doc generator (7Q README). Same shape: resolve → investigate → fill → review.
-- **[map-orientation](//@agent-memory/control-files/procedures/map-orientation.md)** — indexes the deep-dive as `flow-diagram` (`doc_type: flow`) and the map as `flow-journey-map` (`doc_type: flow-journey-map`), and supplies the documented-status that Step 1D discovery joins. This skill does **not** run the map itself — indexing happens at `/wrap-up` or an explicit `/map-orientation --rescan`.
+- **[discovery-contract](//@agent-memory/agent-memory-coding-skill/procedures/discovery-contract.md)** — defines the bare **discovery mode** (Step 1D): inventory format, disk+map status-join, relevance floor, map-as-pick. Per [ADR-008](//@agent-memory/docs/adr/2026-07-09-discovery-first-generation.md), bare discovers; the journey-map is the `[M]` pick, not the bare default.
+- **[generate-readme](//@agent-memory/agent-memory-coding-skill/procedures/generate-readme.md)** — sibling atomic doc generator (7Q README). Same shape: resolve → investigate → fill → review.
+- **[map-orientation](//@agent-memory/agent-memory-coding-skill/procedures/map-orientation.md)** — indexes the deep-dive as `flow-diagram` (`doc_type: flow`) and the map as `flow-journey-map` (`doc_type: flow-journey-map`), and supplies the documented-status that Step 1D discovery joins. This skill does **not** run the map itself — indexing happens at `/wrap-up` or an explicit `/map-orientation --rescan`.
 - **The two altitudes** (see [ADR-007](//@agent-memory/docs/adr/2026-07-08-doc-altitudes-and-three-layer-map-model.md)): the **flow-journey-map** is the *map altitude* (a content map of how flows relate); the **flow-diagram** is the *deep-dive*. Both are content docs, separate from the orientation map (navigation), which indexes them.
 - **[`/generate-docs`](generate-docs.md) orchestrator** — composes this generator's `[M]` (journey-map) path with the sibling generators to synthesize the whole-system doc surface. See [ADR-006](//@agent-memory/docs/adr/2026-07-07-doc-generation-family-architecture.md) + [ADR-009](//@agent-memory/docs/adr/2026-07-09-generate-docs-orchestrator.md).
-- **Decision collection** — if Step 1B resolution is ambiguous, present the candidates using [wait-options](//@agent-memory/control-files/procedures/wait-options.md).
+- **Decision collection** — if Step 1B resolution is ambiguous, present the candidates using [wait-options](//@agent-memory/agent-memory-coding-skill/procedures/wait-options.md).
 
 ---
 
