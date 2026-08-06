@@ -20,6 +20,20 @@ This repo holds every coding- and repository-oriented procedure that sits **on t
 - **Repo / integration**: `map-orientation`, `localize-context`, `pull-*`, `push-*`, `push-exclude-policy`
 - **Fleet**: `ask-agent`, `delegate-agent`, `setup-fleet`
 
+## Setup
+
+This overlay ships its **own** installers (`setup-scripts/`) — it does not depend on the core's installer, and the core's installer does not reach into this repo. Install the **memory core first**, then this overlay:
+
+```bash
+# 1. Memory core (agent-memory-system / control-files):
+bash /path/to/control-files/procedures/setup-scripts/setup-all-claude-code.sh
+
+# 2. This overlay:
+bash setup-scripts/setup-all-claude-code.sh
+```
+
+Both target `~/.claude/commands/` but keep **separate manifests** (core = `.agent-memory-manifest`, overlay = `.agent-memory-coding-skill-manifest`), so re-running either one cleans up only its own commands. Codex (`setup-all-codex.sh`) and Antigravity (`setup-all-antigravity.sh`) installers are provided too.
+
 ## Status
 
 Extracted from the memory core on **2026-08-06** (Phase 2 of the memory-core / coding-skill decoupling — see [ADR-012](https://github.com/alvseek/agent-memory-system) in the core repo). Wrapping this overlay as a 2nd-layer **MCP server** is the target delivery model but a **separate future project** — this repo is currently the procedure content that such a server will serve.
