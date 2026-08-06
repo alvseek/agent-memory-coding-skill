@@ -21,7 +21,7 @@ Follow the [Push Project](/push-project) procedure for the current working direc
 
 ### Step 2: Push Agent Memory
 
-Follow the [Push Memory](/push-memory) procedure for the agent-memory repo (`//@agent-memory/`).
+Follow the [Push Memory](/push-memory) procedure for the agent-memory repo (`[AGENT-MEMORY-PATH]/`).
 
 ### Step 3: Summary
 

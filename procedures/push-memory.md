@@ -15,7 +15,7 @@ Commit and push all changes in the agent-memory repository.
 
 ### Step 1: Check for Changes
 
-Run `git status` in the agent-memory repo (`//@agent-memory/`).
+Run `git status` in the agent-memory repo (`[AGENT-MEMORY-PATH]/`).
 
 If no changes (working tree clean), inform user: "No agent memory changes to push." and stop.
 

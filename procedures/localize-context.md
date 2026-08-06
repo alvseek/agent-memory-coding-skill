@@ -43,8 +43,8 @@ Graduate a **consenting** project's fleet-authored memory OUT of the central `@a
 
 1. **Identify project** — from `[project-name]` arg, else infer from cwd (same detection as `/map-orientation` Prelude).
 2. **Resolve central paths**:
-   - Central map: `//@agent-memory/shared-memory/[PROJECT-NAME]/context/orientation-map.md`
-   - Central context dir: `//@agent-memory/shared-memory/[PROJECT-NAME]/context/`
+   - Central map: `[AGENT-MEMORY-PATH]/shared-memory/[PROJECT-NAME]/context/orientation-map.md`
+   - Central context dir: `[AGENT-MEMORY-PATH]/shared-memory/[PROJECT-NAME]/context/`
    - Project root: the project's working directory on disk (cwd for the active project).
 3. **Guards**:
    - Central map missing → STOP + report: *"No orientation map for [PROJECT] yet — run `/map-orientation create` first, then localize."*
@@ -112,7 +112,7 @@ The `docs/` structural lane (Steps 4–6) is done. Now offer the **agent lane** 
 
    If **skipped** → jump to Step 7 (the project is still localized for the `docs/` lane; the agent lane simply isn't graduated).
 
-2. **Gather across agents** — a project's memory is smeared over many `agent-*/` folders. Scan every `//@agent-memory/agent-*/`:
+2. **Gather across agents** — a project's memory is smeared over many `agent-*/` folders. Scan every `[AGENT-MEMORY-PATH]/agent-*/`:
    - **Episodic**: files in `agent-*/episodes/` whose filename or index summary matches the project (filename prefix `[project]-` OR the `agent-memory-index.md` project tag). Skip `episodes/archive/`.
    - **Knowledge**: everything under `agent-*/knowledge-base/[project]/` (the **project-scoped subfolder only** — NEVER general `knowledge-base/*` files).
 

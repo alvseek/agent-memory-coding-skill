@@ -21,14 +21,14 @@ Map file: `shared-memory/[PROJECT-NAME]/context/orientation-map.md`. Format: [or
 ## Step 1: Prelude (all modes)
 
 1. **Identify project** — match cwd against known project mappings (`shared-memory/[project]/` existence + `shared-memory/integrations/external-integrations.md` task-system mapping). If a project-name arg is passed, use it. If neither: skip silently.
-2. **Compute central map path** — `//@agent-memory/shared-memory/[PROJECT-NAME]/context/orientation-map.md`. Record `CENTRAL_MAP_EXISTS`.
+2. **Compute central map path** — `[AGENT-MEMORY-PATH]/shared-memory/[PROJECT-NAME]/context/orientation-map.md`. Record `CENTRAL_MAP_EXISTS`.
 3. **Resolve localized home** — apply the /localize-context rule:
    - `CENTRAL_MAP_EXISTS` **and** its frontmatter has `home: project` → the project is **localized**. Set:
      - `MAP_PATH` = `<project-root>/<localized_path>` (default `docs/orientation-map.md`; `project-root` = cwd)
      - `CONTEXT_DIR` = `<project-root>/docs/`
      - `SOURCE_OF_TRUTH` = project
      - `MAP_EXISTS` = whether `MAP_PATH` exists. If the stub says localized but `MAP_PATH` is missing → report *"[PROJECT] is localized but `docs/orientation-map.md` isn't here — wrong cwd, or the bundle isn't checked out."* and exit.
-   - else → central defaults: `MAP_PATH` = the central map path, `CONTEXT_DIR` = `//@agent-memory/shared-memory/[PROJECT-NAME]/context/`, `SOURCE_OF_TRUTH` = central, `MAP_EXISTS` = `CENTRAL_MAP_EXISTS`.
+   - else → central defaults: `MAP_PATH` = the central map path, `CONTEXT_DIR` = `[AGENT-MEMORY-PATH]/shared-memory/[PROJECT-NAME]/context/`, `SOURCE_OF_TRUTH` = central, `MAP_EXISTS` = `CENTRAL_MAP_EXISTS`.
 
 > **All mode blocks below operate on the resolved `MAP_PATH` / `CONTEXT_DIR`.** Where a block names `shared-memory/[PROJECT-NAME]/context/orientation-map.md`, read it as `MAP_PATH` — identical for non-localized projects, in-project `docs/` for localized ones.
 

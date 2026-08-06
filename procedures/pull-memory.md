@@ -14,7 +14,7 @@ Pull the latest changes for the agent-memory repository and update the control-f
 
 ### Step 1: Check Repository State
 
-Run `git status` in the agent-memory repo (`//@agent-memory/`).
+Run `git status` in the agent-memory repo (`[AGENT-MEMORY-PATH]/`).
 
 If there are uncommitted changes, warn user: "You have uncommitted changes in agent-memory. Pull may cause merge conflicts. Continue?" and wait for confirmation.
 

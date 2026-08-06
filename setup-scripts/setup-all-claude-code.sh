@@ -55,5 +55,26 @@ fi
 
 echo "Successfully installed $TOTAL_COUNT overlay procedures!"
 echo ""
+
+# --- Register this overlay's repo path so [path-to-agent-memory-coding-skill] resolves ---
+# The overlay's procedures reference their templates via [path-to-agent-memory-coding-skill]/...;
+# that placeholder needs a definition in the global CLAUDE.md every agent loads. Since the overlay
+# is a standalone repo at an arbitrary location, only its own installer knows the path — so we
+# register it here (idempotent, UUID-guarded so re-runs don't duplicate).
+OVERLAY_ROOT="$(dirname "$SCRIPT_DIR")"
+CLAUDE_MD="$HOME/.claude/CLAUDE.md"
+PATH_DEF_UUID="9f3c2a1e-7b4d-4e6a-8c1f-2d5e9a3b6c7f"   # marks the overlay-path definition line
+if [ ! -f "$CLAUDE_MD" ]; then
+    echo "  NOTE: $CLAUDE_MD not found — could not register [path-to-agent-memory-coding-skill]."
+    echo "        Run the memory-core setup first (it creates CLAUDE.md), then re-run this installer."
+elif grep -q "$PATH_DEF_UUID" "$CLAUDE_MD"; then
+    echo "  [path-to-agent-memory-coding-skill] already registered in CLAUDE.md — skipped."
+else
+    printf '\n- **[path-to-agent-memory-coding-skill]** = `%s`  <!-- overlay-path-def %s -->\n' \
+        "$OVERLAY_ROOT" "$PATH_DEF_UUID" >> "$CLAUDE_MD"
+    echo "  Registered [path-to-agent-memory-coding-skill] = $OVERLAY_ROOT"
+fi
+echo ""
+
 echo "Installed overlay commands:"
 while IFS= read -r fname; do echo "  /$(basename "$fname" .md)"; done < "$MANIFEST_FILE"
