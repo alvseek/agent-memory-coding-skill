@@ -1,0 +1,27 @@
+# agent-memory-coding-skill
+
+The **coding/repo add-on overlay** for the [agent-memory](https://github.com/alvseek/agent-memory-system) framework.
+
+This repo holds every coding- and repository-oriented procedure that sits **on top of** the memory core: wizards, doc generation, QA, fleet coordination, project localization, and push/pull. A coding agent installs the memory core **plus** this overlay; a plain chat agent installs the core alone.
+
+## Relationship to the memory core
+
+- **Standalone, independent repo** — a *peer* of the core ([`agent-memory-system`](https://github.com/alvseek/agent-memory-system) / `control-files`). It is **not** a git submodule of the core or of the parent aggregator.
+- **One-way dependency**: this overlay references the core; the **core never references this overlay by name** (enforced by the core's `check-core-invariant.sh` guard).
+- **Additive composition, not override**: the consuming agent is the composition point. `procedures/awaken-coder.md` simply orchestrates *"run the core `/awaken-agent`, then localized-home + orientation map + fleet."* Nothing here overrides a core procedure.
+
+## Contents (`procedures/`)
+
+- **Awakening overlay**: `awaken-coder.md` (composes the core awaken), `localized-memory-workflow.md` (repo-authoritative localized memory behavior)
+- **Lifecycle**: `project-wrap-up.md` (composes the core `/wrap-up`, then push + map-orientation)
+- **Wizards**: `high-wizard`, `quick-wizard`, `council-of-wizards`, `rite-of-creation`, `forge-of-covenant`, `implement-plan`
+- **Doc-gen**: `generate-readme`, `generate-docs`, `generate-architecture-docs`, `generate-domain-docs`, `generate-flow-docs`, `discovery-contract`
+- **QA**: `analyze-code-quality`, `generate-standard`, `integration-test`, `setup-qa-instrument`, `setup-qa-visual-instrument`, `pixel-wizard`
+- **Repo / integration**: `map-orientation`, `localize-context`, `pull-*`, `push-*`, `push-exclude-policy`
+- **Fleet**: `ask-agent`, `delegate-agent`, `setup-fleet`
+
+## Status
+
+Extracted from the memory core on **2026-08-06** (Phase 2 of the memory-core / coding-skill decoupling — see [ADR-012](https://github.com/alvseek/agent-memory-system) in the core repo). Wrapping this overlay as a 2nd-layer **MCP server** is the target delivery model but a **separate future project** — this repo is currently the procedure content that such a server will serve.
+
+See [MIGRATION.md](MIGRATION.md) for the move details.
