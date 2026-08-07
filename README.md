@@ -17,9 +17,9 @@ This repo holds every coding- and repository-oriented procedure that sits **on t
 - **Wizards**: `high-wizard`, `quick-wizard`, `council-of-wizards`, `rite-of-creation`, `forge-of-covenant`, `implement-plan`
 - **Doc-gen**: `generate-readme`, `generate-docs`, `generate-architecture-docs`, `generate-domain-docs`, `generate-flow-docs`, `discovery-contract`
 - **QA**: `analyze-code-quality`, `generate-standard`, `integration-test`, `setup-qa-instrument`, `setup-qa-visual-instrument`, `pixel-wizard`
-- **Repo / integration**: `map-orientation`, `localize-context`, `pull-*`, `push-*`, `push-exclude-policy`
+- **Repo / integration**: `map-orientation`, `localize-context`, `pull-all`/`pull-project`, `push-all`/`push-project`/`push-agent-work`, `push-exclude-policy`
 
-> **Fleet** (`ask-agent`, `delegate-agent`, `setup-fleet` + their scripts/templates) moved to the memory **core** on 2026-08-07 — agent-to-agent orchestration operates on core entities (awakening + agent identity), so it belongs with the core, not this overlay. `awaken-coder` still surfaces the fleet at awakening by composing the core's fleet commands.
+> **Fleet** (`ask-agent`, `delegate-agent`, `setup-fleet` + their scripts/templates) moved to the memory **core** on 2026-08-07 — agent-to-agent orchestration operates on core entities (awakening + agent identity), so it belongs with the core, not this overlay. `awaken-coder` still surfaces the fleet at awakening by composing the core's fleet commands. Likewise **`push-memory`/`pull-memory`** moved to the core the same day — persisting the memory store is the memory server's own job; the overlay's `push-all`/`pull-all` compose `/push-project` (overlay) + the core's `/push-memory`.
 
 ## Setup
 
