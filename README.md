@@ -2,7 +2,7 @@
 
 The **coding/repo add-on overlay** for the [agent-memory](https://github.com/alvseek/agent-memory-system) framework.
 
-This repo holds every coding- and repository-oriented procedure that sits **on top of** the memory core: wizards, doc generation, QA, fleet coordination, project localization, and push/pull. A coding agent installs the memory core **plus** this overlay; a plain chat agent installs the core alone.
+This repo holds every coding- and repository-oriented procedure that sits **on top of** the memory core: wizards, doc generation, QA, project localization, and push/pull. A coding agent installs the memory core **plus** this overlay; a plain chat agent installs the core alone.
 
 ## Relationship to the memory core
 
@@ -18,7 +18,8 @@ This repo holds every coding- and repository-oriented procedure that sits **on t
 - **Doc-gen**: `generate-readme`, `generate-docs`, `generate-architecture-docs`, `generate-domain-docs`, `generate-flow-docs`, `discovery-contract`
 - **QA**: `analyze-code-quality`, `generate-standard`, `integration-test`, `setup-qa-instrument`, `setup-qa-visual-instrument`, `pixel-wizard`
 - **Repo / integration**: `map-orientation`, `localize-context`, `pull-*`, `push-*`, `push-exclude-policy`
-- **Fleet**: `ask-agent`, `delegate-agent`, `setup-fleet`
+
+> **Fleet** (`ask-agent`, `delegate-agent`, `setup-fleet` + their scripts/templates) moved to the memory **core** on 2026-08-07 — agent-to-agent orchestration operates on core entities (awakening + agent identity), so it belongs with the core, not this overlay. `awaken-coder` still surfaces the fleet at awakening by composing the core's fleet commands.
 
 ## Setup
 
