@@ -174,22 +174,11 @@ Fill the [Implementation Phases]([path-to-agent-memory-coding-skill]/plan-templa
 
 ### Step 14: Self-Review + Auto-Fix
 
-Do a self-review by thinking critically:
-- a. Is there anything missing that should be in scope?
-- b. Is there anything that should be out of scope?
-- c. Is there any conflict between confirmed decisions and the solution/implementation?
-- d. Is there anything redundant?
-- e. Are implementation phases in the right order?
-
-**If issues are found**: Auto-fix consistency issues (conflicts, redundancies, ordering) directly in the plan file. For issues that require a NEW decision (scope changes, missing requirements), STOP and present to [USER-NAME] using the WAIT Options format before continuing.
-
-**Report**: Briefly list any auto-fixes made. If no issues found, proceed silently to Step 15.
+Read and follow the [Plan Self-Review + Auto-Fix component]([path-to-agent-memory-coding-skill]/components/plan-self-review.md). If no issues found, proceed silently to Step 15.
 
 ### Step 15: Final Review
 
-Before presenting the plan, double check: are there any unresolved decisions, assumptions, or new concerns that surfaced during writing (Steps 12-13) or self-review (Step 14) that need [USER-NAME]'s input? If yes, present them now with the same decision format (options + confidence + reason).
-
-Present the complete plan file link to [USER-NAME] for final review.
+Read and follow the [Plan Final Review component]([path-to-agent-memory-coding-skill]/components/plan-final-review.md).
 
 ### ⛔ END OF PHASE 2
 
@@ -299,10 +288,7 @@ The delegated procedure will:
 
 ### Step 20: Move Plan to Completed
 
-After all implementation phases are done, logged, and both Quality Review (Step 18) + Final Integration Test (Step 19) are resolved, move the plan file to `/plans/completed/`:
-`mkdir -p ./plans/completed && mv ./plans/[plan-file].md ./plans/completed/[plan-file].md`
-
-**Note**: Episodic memory links to the plan will break after moving. This is accepted — completed plans are archival.
+After all implementation phases are done, logged, and both Quality Review (Step 18) + Final Integration Test (Step 19) are resolved, follow the [Archive Plan component]([path-to-agent-memory-coding-skill]/components/archive-plan.md) — move the plan file `[plan-file].md`.
 
 ### Step 21: Completion Report
 

@@ -214,9 +214,6 @@ After all sub-plans are DONE:
 
 ### Step 18: Move Council Folder to Completed
 
-After [USER-NAME] confirms feature is complete, move the entire council folder (core plan + sub-plans + contracts):
-`mkdir -p ./plans/completed && mv ./plans/[council-folder] ./plans/completed/[council-folder]`
-
-**Note**: Episodic memory links to the plan will break after moving. This is accepted — completed plans are archival.
+After [USER-NAME] confirms feature is complete, follow the [Archive Plan component]([path-to-agent-memory-coding-skill]/components/archive-plan.md) — move the entire council folder `[council-folder]` (core plan + sub-plans + contracts).
 
 ---

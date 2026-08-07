@@ -72,12 +72,8 @@ Default to `flowchart` unless C4 clearly fits (Mermaid's C4 support is newer/les
 
 ### Step 4: Compute placement (LCA)
 
-- **architecture-map** → project root `docs/architecture/{project}.md` (inherently project-wide).
-- **architecture-overview** → the subsystem's **LCA** `docs/architecture/{subsystem}.md` (collect the subsystem's file paths → nearest existing common ancestor).
-
-Use the nearest *existing* ancestor — never invent a parent folder. Create `docs/architecture/` at the target if it doesn't exist.
-
-> **Placement Contract**: **scope = location.** The doc lives in the **project's own tree** at its LCA.
+- **architecture-map** (project-wide) → project root `docs/architecture/{project}.md`.
+- **architecture-overview** → follow the [Compute Doc Placement component]([path-to-agent-memory-coding-skill]/components/compute-doc-placement.md) with **lens** = `architecture`, **scope files** = the subsystem's file paths, **name** = the subsystem.
 
 ### Step 5: Fill the doc
 
@@ -95,11 +91,7 @@ Use the nearest *existing* ancestor — never invent a parent folder. Create `do
 
 ### Step 6: Present for review
 
-Present the architecture doc to [USER-NAME]:
-- Show the diagram + prose.
-- Group outstanding markers by type.
-- State the placement, the **altitude** (map vs overview), and whether the health-check recommended a split.
-- Ask if anything needs adjustment.
+Follow the [Present Doc For Review component]([path-to-agent-memory-coding-skill]/components/present-doc-for-review.md) — **show** the diagram + prose; state the **altitude** (map vs overview).
 
 > **Vector export** (optional): extract the fenced Mermaid block to `{scope}.mmd` and run `mmdc -i {scope}.mmd -o {scope}.svg` (or `.pdf`).
 

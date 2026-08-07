@@ -170,9 +170,7 @@ Do a self-review by thinking critically:
 
 ### Step 14: Final Review
 
-Before presenting the plan, double check: are there any unresolved decisions, assumptions, or new concerns that surfaced during writing (Steps 10-12) or self-review (Step 13) that need [USER-NAME]'s input? If yes, present them now with the same decision format (options + confidence + reason).
-
-Present the complete plan file link to [USER-NAME] for final review. STOP. Wait for instruction.
+Read and follow the [Plan Final Review component]([path-to-agent-memory-coding-skill]/components/plan-final-review.md). STOP. Wait for instruction.
 
 ### Step 15: Execute Phases
 
@@ -203,9 +201,6 @@ After all phases are DONE:
 
 ### Step 17: Move Rite Folder to Completed
 
-After [USER-NAME] confirms project is complete, move the entire rite folder:
-`mkdir -p ./plans/completed && mv ./plans/[rite-folder] ./plans/completed/[rite-folder]`
-
-**Note**: Episodic memory links to the plan will break after moving. This is accepted — completed plans are archival.
+After [USER-NAME] confirms project is complete, follow the [Archive Plan component]([path-to-agent-memory-coding-skill]/components/archive-plan.md) — move the entire rite folder `[rite-folder]`.
 
 ---

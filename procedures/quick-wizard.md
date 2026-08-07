@@ -19,20 +19,7 @@ If no arguments provided, ask: "What feature or task should I create a Quick Wiz
 
 ### Step 1: Investigate and Collect Decisions
 
-This is where the thinking happens. Follow the investigation checklist below IN ORDER. Each step from 3-7 produces decision items for the WAIT Options form.
-
-Read and follow the /wait-options for collecting decisions.
-
-**Investigation checklist (in order):**
-
-1. **Requirements clarity** - Is the intent already clear? Is there ambiguity within the context? If ambiguous, create decisions to clarify before proceeding
-2. **Codebase scan** - Scan relevant files, modules, and architecture related to the task to understand current state
-3. **Critical technical points disclosure** - Identify the main function/module entrypoints, core engine algorithm/logic pattern, and key execution flow touchpoints. Surface these in WAIT Options even when the implementation direction is already clear
-4. **Alternative approaches** - Based on the requirement, discover what ways this can be done (there's usually more than one) → offer as decisions
-5. **Reusable components** - Identify existing functions, utilities, patterns that could be leveraged → offer to reuse the related/reusable ones as decisions
-6. **Conflicts and constraints** - Note what could go wrong, what limits exist → if any, offer options based on pros and cons as decisions
-7. **Integration points** - Check what existing code/systems will be affected → if concerning, offer options as decisions
-8. **Quality standard discovery** - Search for `quality-standard.md` in the project via glob (`**/quality-standard.md`). If found, load it as additional implementation criteria to reference during execution. If not found, note it and proceed
+Read and follow the [Investigate & Collect Decisions component]([path-to-agent-memory-coding-skill]/components/investigate-and-collect-decisions.md) — it runs the shared investigation checklist and collects decision items for the WAIT Options form.
 
 ### Step 2: Scope Gate Assessment
 

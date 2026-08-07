@@ -45,20 +45,7 @@ Fill the [Project Info]([path-to-agent-memory-coding-skill]/plan-templates/high-
 
 ### Step 5: Investigate and Collect Decisions
 
-This is where the thinking happens - NOT in the plan document. Follow the investigation checklist below IN ORDER. Each step from 3-7 produces decision items for the WAIT Options form.
-
-Read and follow the /wait-options for collecting decisions.
-
-**Investigation checklist (in order):**
-
-1. **Requirements clarity** - Is the intent already clear? Is there ambiguity within the context? If ambiguous, create decisions to clarify before proceeding
-2. **Codebase scan** - Scan relevant files, modules, and architecture related to the task to understand current state
-3. **Critical technical points disclosure** - Identify the main function/module entrypoints, core engine algorithm/logic pattern, and key execution flow touchpoints. Surface these in WAIT Options even when the implementation direction is already clear
-4. **Alternative approaches** - Based on the requirement, discover what ways this can be done (there's usually more than one) → offer as decisions
-5. **Reusable components** - Identify existing functions, utilities, patterns that could be leveraged → offer to reuse the related/reusable ones as decisions
-6. **Conflicts and constraints** - Note what could go wrong, what limits exist → if any, offer options based on pros and cons as decisions
-7. **Integration points** - Check what existing code/systems will be affected → if concerning, offer options as decisions
-8. **Quality standard discovery** - Search for `quality-standard.md` in the project via glob (`**/quality-standard.md`). If found, load it as additional implementation criteria to reference when writing plan steps. If not found, note it and proceed
+Read and follow the [Investigate & Collect Decisions component]([path-to-agent-memory-coding-skill]/components/investigate-and-collect-decisions.md) — it runs the shared investigation checklist and collects decision items for the WAIT Options form. This is where the thinking happens — NOT in the plan document.
 
 ### Step 6: Present WAIT Options
 
@@ -144,22 +131,11 @@ Fill the [Implementation Phases]([path-to-agent-memory-coding-skill]/plan-templa
 
 ### Step 13: Self-Review + Auto-Fix
 
-Do a self-review by thinking critically:
-- a. Is there anything missing that should be in scope?
-- b. Is there anything that should be out of scope?
-- c. Is there any conflict between confirmed decisions and the solution/implementation?
-- d. Is there anything redundant?
-- e. Are implementation phases in the right order?
-
-**If issues are found**: Auto-fix consistency issues (conflicts, redundancies, ordering) directly in the plan file. For issues that require a NEW decision (scope changes, missing requirements), STOP and present to [USER-NAME] using the WAIT Options format before continuing.
-
-**Report**: Briefly list any auto-fixes made. If no issues found, proceed silently to Step 14.
+Read and follow the [Plan Self-Review + Auto-Fix component]([path-to-agent-memory-coding-skill]/components/plan-self-review.md). If no issues found, proceed silently to Step 14.
 
 ### Step 14: Final Review
 
-Before presenting the plan, double check: are there any unresolved decisions, assumptions, or new concerns that surfaced during writing (Steps 11-12) or self-review (Step 13) that need [USER-NAME]'s input? If yes, present them now with the same decision format (options + confidence + reason).
-
-Present the complete plan file link to [USER-NAME] for final review.
+Read and follow the [Plan Final Review component]([path-to-agent-memory-coding-skill]/components/plan-final-review.md).
 
 ### ⛔ END OF PHASE 2
 
@@ -222,10 +198,7 @@ The delegated procedure will:
 
 ### Step 18: Move Plan to Completed
 
-After all implementation phases are done, logged, and both Quality Review (Step 16) + Final Integration Test (Step 17) are resolved, move the plan file to `/plans/completed/`:
-`mkdir -p ./plans/completed && mv ./plans/[plan-file].md ./plans/completed/[plan-file].md`
-
-**Note**: Episodic memory links to the plan will break after moving. This is accepted — completed plans are archival.
+After all implementation phases are done, logged, and both Quality Review (Step 16) + Final Integration Test (Step 17) are resolved, follow the [Archive Plan component]([path-to-agent-memory-coding-skill]/components/archive-plan.md) — move the plan file `[plan-file].md`.
 
 ### Step 19: Completion Report
 

@@ -81,14 +81,7 @@ When in doubt, default to `sequenceDiagram`.
 
 ### Step 4: Compute placement (LCA)
 
-1. Collect the file paths of every **code participant** the flow runs through (exclude externals like third-party APIs).
-2. Compute their **nearest existing common ancestor** folder.
-3. Target = `[LCA]/docs/flows/{flow-name}.md`.
-   - A flow contained in one module → LCA = that module → co-located `[module]/docs/flows/`.
-   - A flow spanning modules → LCA = their nearest common ancestor's `docs/flows/`.
-4. Use the nearest *existing* ancestor — never invent a parent folder. If `docs/flows/` doesn't exist at the LCA, create it there.
-
-> **Placement Contract**: **scope = location.** A flow doc lives at the LCA of the files it runs through — measured by *blast radius, not casual references* (only files the flow actually executes through count). A flow doc always lives in the **project's own tree** at its LCA; localization only governs where the orientation map that later indexes it lives, not the doc.
+Follow the [Compute Doc Placement component]([path-to-agent-memory-coding-skill]/components/compute-doc-placement.md) with **lens** = `flows`, **scope files** = every code participant the flow runs through (exclude externals like third-party APIs), **name** = the flow name. (Localization only governs where the orientation map that later indexes the doc lives, not the doc itself.)
 
 ### Step 5: Fill the doc
 
@@ -108,11 +101,7 @@ When in doubt, default to `sequenceDiagram`.
 
 ### Step 6: Present for review
 
-Present the flow doc to [USER-NAME]:
-- Show the diagram + prose.
-- Group outstanding markers by type (`[TODO]` needs input · `[CONFIRM]` needs verification · `[NOT FOUND]` missing from code).
-- State the placement (the LCA folder chosen) so [USER-NAME] can confirm it.
-- Ask if anything needs adjustment.
+Follow the [Present Doc For Review component]([path-to-agent-memory-coding-skill]/components/present-doc-for-review.md) — **show** the diagram + prose.
 
 > **Vector export** (optional): to produce a sharable image, extract the fenced Mermaid block to `{flow}.mmd` and run `mmdc -i {flow}.mmd -o {flow}.svg` (or `.pdf`). Prefer SVG/PDF over PNG for dense diagrams.
 

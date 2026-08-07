@@ -275,9 +275,7 @@ Do a self-review by thinking critically:
 
 ### Step 15: Final Review
 
-Before presenting the plan, double check: are there any unresolved decisions, assumptions, or new concerns that surfaced during writing (Steps 7-13) or self-review (Step 14) that need [USER-NAME]'s input? If yes, present them now with the same decision format (options + confidence + reason).
-
-Present the complete grand-plan file link to [USER-NAME] for final review. STOP. Wait for instruction.
+Read and follow the [Plan Final Review component]([path-to-agent-memory-coding-skill]/components/plan-final-review.md). STOP. Wait for instruction.
 
 ---
 
@@ -336,9 +334,6 @@ After all milestones are DONE and all Covenant Reviews completed:
 3. Verify the Deferral & Debt Tracker has no unresolved items
 4. Present completion summary to [USER-NAME]
 
-After [USER-NAME] confirms project is complete, move the entire covenant folder:
-`mkdir -p ./plans/completed && mv ./plans/[covenant-folder] ./plans/completed/[covenant-folder]`
-
-**Note**: Episodic memory links to the plan will break after moving. This is accepted — completed plans are archival.
+After [USER-NAME] confirms project is complete, follow the [Archive Plan component]([path-to-agent-memory-coding-skill]/components/archive-plan.md) — move the entire covenant folder `[covenant-folder]`.
 
 ---

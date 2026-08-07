@@ -78,14 +78,7 @@ When in doubt, default to `erDiagram`.
 
 ### Step 4: Compute placement (LCA)
 
-1. Collect the file paths of the **entity files** in scope.
-2. Compute their **nearest existing common ancestor** folder.
-3. Target = `[LCA]/docs/domain/{scope-name}.md`.
-   - A model contained in one module → LCA = that module → co-located `[module]/docs/domain/`.
-   - A model shared across modules → LCA = their nearest common ancestor's `docs/domain/` (data models often sit higher than flows).
-4. Use the nearest *existing* ancestor — never invent a parent folder. Create `docs/domain/` at the LCA if it doesn't exist.
-
-> **Placement Contract**: **scope = location.** A domain doc lives at the LCA of the entity files it covers — *blast radius, not casual references*. It always lives in the **project's own tree**.
+Follow the [Compute Doc Placement component]([path-to-agent-memory-coding-skill]/components/compute-doc-placement.md) with **lens** = `domain`, **scope files** = the entity files in scope, **name** = the model/scope name. (Data models often sit higher than flows — a model shared across modules lands at their common ancestor.)
 
 ### Step 5: Fill the doc
 
@@ -103,11 +96,7 @@ When in doubt, default to `erDiagram`.
 
 ### Step 6: Present for review
 
-Present the domain doc to [USER-NAME]:
-- Show the ERD + prose.
-- Group outstanding markers by type (`[TODO]` needs input · `[CONFIRM]` needs verification · `[NOT FOUND]` missing from code).
-- State the placement (the LCA folder chosen) + whether the health-check recommended a split.
-- Ask if anything needs adjustment.
+Follow the [Present Doc For Review component]([path-to-agent-memory-coding-skill]/components/present-doc-for-review.md) — **show** the ERD + prose.
 
 > **Vector export** (optional): extract the fenced Mermaid block to `{scope}.mmd` and run `mmdc -i {scope}.mmd -o {scope}.svg` (or `.pdf`). Prefer SVG/PDF over PNG for dense diagrams.
 
