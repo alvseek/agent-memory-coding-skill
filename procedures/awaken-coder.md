@@ -1,6 +1,6 @@
 # Awaken Coder — Coding-Agent Awakening Overlay
 
-Orchestrating overlay for **coding agents** (working in a repo). It composes the memory-core awakening with repo/environment context: the core loads central memory; this overlay adds localization, orientation map, fleet, and task-system.
+Orchestrating overlay for **coding agents** (working in a repo). It composes the memory-core awakening with repo/environment context: the core loads central memory + the fleet roster; this overlay adds localization, orientation map, and task-system.
 
 **Delivery**: as a local skill/command (Claude Code CLI) or an MCP prompt (`agent-memory-coding-skill` server). Either way, the composition is agent-side — this overlay *invokes* the core `/awaken-agent`; it never reaches into the core repo/server directly.
 
@@ -17,16 +17,13 @@ Orchestrating overlay for **coding agents** (working in a repo). It composes the
    - **Context**: shared entries resolve to `<project-root>/docs/`, private to `<project-root>/.agents/knowledge/` (instead of the central paths the core loaded).
    - For memory **writes** this session, follow /localized-memory-workflow.
 
-3. **Orientation map** — attempt `shared-memory/[PROJECT-NAME]/fleet-agents.md` (silently skip if missing). Call `/map-orientation` (bare, load-only) to load the orientation map if it exists — never auto-create.
+3. **Orientation map** — Call `/map-orientation` (bare, load-only) to load the orientation map if it exists — never auto-create. (The core awakening already loaded the project's `fleet-agents.md` roster + surfaced the fleet in its report.)
 
 4. **Task system check** — match the working directory to its task system and run that project's Awakening Hook: **Todoist** (`aquazone`, `invintiry`) → query `@agent-[my-domain]` + `@waiting-human`; **Jira/Linear** (`plko` / `ocx-platform`, `ocx-data`) → the Awakening Hook section in that project's context. Report counts. No matching project → skip silently.
 
 5. **Augment the core report** — fold these additions into the core's report block:
    - **Current project + orientation map status**: if no map → *"No orientation map for [project] yet — use `/map-orientation create` to scan and create when ready."*
-   - **Fleet**: if `fleet-agents.md` loaded → mention `/ask-agent` and `/delegate-agent`; else *"No fleet defined yet — use `/setup-fleet` to initialize."*
    - **Task system**: report the queried counts.
    - If localized: note that localized episodic/context superseded the central load.
 
-## Domain Boundary Awareness (coding/fleet)
-
-When asked about something outside your domain: acknowledge it's outside your expertise, check `fleet-agents.md` and name the right specialist, offer with a disclaimer, and if no specialist exists escalate to [USER-NAME]. Never silently guess.
+*(Domain Boundary Awareness — consult `fleet-agents.md` and name the right specialist when asked outside your domain — is inherited from the core awakening; no need to restate it here.)*
