@@ -49,7 +49,7 @@ Read and follow the [Investigate & Collect Decisions component]([path-to-agent-m
 
 ### Step 6: Present WAIT Options
 
-Present the WAIT Options form to [USER-NAME] using the /wait-options.
+Present the WAIT Options form to [USER-NAME] by invoking the `/wait-options` command procedure.
 Preamble: "I've investigated the codebase. Here are the decisions I need before planning"
 
 STOP. Present to [USER-NAME] for review. Do NOT write any plan sections until decisions are confirmed.

@@ -47,13 +47,13 @@ Investigate the feature to understand what [USER-NAME] wants delivered. This hap
 2. **Identify all parts** — What distinct pieces need to be built? (data models, APIs, UI, infrastructure, migrations, etc.)
 3. **Research context** — Scan relevant codebase, architecture, and existing patterns
 
-Read and follow the /wait-options for collecting requirement decisions.
+Invoke the `/wait-options` command procedure to guide collecting requirement decisions — run the command; its format rules are not in context.
 
 Be exhaustive — missing a requirement here means a missing sub-plan later.
 
 ### Step 6: Present Requirements WAIT Options
 
-Present the requirements to [USER-NAME] using the /wait-options.
+Present the requirements to [USER-NAME] by invoking the `/wait-options` command procedure.
 Preamble: "Based on my investigation, here's what I think you want"
 
 STOP. Present to [USER-NAME] for review. Do NOT fill any tables or proceed until [USER-NAME] confirms the requirements.
@@ -94,11 +94,11 @@ Before decomposing into sub-plans, investigate the codebase and feature context 
 4. **Parallel strategy** — Which sub-plans can run concurrently? Any hard sequential dependencies?
 5. **Conflicts and constraints** — Are there requirements that must be in the same sub-plan? Cross-cutting concerns?
 
-Read and follow the /wait-options for collecting decomposition decisions.
+Invoke the `/wait-options` command procedure to guide collecting decomposition decisions — run the command; its format rules are not in context.
 
 ### Step 9: Present Decomposition WAIT Options
 
-Present the decomposition decisions to [USER-NAME] using the /wait-options.
+Present the decomposition decisions to [USER-NAME] by invoking the `/wait-options` command procedure.
 Preamble: "Here are the decomposition decisions I need before breaking this into sub-plans"
 
 STOP. Present to [USER-NAME] for review. Do NOT proceed to decomposition until decisions are confirmed.

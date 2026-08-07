@@ -71,7 +71,7 @@ Fill the [Project Info]([path-to-agent-memory-coding-skill]/plan-templates/high-
 
 This is where the thinking happens - NOT in the plan document. Follow the investigation checklist below IN ORDER. Each step from 3-6 produces decision items for the WAIT Options form.
 
-Read and follow the /wait-options for collecting decisions.
+Invoke the `/wait-options` command procedure to guide collecting decisions — run the command; its format rules are not in context.
 
 **Investigation checklist (in order):**
 
@@ -89,7 +89,7 @@ Read and follow the /wait-options for collecting decisions.
 
 ### Step 7: Present WAIT Options
 
-Present the WAIT Options form to [USER-NAME] using the /wait-options.
+Present the WAIT Options form to [USER-NAME] by invoking the `/wait-options` command procedure.
 Preamble: "I've investigated the codebase. Here are the decisions I need before planning"
 
 STOP. Present to [USER-NAME] for review. Do NOT write any plan sections until decisions are confirmed.

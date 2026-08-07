@@ -104,7 +104,7 @@ Follow the [Present Doc For Review component]([path-to-agent-memory-coding-skill
 - **/map-orientation** — indexes the generated doc as `architecture-map` or `architecture-overview` (via the `doc_type` frontmatter), and supplies the documented-status that Step 1D discovery joins. This skill does **not** run the map — indexing is `/wrap-up` or an explicit `/map-orientation --rescan`.
 - **The 3-layer model**: this doc is a **map-altitude content artifact** — cleanly separate from the *orientation map* (navigation), which indexes it. The orientation map maps *docs*; an architecture-map maps the *system*.
 - **/generate-docs orchestrator** — composes this generator's `[M]` (architecture-map) path with the other atomic generators to synthesize the whole-system doc surface.
-- **Decision collection** — if Step 1S / Step 1D resolution is ambiguous, present the candidates using /wait-options.
+- **Decision collection** — if Step 1S / Step 1D resolution is ambiguous, present the candidates by invoking the `/wait-options` command procedure (run the command; its format rules are not in context).
 
 ---
 

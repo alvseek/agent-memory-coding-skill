@@ -41,7 +41,7 @@ After investigation, assess whether this task is suitable for Quick Wizard (dire
 
 ### Step 3: Present WAIT Options
 
-Present the WAIT Options form to [USER-NAME] using the /wait-options.
+Present the WAIT Options form to [USER-NAME] by invoking the `/wait-options` command procedure.
 Preamble: "I've investigated the codebase. Here are the decisions I need before proceeding"
 
 STOP. Present to [USER-NAME] for review. Do NOT proceed until decisions are confirmed.

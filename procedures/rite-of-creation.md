@@ -49,13 +49,13 @@ Investigate to understand what [USER-NAME] wants to build. This happens BEFORE a
 4. **Tech stack considerations** — What languages, frameworks, infrastructure fit this project?
 5. **Constraints and risks** — Budget, timeline, technical limitations, team capabilities?
 
-Read and follow the /wait-options for collecting project-level decisions.
+Invoke the `/wait-options` command procedure to guide collecting project-level decisions — run the command; its format rules are not in context.
 
 Be thorough — these are foundational decisions that shape every phase downstream.
 
 ### Step 6: Present Project WAIT Options (Round 1)
 
-Present the project decisions to [USER-NAME] using the /wait-options.
+Present the project decisions to [USER-NAME] by invoking the `/wait-options` command procedure.
 Preamble: "Based on my investigation, here are the project decisions I need before planning"
 
 STOP. Present to [USER-NAME] for review. Do NOT fill any tables or proceed until [USER-NAME] confirms the project decisions.
@@ -107,11 +107,11 @@ Before filling exit criteria and dependencies, investigate to collect decisions 
 4. **Role assignment** — Are the recommended roles appropriate for this project's context?
 5. **Conflicts and constraints** — Are there cross-phase concerns that need special handling?
 
-Read and follow the /wait-options for collecting phase-level decisions.
+Invoke the `/wait-options` command procedure to guide collecting phase-level decisions — run the command; its format rules are not in context.
 
 ### Step 9: Present Phase WAIT Options (Round 2)
 
-Present the phase planning decisions to [USER-NAME] using the /wait-options.
+Present the phase planning decisions to [USER-NAME] by invoking the `/wait-options` command procedure.
 Preamble: "Here are the phase planning decisions I need before structuring the phases"
 
 STOP. Present to [USER-NAME] for review. Do NOT proceed until decisions are confirmed.
@@ -164,7 +164,7 @@ Do a self-review by thinking critically:
 - d. Are dependencies correct? Any missing parallel opportunities?
 - e. Is there any conflict between project decisions and the phase plan?
 
-**If issues are found**: Auto-fix consistency issues (wrong protocol assignments, dependency errors, incomplete exit criteria) directly in the plan file. For issues that require a NEW decision (missing phases, scope changes), STOP and present to [USER-NAME] using the WAIT Options format before continuing.
+**If issues are found**: Auto-fix consistency issues (wrong protocol assignments, dependency errors, incomplete exit criteria) directly in the plan file. For issues that require a NEW decision (missing phases, scope changes), STOP and present to [USER-NAME] by invoking the `/wait-options` command procedure before continuing.
 
 **Report**: Briefly list any auto-fixes made. If no issues found, proceed silently to Step 14.
 

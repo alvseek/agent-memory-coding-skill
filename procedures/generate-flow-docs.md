@@ -114,7 +114,7 @@ Follow the [Present Doc For Review component]([path-to-agent-memory-coding-skill
 - **/map-orientation** — indexes the deep-dive as `flow-diagram` (`doc_type: flow`) and the map as `flow-journey-map` (`doc_type: flow-journey-map`), and supplies the documented-status that Step 1D discovery joins. This skill does **not** run the map itself — indexing happens at `/wrap-up` or an explicit `/map-orientation --rescan`.
 - **The two altitudes**: the **flow-journey-map** is the *map altitude* (a content map of how flows relate); the **flow-diagram** is the *deep-dive*. Both are content docs, separate from the orientation map (navigation), which indexes them.
 - **/generate-docs orchestrator** — composes this generator's `[M]` (journey-map) path with the sibling generators to synthesize the whole-system doc surface.
-- **Decision collection** — if Step 1B resolution is ambiguous, present the candidates using /wait-options.
+- **Decision collection** — if Step 1B resolution is ambiguous, present the candidates by invoking the `/wait-options` command procedure (run the command; its format rules are not in context).
 
 ---
 

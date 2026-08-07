@@ -8,7 +8,7 @@ Shared investigation checklist for the planning wizards. **This is a component, 
 
 This is where the thinking happens — NOT in the plan document. Follow the investigation checklist below IN ORDER. Each item can produce decision items for the WAIT Options form.
 
-Read and follow the /wait-options for collecting decisions.
+Invoke the `/wait-options` command procedure to guide collecting decisions — run the command; its format rules are not in context.
 
 **Investigation checklist (in order):**
 
