@@ -17,11 +17,11 @@ Commit and push changes in both the current working project and the agent-memory
 
 ### Step 1: Push Project Files
 
-Follow the [Push Project](/push-project) procedure for the current working directory.
+Follow the [Push Project](/push-project) procedure in **`all`** mode (`/push-project all [message]`) for the current working directory — full working tree.
 
 ### Step 2: Push Agent Memory
 
-Follow the [Push Memory](/push-memory) procedure for the agent-memory repo (the core owns its store location).
+Follow the [Push Memory](/push-memory) procedure in **`all`** mode (`/push-memory all [message]`) for the agent-memory repo — the whole store (the core owns its store location).
 
 ### Step 3: Summary
 

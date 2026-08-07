@@ -8,18 +8,21 @@ End-of-session **full** orchestrator (coding/environment add-on): push the proje
 
 ## Arguments
 
-`$ARGUMENTS`
+`$ARGUMENTS` = `[all|agent] [fresh]`
 
-- `/project-wrap-up` → Default (delta vs fresh auto-detected by `/update-memory`)
-- `/project-wrap-up fresh` → Force fresh mode (pass-through to the memory wrap-up)
+- **Push mode** (optional): `agent` (default) pushes only the agent's own work across project + memory (leaves the user's unrelated changes and other agents' in-flight memory untouched); `all` pushes the **full working tree** of both — a deliberate choice that includes the user's unrelated changes.
+- **`fresh`** (optional): force fresh mode for the memory wrap-up (pass-through to `/update-memory`); default auto-detects delta vs fresh.
+- Examples: `/project-wrap-up` (agent + delta) · `/project-wrap-up all` · `/project-wrap-up fresh` · `/project-wrap-up all fresh`.
 
 ---
 
 ## Procedure
 
+**Resolve args first**: `<mode>` = `all` if `$ARGUMENTS` contains the token `all`, else `agent` (the default). Pass `fresh` through to the memory wrap-up if present. `<mode>` drives every push step below.
+
 ### Step 1: Push the Project's Work (silent) — MANDATORY
 
-Push the agent's **project** work FIRST, so a merge request / PR can be opened immediately without waiting for the memory update that follows. Execute /push-agent-work scoped to the **working project repo and its owned submodules only** — do NOT touch the agent-memory repo yet (this session's memory isn't written until Step 2, so pushing it now would miss it). The conservative rule still holds: stage only agent-produced project paths (never `git add -A`); the user's unrelated changes are left for the user.
+Push the agent's **project** work FIRST, so a merge request / PR can be opened immediately without waiting for the memory update that follows. Execute **`/push-project <mode>`** (working project repo + owned submodules only) — do NOT touch the agent-memory store yet (this session's memory isn't written until Step 2, so pushing it now would miss it). In the default `agent` mode this stages only agent-produced project paths (never `git add -A`), leaving the user's unrelated changes for the user; `all` mode pushes the full working tree.
 
 Tool calls visible (git commands); capture per-repo commit hashes + user-files-left counts for Step 5.
 
@@ -44,11 +47,11 @@ Silent no-op if no map exists or no orientation docs touched. Capture refresh co
 
 ### Step 4: Push Memory (silent) — MANDATORY
 
-Execute /push-agent-work for the **agent-memory repo** (whole) plus any **project memory files** Steps 2–3 just wrote (localized `.agents/**` + refreshed `docs/` orientation/context docs). Invoking `/project-wrap-up` IS the authorization to commit + push. This captures the episodic / emotional / reasoning / knowledge writes that the Step 1 project push ran too early to include. Same scope discipline — never a blanket `git add -A` on the project (only the memory paths above); explicit `/push-all` / `/push-project` stay full-tree as a deliberate user choice.
+Execute **`/push-memory <mode>`** for the **agent-memory store** **and** **`/push-project <mode>`** again to capture the **project memory files** Steps 2–3 just wrote (localized `.agents/**` + refreshed `docs/` orientation/context docs). Invoking `/project-wrap-up` IS the authorization to commit + push. This captures the episodic / emotional / reasoning / knowledge writes that the Step 1 project push ran too early to include. In the default `agent` mode both stage only this agent's own work (never a blanket `git add -A`), leaving other agents' in-flight memory and the user's project changes untouched; `all` mode pushes both full trees.
 
 Tool calls visible (git commands); capture per-repo commit hashes + agent-work-pushed status for Step 5.
 
-**Then verify (drives the Step 5 completion gate)**: from Push Agent Work's Step 3 verification across BOTH pushes (Step 1 project + Step 4 memory), record per repo whether **every agent-work path is committed AND pushed** (branch not ahead of remote) + a count of user files left. **Excluded repos are exempt** (report as `skipped (excluded)`). Do NOT attempt elaborate recovery — if an *agent-work* push fails or any agent-work path remains, that is carried to Step 5, where the wrap-up fails loudly.
+**Then verify (drives the Step 5 completion gate)**: from the leaf pushers' `git status -sb [ahead N]` verification (Step 4 of `/push-project` + `/push-memory`) across Step 1 (project) + Step 4 (memory + project-memory), record per repo whether **every agent-work path is committed AND pushed** (branch not ahead of remote) + a count of user files left. **Excluded repos are exempt** (report as `skipped (excluded)`). Do NOT attempt elaborate recovery — if an *agent-work* push fails or any agent-work path remains, that is carried to Step 5, where the wrap-up fails loudly.
 
 ### Step 5: Final Summary (only visible output)
 
