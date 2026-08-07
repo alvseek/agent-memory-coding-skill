@@ -18,7 +18,7 @@ Follow the [Pull Project](/pull-project) procedure for the current working direc
 
 ### Step 2: Pull Agent Memory
 
-Follow the [Pull Memory](/pull-memory) procedure for the agent-memory repo (`[AGENT-MEMORY-PATH]/`).
+Follow the [Pull Memory](/pull-memory) procedure for the agent-memory repo (the core owns its store location).
 
 ### Step 3: Summary
 
