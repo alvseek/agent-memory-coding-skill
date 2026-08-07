@@ -23,9 +23,16 @@ Push the agent's **project** work FIRST, so a merge request / PR can be opened i
 
 Tool calls visible (git commands); capture per-repo commit hashes + user-files-left counts for Step 5.
 
-### Step 2: Memory Wrap-Up (silent)
+### Step 2: Project Context Gate + Memory Wrap-Up (silent)
 
-Execute the core /wrap-up **memory steps** (Save Memory via `/update-memory` + Extract Open Items), passing `fresh` through if present. Capture its memory-update results (mode, gate decisions, episodic entry, carry-forward count, promotions, emotional status) and the open-item lists as data for Step 5. Do NOT print `/wrap-up`'s own Memory Summary separately — it folds into Step 5.
+**First — the Project Context Gate** (the memory core is project-blind; the coding overlay owns project-context). Evaluate whether this session produced project-specific context worth persisting:
+- Project-specific conventions, setup, deployment, env details?
+- Workarounds, configs, or decisions specific to the current project?
+- New credentials, URLs, API endpoints, infrastructure details?
+
+**YES to any** → run `/update-project-context` for the material (it resolves central vs localized home itself). Run it **before** the memory wrap-up below, so the core `/update-memory` promotion pre-scan catches the write and records it in the episodic **Promotions** field. **NO to all** → skip silently.
+
+**Then — the memory wrap-up**: Execute the core /wrap-up **memory steps** (Save Memory via `/update-memory` + Extract Open Items), passing `fresh` through if present. Capture its memory-update results (mode, gate decisions, episodic entry, carry-forward count, promotions, emotional status) and the open-item lists as data for Step 5. Do NOT print `/wrap-up`'s own Memory Summary separately — it folds into Step 5.
 
 ### Step 3: Refresh Orientation Map (silent)
 

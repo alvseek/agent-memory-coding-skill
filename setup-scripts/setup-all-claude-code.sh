@@ -30,11 +30,18 @@ if [ ! -d "$PROC_DIR" ]; then echo "Error: overlay procedures directory not foun
 mkdir -p "$TARGET_DIR"
 
 # Clean up previously installed OVERLAY files using the overlay manifest (leaves core commands untouched).
+# Never delete a file the sibling (core) manifest also claims — a stale manifest entry (e.g. a command
+# that moved core<->overlay in a prior session) must not delete a command the other installer owns. This
+# makes the two installers order-independent and robust to cross-repo moves.
+SIBLING_MANIFEST="$TARGET_DIR/.agent-memory-manifest"
 if [ -f "$MANIFEST_FILE" ]; then
     echo "Cleaning up previously installed overlay commands..."
     CLEANED=0
     while IFS= read -r filename; do
         if [ -n "$filename" ] && [ -f "$TARGET_DIR/$filename" ]; then
+            if [ -f "$SIBLING_MANIFEST" ] && grep -qxF "$filename" "$SIBLING_MANIFEST"; then
+                continue   # owned by the core installer — don't delete
+            fi
             rm "$TARGET_DIR/$filename"
             CLEANED=$((CLEANED + 1))
         fi
