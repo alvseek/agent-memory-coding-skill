@@ -10,7 +10,12 @@
 # Env override: AGENT_MEMORY_TARGET_DIR (default: ~/.claude/commands)
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROC_DIR="$(dirname "$SCRIPT_DIR")/procedures"
+
+# Compile procedures (inline components + templates) into output/, then install FROM output/
+# so the installed commands are self-contained (no refs to components/ or templates/).
+bash "$SCRIPT_DIR/compile-procedures.sh" || { echo "Error: compile-procedures.sh failed"; exit 1; }
+
+PROC_DIR="$(dirname "$SCRIPT_DIR")/output"
 TARGET_DIR="${AGENT_MEMORY_TARGET_DIR:-$HOME/.claude/commands}"
 MANIFEST_FILE="$TARGET_DIR/.agent-memory-coding-skill-manifest"
 
