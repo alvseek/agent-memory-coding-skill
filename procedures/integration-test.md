@@ -104,6 +104,10 @@ Use this to verify one specific feature/flow (e.g. *"auto fish-in quarantine"*).
 
 8. **Fidelity check (periodic, not every run)** — occasionally run the REAL upstream stage (not its fixture) and assert its output matches what `fixture(stage)` produced. If they diverge, the fixture has drifted and is lying — fix the fixture before trusting further Tactic-B runs off it.
 
+**Applicability & escape hatches.** The DB/HTTP mechanics above (SQL delta, cached token, endpoint) are *one common shape* — read them as examples, not the only form. Two assumptions ride under Tactic B; when either fails, adapt rather than force it:
+- **State must be resettable** for RESET + TEARDOWN to hold. If the step has *irreversible* side effects (a real email/SMS, a payment, a non-idempotent external call) you cannot `finally { undo }` — route it through a **sandbox / test double / idempotency key**, or fall to Tactic A and assert the *intent* (the outbound call was issued) rather than the irreversible effect. For **non-persistent** systems (stateless, streaming, pure compute) "snapshot the rows" has no meaning — OBSERVE via the system's real output channel (emitted event, return value, log/trace) and TEARDOWN is a no-op.
+- **The step under test needs an automatable entry point.** If it's **UI-only** (desktop GUI, mobile screen) with no service/HTTP seam, you cannot drive it for real — drive the **nearest automatable boundary** (the method/endpoint the UI calls) and **manual-verify** the UI layer, and say so. Do NOT relabel a boundary-driven run as full e2e.
+
 ### Step 4: Present Findings
 
 Any failure becomes a **Critical** finding. Present by invoking the `/wait-options` command procedure — run the command; its format rules are not in context.
