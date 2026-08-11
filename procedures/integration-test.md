@@ -1,6 +1,6 @@
 # Integration Test
 
-Run runtime verification through the qa/ instrument — execute the R/I/A/O loop per touched module to verify the system runs end-to-end. Closes the loop on *"does it actually work?"*.
+Run runtime verification through the qa/ instrument — execute the R/I/A/O loop to verify the system actually runs. Two tactics: **whole-stack module smoke** (did a change break the run path?) and the **goal-driven fixture→e2e ladder** (does a specific feature/flow produce the right outcome, driven the way the system really runs it?). Closes the loop on *"does it actually work?"*.
 
 - **Standalone**: invoke directly after manual changes, bug fixes, or pre-deploy checks to verify runtime behavior on a scope.
 - **Embedded (wizard-delegated)**: called by `/high-wizard` Step 17, `/quick-wizard` Step 8, and `/pixel-wizard` Step 19 as the "Final Integration Test" step in their lifecycle.
@@ -53,7 +53,21 @@ Check for a `qa/runbooks/` directory (the per-module **runbook** tier marks a pr
 
 From the scope (caller-passed in embedded mode, or asked in standalone mode), map each file to its qa/ runbook by matching directory or module name. Surface any files that don't map to a runbook — flag as *"no runbook coverage"* in the report/log.
 
-### Step 3: Run R/I/A/O Loop Per Module
+### Step 3: Choose the Tactic
+
+Integration verification has two tactics. Pick by what you're actually verifying:
+
+- **Tactic A — Whole-stack module smoke** (Step 3A). *"Did this change break the module's invariant run path?"* Broad, coarse. Use for post-change regression across touched modules, and for the embedded wizard step by default.
+- **Tactic B — Goal-driven fixture→e2e ladder** (Step 3B). *"Does this specific feature/flow produce the right outcome, driven through its real entry point?"* Surgical, high-confidence on one path. Use to verify a shipped feature end-to-end, or to reproduce + verify a bug fix.
+
+Often you run **both**: B to prove the changed feature works, A to confirm nothing else regressed. In embedded (wizard) mode, default to A unless the caller named a specific feature/flow — then run B on it.
+
+**Both tactics obey these standing refinements** (they are what make a run trustworthy and repeatable):
+1. **Reset the baseline at the START and teardown at the END** — wrap the whole run in try/finally so a mid-run failure still cleans up. A run that leaves residue makes the next run start dirty.
+2. **Keep both layers** — the fast targeted check (a component/DB test) AND the slow full-flow. One does not replace the other; the pyramid wants many fast, few slow.
+3. **Fidelity** — any shortcut that stands in for a real stage MUST produce a state *equivalent* to that stage's real output, or downstream checks pass against states the system could never actually reach.
+
+### Step 3A: Whole-Stack Module Smoke
 
 **Resolve scripts by category header, not filename.** Scan `qa/scripts/*`, read each script's `# R/I/A/O category:` header, and map it to its phase (RESET/INJECT/ACT/OBSERVE). Do NOT assume filenames like `reset-*` — a project's scripts may be named `teardown` / `import-seed` / `start-stack` / `smoke-check`; the header is the contract.
 
@@ -69,6 +83,27 @@ For each touched module's runbook, run the full loop:
 
 **Cross-module scope**: if the touched files span multiple modules (or the change is inherently cross-cutting), also run the **playbook** (`qa/playbook.md`) — its Full-System Boot Order, Full-System Smoke, and any End-to-End Scenarios covering the touched paths. Runbooks verify each module in isolation; the playbook verifies they still work *connected*.
 
+### Step 3B: Goal-Driven Fixture→e2e Ladder
+
+Use this to verify one specific feature/flow (e.g. *"auto fish-in quarantine"*). The core insight: driving a whole flow through its real entry points is expensive (auth, full stack, slow), so pay the real cost only for the **one step you're validating**, and reach everything before it **cheaply via fixtures**.
+
+1. **Decompose the flow into stages** and name the **step under test** — the single stage whose behavior you're validating (usually the changed or suspect one). List the upstream stages that must have happened first.
+   > Example — auto fish-in quarantine: `create order → supplier order → prepare fish-in → CONFIRM fish-in (step under test) → observe tank state`.
+
+2. **THE RULE — fixture the preconditions; exercise the step under test for real. NEVER fixture the step under test.** A shortcut standing in for the behavior you're validating proves nothing. (A shortcut standing in for an *upstream* stage is exactly right.)
+
+3. **RESET the baseline** — either the Tactic-A RESET, or a scoped **snapshot** of just the entities the run will touch (capture their pre-state so teardown can restore them exactly).
+
+4. **Build the precondition state by forward-chaining the upstream stages** — for each, use its `fixture(stage)` from `qa/fixtures/` (reuse existing snapshot data / call the real API with a cached token / a DB seed that mirrors that stage's real output). **No reset between stages** — each consumes the prior stage's accumulated state. Prefer the highest-fidelity fixture available; if a needed fixture doesn't exist, flag it and offer to build it (it belongs to the qa/ instrument — see `/setup-qa-instrument`).
+
+5. **Exercise the step under test for real** — drive its *actual* entry point: the HTTP endpoint the UI/mobile calls, the scheduler endpoint, the real service method at the true boundary. Not an internal shortcut that bypasses the wiring.
+
+6. **OBSERVE the goal outcome** — assert the real result (SQL query, response body, smoke check). For DB-facing steps use the **surgical pattern**: snapshot the disposable target(s) first, drive the step, assert the exact DB delta, so the check is precise and not masked by other data.
+
+7. **TEARDOWN (finally)** — restore snapshots / delete created rows / reset touched entities, so the run leaves **zero residue** and is re-runnable. This runs even if an assertion failed.
+
+8. **Fidelity check (periodic, not every run)** — occasionally run the REAL upstream stage (not its fixture) and assert its output matches what `fixture(stage)` produced. If they diverge, the fixture has drifted and is lying — fix the fixture before trusting further Tactic-B runs off it.
+
 ### Step 4: Present Findings
 
 Any failure becomes a **Critical** finding. Present by invoking the `/wait-options` command procedure — run the command; its format rules are not in context.
@@ -80,15 +115,17 @@ If no findings, report: *"Integration test passed — runtime clean."*
 
 ### Step 5: Fix Cycle
 
-Apply approved fixes in one batch. Re-run R/I/A/O loop (Step 3) for affected modules. Repeat until clean or [USER-NAME] explicitly defers remaining items.
+Apply approved fixes in one batch. Re-run the loop (Step 3A or 3B, whichever this run used) for the affected modules/flow. Repeat until clean or [USER-NAME] explicitly defers remaining items.
 
 ### Step 6: Log Results
 
 - **Standalone mode**: Report results inline to [USER-NAME]:
+  - Tactic used (A whole-stack smoke / B fixture→e2e ladder / both)
   - Touched modules + runbooks run
+  - For Tactic B: the flow, the step under test (driven for real), and the fixtures used for the upstream stages
   - Playbook run (if cross-module): result, or N/A
   - qa/ Status (detected / skipped)
-  - R/I/A/O loop results per module (pass/fail)
+  - R/I/A/O loop results (pass/fail); confirm teardown left zero residue
   - Findings + Fixed
 
 - **Embedded mode**: Write results into caller's plan `## FINAL INTEGRATION TEST` section:
