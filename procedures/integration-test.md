@@ -36,7 +36,7 @@ Embedded mode flow: caller hands off control → this procedure runs the R/I/A/O
 
 ### Step 1: Detect qa/ Instrument
 
-Check for `qa/playbooks/` directory.
+Check for a `qa/runbooks/` directory (the per-module **runbook** tier marks a present instrument).
 
 - **If missing**: STOP. Present to [USER-NAME]:
   ```
@@ -51,19 +51,23 @@ Check for `qa/playbooks/` directory.
 
 ### Step 2: Identify Touched Modules
 
-From the scope (caller-passed in embedded mode, or asked in standalone mode), map each file to its qa/ playbook by matching directory or module name. Surface any files that don't map to a playbook — flag as *"no playbook coverage"* in the report/log.
+From the scope (caller-passed in embedded mode, or asked in standalone mode), map each file to its qa/ runbook by matching directory or module name. Surface any files that don't map to a runbook — flag as *"no runbook coverage"* in the report/log.
 
 ### Step 3: Run R/I/A/O Loop Per Module
 
-For each touched module's playbook, run the full loop:
+**Resolve scripts by category header, not filename.** Scan `qa/scripts/*`, read each script's `# R/I/A/O category:` header, and map it to its phase (RESET/INJECT/ACT/OBSERVE). Do NOT assume filenames like `reset-*` — a project's scripts may be named `teardown` / `import-seed` / `start-stack` / `smoke-check`; the header is the contract.
 
-- **a.** Read `qa/playbooks/{module}.md`
-- **b.** Execute `qa/scripts/reset-{scope}*` (RESET to clean state)
-- **c.** Execute `qa/scripts/seed-{scope}*` (INJECT test data)
-- **d.** Execute `qa/scripts/start-{scope}*` (ACT — bring stack up)
-- **e.** Execute playbook's Act-section scenarios (per playbook instructions)
-- **f.** Execute `qa/scripts/smoke-{scope}*` (OBSERVE)
-- **g.** Compare results against playbook's Observe-section expectations
+For each touched module's runbook, run the full loop:
+
+- **a.** Read `qa/runbooks/{module}.md`
+- **b.** Execute the **RESET**-category script (RESET to clean state)
+- **c.** Execute the **INJECT**-category script (INJECT test data)
+- **d.** Execute the **ACT**-category script (ACT — bring stack up)
+- **e.** Execute the runbook's Act-section scenarios (per runbook instructions)
+- **f.** Execute the **OBSERVE**-category script (OBSERVE)
+- **g.** Compare results against the runbook's Observe-section expectations
+
+**Cross-module scope**: if the touched files span multiple modules (or the change is inherently cross-cutting), also run the **playbook** (`qa/playbook.md`) — its Full-System Boot Order, Full-System Smoke, and any End-to-End Scenarios covering the touched paths. Runbooks verify each module in isolation; the playbook verifies they still work *connected*.
 
 ### Step 4: Present Findings
 
@@ -81,7 +85,8 @@ Apply approved fixes in one batch. Re-run R/I/A/O loop (Step 3) for affected mod
 ### Step 6: Log Results
 
 - **Standalone mode**: Report results inline to [USER-NAME]:
-  - Touched modules + playbooks run
+  - Touched modules + runbooks run
+  - Playbook run (if cross-module): result, or N/A
   - qa/ Status (detected / skipped)
   - R/I/A/O loop results per module (pass/fail)
   - Findings + Fixed
@@ -89,7 +94,8 @@ Apply approved fixes in one batch. Re-run R/I/A/O loop (Step 3) for affected mod
 - **Embedded mode**: Write results into caller's plan `## FINAL INTEGRATION TEST` section:
   - **Scope**: touched modules
   - **qa/ Status**: detected / missing / skipped
-  - **Playbooks Run**: list of `qa/playbooks/{module}.md` exercised
+  - **Runbooks Run**: list of `qa/runbooks/{module}.md` exercised
+  - **Playbook Run**: `qa/playbook.md` if cross-module (boot order + full-system smoke + E2E scenarios), or N/A
   - **R/I/A/O Results**: per-module pass/fail summary
   - **Findings**: runtime failures + severity, or *"No findings — runtime clean"*
   - **Fixed**: what was fixed from approved findings, or *"N/A"*

@@ -277,7 +277,7 @@ After Quality Review is resolved (Step 18), run **runtime** verification by dele
 
 The delegated procedure will:
 - **Detect qa/ instrument** (its Step 1) — stop + offer `/setup-qa-instrument` if missing
-- **Identify touched modules** and map to playbooks (its Step 2)
+- **Identify touched modules** and map to runbooks — plus the playbook if the change is cross-module (its Step 2)
 - **Run R/I/A/O loop per module** (its Step 3): reset → seed → start → act scenarios → smoke → compare
 - Present findings via /wait-options (its Step 4) — preamble: *"Runtime verification findings:"*
 - **STOP** at the WAIT Options prompt — wait for [USER-NAME]'s response

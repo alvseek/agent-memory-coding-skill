@@ -273,7 +273,8 @@ I have to use this document as my **ONLY** source of truth to execute and track 
 
 - **Scope**: [Modules touched — mapped from Execution Log scope]
 - **qa/ Status**: [Detected / Missing / Skipped — reason if skipped]
-- **Playbooks Run**: [List of `qa/playbooks/{module}.md` exercised, or "N/A — skipped"]
+- **Runbooks Run**: [List of `qa/runbooks/{module}.md` exercised, or "N/A — skipped"]
+- **Playbook Run**: [`qa/playbook.md` if cross-module, or "N/A"]
 - **R/I/A/O Results**: [Per-module pass/fail summary, or "N/A — skipped"]
 - **Findings**: [Runtime failures + severity, or "No findings — runtime clean", or "N/A — skipped"]
 - **Fixed**: [What was fixed from approved findings, or "N/A"]

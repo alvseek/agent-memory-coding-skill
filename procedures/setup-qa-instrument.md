@@ -1,6 +1,11 @@
 # Setup QA Instrument
 
-Establish a reliable QA feedback loop for a project. Investigates the project's existing reset/inject/act/observe pieces, identifies gaps, then codifies them into 4 artifact types: **playbook(s)**, **run-script framework**, **aggregation manifest**, and **config templates**. Works across any stack — the loop is universal, the implementations are project-specific.
+Establish a reliable QA feedback loop for a project. Investigates the project's existing reset/inject/act/observe pieces, identifies gaps, then codifies them into 5 artifact types: **runbook(s)** (per-module how-to-run), **run-script framework** (R/I/A/O scripts), **playbook** (cross-module orchestration + end-to-end scenarios), **checklist(s)** (per-feature verification), and **config templates**. Works across any stack — the loop is universal, the implementations are project-specific.
+
+> **Artifact ontology (runbook vs playbook vs checklist)** — three distinct tiers, each named per the SRE/ops convention:
+> - **Runbook** (`qa/runbooks/{module}.md`) — the operational how-to for **one module**: preconditions, launch, reset/inject/act/observe for that module, config-switching, gotchas. Evergreen. Atomic.
+> - **Playbook** (`qa/playbook.md`) — the **cross-module** strategy layer: connection map, full-system boot order, full-system smoke, and end-to-end scenarios that span modules. *References* the runbooks. Evergreen.
+> - **Checklist** (`qa/checklists/{feature}.md` → `completed/`) — **per-feature** manual verification tied to a specific shipped change. Ephemeral; archived on sign-off.
 
 > *Output (`qa/` folder) is consumed by /integration-test — the runtime verification procedure — invoked from the **Final Integration Test** step in /high-wizard (Step 17), /quick-wizard (Step 8), and /pixel-wizard (Step 19), or standalone for ad-hoc runtime checks.*
 
@@ -86,11 +91,11 @@ Many projects need external config (API keys, OAuth tokens, DB URLs, cloud crede
 | `tribal` | Value lives in someone's local machine / password manager but not documented |
 | `missing` | Value isn't anywhere yet — needs acquisition (sign up for API key, request access, etc.) |
 
-For each `missing` item, ask [USER-NAME] what the **acquisition step** is (e.g., "sign up at resend.com, free tier", "request prod DB read-replica access from ops"). Capture as a note for the playbook.
+For each `missing` item, ask [USER-NAME] what the **acquisition step** is (e.g., "sign up at resend.com, free tier", "request prod DB read-replica access from ops"). Capture as a note for the runbook.
 
 For each `tribal` item, ask if [USER-NAME] wants to document it now or defer. Tribal config is a future-trap.
 
-**Output**: feeds into Template 4's `REQUIRED.md` inventory file.
+**Output**: feeds into Template 5's `REQUIRED.md` inventory file.
 
 ### Step 4: Choose Seed Strategy
 
@@ -121,20 +126,20 @@ Present options:
 The chosen strategy influences:
 - Which seed scripts get generated in Template 2 (`seed-fixtures.*` vs `seed-from-snapshot.*` vs both)
 - What `REQUIRED.md` lists (option B adds prod-DB-access credentials as required config)
-- What the playbook documents under "Inject → Realistic Data" in Template 1
+- What the runbook documents under "Inject → Realistic Data" in Template 1
 
-### Step 5: Identify Modules and Connections (Aggregation)
+### Step 5: Identify Modules and Connections (Playbook Scope)
 
 Ask:
 
-1. **Which modules need their own playbook?** Free text, one per line. Examples: `web`, `middleware`, `api`, `mobile`, `bff`, `worker`.
+1. **Which modules need their own runbook?** Free text, one per line. Examples: `web`, `middleware`, `api`, `mobile`, `bff`, `worker`.
 2. **How do they connect?** Pick from:
    - A) Aggregate with git submodules (each module = own repo)
    - B) Monorepo workspace (npm/pnpm/Cargo/Go workspaces)
-   - C) Single-app single-repo (one playbook only — skip aggregation artifacts)
-   - D) Bridge to external systems (focus playbook on the bridge contract)
+   - C) Single-app single-repo (one runbook only — skip the cross-module playbook)
+   - D) Bridge to external systems (focus the runbook on the bridge contract)
 
-The answer drives whether Template 3 (Aggregation) gets generated and what shape it takes.
+The answer drives whether Template 3 (Playbook) gets generated and what shape it takes. A multi-module answer (A/B/D) means the cross-module **playbook** is warranted; a single-app answer (C) means the runbook alone carries the whole story.
 
 ### Step 6: Choose Runtime + Shell (No Defaults)
 
@@ -145,23 +150,23 @@ Ask:
 
 Do NOT default to any shell. Use [USER-NAME]'s explicit answer. If the project has existing scripts of one type detected in Step 1, mention that as the suggested default but still ask.
 
-### Step 7: Generate the 4 Templates
+### Step 7: Generate the Templates
 
 Generate **only** the templates that fill identified gaps from Steps 2–4. If a phase already exists & is documented, don't regenerate it — extend or link to it instead.
 
-#### Template 1 — Playbook (one per module from Step 5)
+#### Template 1 — Runbook (one per module from Step 5)
 
-File: `qa/playbooks/{module}.md`
+File: `qa/runbooks/{module}.md`
 
-Content shape (this is a runbook, NOT a 7Q README):
+Content shape (an operational how-to — NOT a 7Q README). Per-feature scenarios belong in a **checklist** (Template 4); cross-module scenarios belong in the **playbook** (Template 3). Keep the runbook's Act section to the module's *invariant* smoke path:
 
 ```markdown
-# {Module} — QA Playbook
+# {Module} — QA Runbook
 
 > Tells the whole story of QA-ing this module. Read top-to-bottom first time; jump-to-section later.
 
 ## Goal
-<single sentence: what this playbook helps you accomplish>
+<single sentence: what this runbook helps you accomplish>
 
 ## Preconditions
 <what must be running first; reference orchestration commands from scripts/ below>
@@ -192,33 +197,35 @@ Content shape (this is a runbook, NOT a 7Q README):
 
 #### Template 2 — Run-Script Framework (categorized by R/I/A/O)
 
-Files at `qa/scripts/` (or `qa/` root if there will be ≤4 scripts). Naming follows the R/I/A/O category for fast playbook cross-reference:
+Files at `qa/scripts/` (or `qa/` root if there will be ≤4 scripts). The **`# R/I/A/O category:` header is the machine contract** — `/integration-test` resolves each script by reading that header, NOT by its filename. So existing project scripts keep their natural names (`teardown`, `import-seed`, `start-stack`, `smoke-check`); just ensure each carries the category header. The filename patterns below are a **human-readability suggestion for new scripts**, not a requirement:
 
-| Category | Filename pattern | Examples |
+| Category | Suggested filename | Examples |
 |---|---|---|
-| RESET | `reset-{scope}.{ext}` | `reset-stack`, `reset-db`, `reset-cache` |
-| INJECT | `seed-{scope}.{ext}` | `seed-fixtures` (option A), `seed-from-snapshot` (option B), `anonymize-snapshot` (option B/C) |
+| RESET | `reset-{scope}.{ext}` | `reset-stack`, `reset-db`, `teardown` |
+| INJECT | `seed-{scope}.{ext}` | `seed-fixtures` (option A), `seed-from-snapshot` (option B), `import-seed` |
 | ACT | `start-{scope}.{ext}` | `start-stack`, `start-module` |
 | OBSERVE | `smoke-{scope}.{ext}` | `smoke-check`, `tail-logs` |
 
-Each generated script is a stub with:
-- Header comment: `# R/I/A/O category: {RESET|INJECT|ACT|OBSERVE} — scope: {scope}`
-- Single `TODO:` line for the user/agent to fill
-- Nothing else — no boilerplate, no baked-in lessons
+Each generated (or adopted) script MUST carry:
+- Header comment: `# R/I/A/O category: {RESET|INJECT|ACT|OBSERVE} — scope: {scope}` — **required**; this is how the consumer finds it regardless of filename.
+- A newly generated stub adds a single `TODO:` line for the user/agent to fill, and nothing else — no boilerplate, no baked-in lessons.
+- When adopting an existing script that already works, just prepend the header — do not rewrite it.
 
-#### Template 3 — Aggregation (only if Step 5 = A/B/D)
+#### Template 3 — Playbook (cross-module; only if Step 5 = A/B/D)
 
-Two files:
+The **playbook** is the system-wide strategy layer — connection map, boot order, full-system smoke, and the end-to-end scenarios that span modules. It *references* the per-module runbooks. A single-app project (Step 5 = C) has no playbook; its one runbook carries the whole story. Two parts:
 
 **(3a) Orchestration file** (chosen in Step 6) at the appropriate location:
 - For `docker-compose`: stub `docker-compose.yml` with placeholder services + `depends_on` graph reflecting module connections
 - For `Makefile` / `Justfile`: stub with composed targets (`make up`, `make down`, `make smoke`)
 - For `npm workspaces`: stub `package.json` workspaces field
 
-**(3b) Connections manifest** at `qa/connections.md`:
+**(3b) Playbook doc** at `qa/playbook.md`:
 
 ```markdown
-# {Project} — Module Connections
+# {Project} — QA Playbook
+
+> The cross-module strategy layer: connection map + boot order + full-system smoke + end-to-end scenarios that span modules. References the per-module runbooks in qa/runbooks/.
 
 ## Connection Map
 
@@ -228,19 +235,52 @@ Two files:
 | <BE> | <DB> | TCP | 5432 | env var DB_URL | |
 
 ## Full-System Boot Order
-1. <e.g., DB first>
-2. <e.g., BE next>
-3. <e.g., FE last>
+1. <e.g., DB first — see qa/runbooks/{db}.md>
+2. <e.g., BE next — see qa/runbooks/{be}.md>
+3. <e.g., FE last — see qa/runbooks/{fe}.md>
 
 ## Full-System Smoke
 <commands or steps to verify the whole connected stack at once>
+
+## End-to-End Scenarios
+<numbered cross-module scenarios — the paths that touch multiple modules (e.g. "customer order: FE → BE → queue → worker → DB"). Each step names the module + points at its runbook. Cover system invariants, not every variant.>
 ```
 
-#### Template 4 — Config (Inventory + Templates)
+> **Naming note**: this file was historically the "aggregation manifest" / `connections.md`. It is a **playbook** — the cross-module orchestration + scenario layer, distinct from the per-module runbooks and the per-feature checklists.
+
+#### Template 4 — Checklist(s) (per-feature; scaffold the folder, not the content)
+
+Checklists are **per-feature, ephemeral** manual-verification plans — created when a specific feature ships, run during QA, archived on sign-off. Unlike runbooks (evergreen "how to run") and the playbook (evergreen "how the system connects"), a checklist is tied to one change and has a lifecycle.
+
+**Scaffold the folder structure only** — do NOT generate feature checklists up front (there's no feature to verify yet):
+
+- `qa/checklists/` — active per-feature checklists live here
+- `qa/checklists/completed/` — archived here after sign-off (add a `.gitkeep`)
+- `qa/checklists/README.md` — one-paragraph lifecycle note: create on ship → run + tick + note defects inline → move to `completed/` on sign-off
+
+Checklist content shape (created later, per feature, by the shipping wizard — not now):
+
+```markdown
+# {Feature} — QA Checklist
+
+> Per-feature verification for {feature/plan}. Tick as you go; note defects inline; archive to completed/ on sign-off.
+
+## Preconditions
+<which runbook(s) / the playbook to bring the stack up first>
+
+## Checks
+- [ ] <observable behavior + expected result>
+- [ ] <edge case + expected result>
+
+## Result
+<sign-off + date, or defects found>
+```
+
+#### Template 5 — Config (Inventory + Templates)
 
 Two parts: a required-config inventory (from Step 3) + per-environment templates.
 
-**(4a) `qa/config/REQUIRED.md`** — system-level config inventory:
+**(5a) `qa/config/REQUIRED.md`** — system-level config inventory:
 
 ```markdown
 # {Project} — Required Config Inventory
@@ -258,7 +298,7 @@ Two parts: a required-config inventory (from Step 3) + per-environment templates
 <expand on any item that needs more than one line>
 ```
 
-**(4b) Per-environment templates** — use placeholders, NEVER real secrets:
+**(5b) Per-environment templates** — use placeholders, NEVER real secrets:
 
 - `qa/config/.env.local.template` — local development values, one-line comment per var
 - `qa/config/.env.qa.template` — QA-environment values
@@ -291,16 +331,17 @@ QA instrument set up at qa/:
 - R/I/A/O loop status: RESET={status}, INJECT={status}, ACT={status}, OBSERVE={status}
 - Required config inventory: {n} keys ({n_exists} exist, {n_tribal} tribal, {n_missing} missing)
 - Seed strategy: {A/B/C/D} — {brief why}
-- Playbooks generated: {count} ({list})
-- Scripts generated: {count} (R={n}, I={n}, A={n}, O={n})
-- Aggregation: {orchestration file + connections.md} or N/A
+- Runbooks generated: {count} ({list})
+- Scripts generated: {count} (R={n}, I={n}, A={n}, O={n}) — each with the `# R/I/A/O category:` header
+- Playbook (cross-module): {qa/playbook.md + orchestration file} or N/A (single-app)
+- Checklists: folder scaffolded (per-feature checklists created on ship)
 - Config templates: {count}
 
 Next steps:
 - Acquire missing config: {list missing items + acquisition steps}
 - Fill the {phase} stub in {file}
 - Run `qa/scripts/start-stack.{ext}` to bring stack up
-- Read qa/playbooks/{first-module}.md for the full QA story
+- Read qa/runbooks/{first-module}.md for a module's QA story, or qa/playbook.md for the full-system view
 ```
 
 If any phase is still stubbed OR any required config is still missing, list those gaps explicitly so they don't get forgotten — per NO TODOS LEFT BEHIND (UUID a1b2c3d4).

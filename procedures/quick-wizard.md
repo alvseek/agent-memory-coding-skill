@@ -97,7 +97,7 @@ After Quality Review is resolved, run **runtime** verification by delegating to 
 
 The delegated procedure will:
 - **Detect qa/ instrument** (its Step 1) — stop + offer `/setup-qa-instrument` if missing
-- **Identify touched modules** and map to playbooks (its Step 2)
+- **Identify touched modules** and map to runbooks — plus the playbook if the change is cross-module (its Step 2)
 - **Run R/I/A/O loop per module** (its Step 3): reset → seed → start → act scenarios → smoke → compare
 - Present findings via /wait-options (its Step 4) — preamble: *"Runtime verification findings:"*
 - **STOP** at the WAIT Options prompt — wait for [USER-NAME]'s response
@@ -159,7 +159,8 @@ Use this structure when writing the plan in plan mode (or presenting in conversa
 
 - **Scope**: [Modules touched]
 - **qa/ Status**: [Detected / Missing / Skipped — reason if skipped]
-- **Playbooks Run**: [List of `qa/playbooks/{module}.md` exercised, or "N/A — skipped"]
+- **Runbooks Run**: [List of `qa/runbooks/{module}.md` exercised, or "N/A — skipped"]
+- **Playbook Run**: [`qa/playbook.md` if cross-module, or "N/A"]
 - **R/I/A/O Results**: [Per-module pass/fail summary, or "N/A — skipped"]
 - **Findings**: [Runtime failures + severity, or "No findings — runtime clean", or "N/A — skipped"]
 - **Fixed**: [What was fixed from approved findings, or "N/A"]
