@@ -40,9 +40,12 @@ titlecase() { echo "$1" | sed -E 's/-/ /g' | awk '{for(i=1;i<=NF;i++)$i=toupper(
 # Bare template names referenced in a file (link OR backtick code-path form), unique, in order.
 tpl_names_in() { grep -oE '/(plan-templates|templates)/[a-z-]+\.md' "$1" | sed -E 's#.*/##; s#\.md##' | awk '!s[$0]++'; }
 
+NPROC=$(ls -1 "$PROC_DIR"/*.md 2>/dev/null | wc -l | tr -d ' ')
+echo "Compiling $NPROC procedures (inlining components + templates) -> $OUT_DIR ..."
 total=0
 for f in "$PROC_DIR"/*.md; do
     [ -f "$f" ] || continue
+    echo "  [$((total + 1))/$NPROC] $(basename "$f")"
     out="$OUT_DIR/$(basename "$f")"
     tmp="$(mktemp)"
 
