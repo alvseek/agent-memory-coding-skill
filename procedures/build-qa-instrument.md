@@ -88,7 +88,9 @@ The default posture is **build**. Work each phase by its Status:
 
 Build in loop order — RESET → INJECT → ACT → OBSERVE (config feeds INJECT/ACT) — so each phase's clean state is ready for the next. As each mechanism becomes real, its Mechanism cell links it: by the end of Phase 2, every row points at a working script.
 
-> *This step is intentionally overview-level — the per-phase scaffold recipes are detailed separately. The hard line: build only the missing engine parts; the map links everything else, and the README table is the index `/integration-test` reads.*
+For a `missing` phase, follow the [Build R/I/A/O Mechanisms component]([path-to-agent-memory-coding-skill]/components/build-riao-mechanisms.md) — the per-part (RESET / INJECT / ACT / OBSERVE) scaffold recipes.
+
+> *The hard line: build only the missing engine parts; the map links everything else, and the README table is the index `/integration-test` reads.*
 
 ---
 
