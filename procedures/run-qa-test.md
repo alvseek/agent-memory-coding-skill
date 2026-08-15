@@ -72,7 +72,7 @@ From the scope (caller-passed in embedded mode, or asked in standalone mode), ma
 
 Surface any files that don't map to a runbook — flag as *"no runbook coverage"* in the report/log.
 
-**If a touched module has no runbook at all**, that module cannot be smoke-tested by Tactic A. Present:
+**If a touched module has no runbook at all** — the file doesn't exist — that module cannot be smoke-tested by Tactic A, because nothing describes how to bring it up. (A runbook that exists but carries no scenarios is a different thing entirely, and is fine: see Step 3A.) Present:
 
 ```
 Module {name} has no qa/runbooks/{name}.md — Tactic A can't resolve its scenarios.
@@ -108,11 +108,14 @@ For each touched module's runbook, run the full loop:
 - **b.** Run the table's **RESET** mechanism (to clean state)
 - **c.** Run the table's **INJECT** mechanism (test data)
 - **d.** Run the table's **ACT** mechanism (bring stack up)
-- **e.** Execute the scenarios under the runbook's `## Act → Exercise the System` heading
-- **f.** Run the table's **OBSERVE** mechanism
-- **g.** Compare results against the runbook's `## Observe → Confirm Result` expectations
+- **e.** Follow the runbook's **daily-loop / quick-start** path — bring the module up the way it is actually run
+- **f.** Execute the scenarios under `## Act → Exercise the System`, **if the runbook has any**
+- **g.** Run the table's **OBSERVE** mechanism
+- **h.** Compare against `## Observe → Confirm Result` if present, otherwise against the expectations the quick-start path states
 
-> Those two headings are the resolution contract, written by `/build-qa-test`. If a runbook exists but lacks them, treat it as "no scenarios" — report it and offer the Step 2 options rather than guessing which prose was meant to be the scenario.
+> **An empty scenario section is a valid, deliberate state — never a finding.** Pre-written per-module scenarios for hypothetical failures rot into theatre, and the invariant a runbook really guards is *"does this module come up and behave the way its daily loop says."* Feature-level verification belongs in checklists (Tactic C) and the fixture ladder (Tactic B), not here.
+>
+> When the pinned headings are present they are the contract and resolution is exact. When they're absent or empty, run the quick-start path and report *"no module scenarios (by design)"* — do **not** offer to build them, and do not guess which prose was meant to be the scenario.
 
 **Cross-module scope**: if the touched files span multiple modules (or the change is inherently cross-cutting), also run the **playbook** (`qa/playbook.md`) — its Full-System Boot Order, Full-System Smoke, and any End-to-End Scenarios covering the touched paths. Runbooks verify each module in isolation; the playbook verifies they still work *connected*.
 

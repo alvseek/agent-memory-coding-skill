@@ -125,18 +125,22 @@ Each fixture must be:
 
 Stub anything project-specific with a single `TODO:` rather than guessing a table name or endpoint.
 
-### F6: BUILD — the scenario
+### F6: BUILD — the scenario (only if it earns its place)
 
-Write the Act + Observe pair into the host document, under these **exact headings** — `/run-qa-test` resolves them by name:
+> **First ask whether this scenario should exist at all.** A runbook's scenario section is **empty by default**, and that is a healthy state, not a gap. Add one only when a durable, non-obvious invariant is worth re-running every time — typically something a real bug already taught you. Per-feature verification belongs in a **checklist**; a one-off proof belongs in a **Tactic-B run**. Pre-writing per-module scenarios for hypothetical failures produces text nobody trusts and everybody skips.
+>
+> If nothing qualifies, say so and move on. The module is still covered: `/run-qa-test` Tactic A runs the bench loop plus the runbook's daily-loop path regardless.
+
+When a scenario *does* earn its place, write the Act + Observe pair into the host document under these **exact headings** — `/run-qa-test` resolves them by name:
 
 - `## Act → Exercise the System`
 - `## Observe → Confirm Result`
 
-**Act** — the concrete steps that drive the step under test through its **real entry point** (the endpoint the UI calls, the scheduler trigger, the service method at the true boundary). If the only entry point is UI-only, write the nearest automatable seam as the Act and mark the UI layer explicitly as manual-verify. Never label a boundary-driven scenario as e2e.
+**Act** — the concrete steps that drive the behavior through its **real entry point** (the endpoint the UI calls, the scheduler trigger, the service method at the true boundary). If the only entry point is UI-only, write the nearest automatable seam as the Act and mark the UI layer explicitly as manual-verify. Never label a boundary-driven scenario as e2e.
 
 **Observe** — the exact expected outcome, specific enough to fail. *"Order appears correctly"* is not an expectation; *"`llx_stock_mouvement` gains one row with `type=3` for the confirmed fish-in"* is. If you cannot write a failing condition, you do not yet understand the check.
 
-Keep a runbook's scenarios to the module's **invariant** path. Per-feature variants belong in a checklist; cross-module paths belong in the playbook.
+Keep a runbook's scenarios to the module's **invariant** path. Cross-module paths belong in the playbook, whose End-to-End Scenarios are the one place a pre-written multi-module path does earn its keep.
 
 ### F7: TEST — run the fixture chain
 
@@ -264,11 +268,19 @@ File: `qa/runbooks/{module}.md`. An operational how-to — **not** a 7Q README.
 ## Inject → Realistic Data
 <link the bench's INJECT mechanism; note the seed strategy>
 
+## Daily Loop / Quick Start
+<the copy-pasteable path to bring THIS module up and actually use it — link the bench's ACT
+ mechanism, then the module-specific launch. This is the runbook's real Act: it is what
+ /run-qa-test Tactic A follows, and for most modules it is the whole of the invariant path.>
+
 ## Act → Exercise the System
-<numbered scenarios: step + expected result. Cover the module's INVARIANT path, not every variant.>
+<OPTIONAL — empty is the right default. Add a scenario ONLY when a real bug taught you a durable
+ invariant worth re-running every time. Do NOT pre-write scenarios for hypothetical bugs: they
+ rot, and a stale scenario is worse than none. Per-feature verification goes in a checklist.>
 
 ## Observe → Confirm Result
-<where to look: logs, UI, SQL asserts. How to tell pass from fail.>
+<OPTIONAL — the pass/fail expectations for the scenarios above, if there are any. Omit the whole
+ section when the Act section is empty.>
 
 ## Config Switching
 <files/lines to edit when going local ↔ deployed. Committed config = deploy target.>
@@ -280,7 +292,7 @@ File: `qa/runbooks/{module}.md`. An operational how-to — **not** a 7Q README.
 <things that broke before, with workarounds>
 ```
 
-> The `## Act → Exercise the System` and `## Observe → Confirm Result` headings are the contract `/run-qa-test` Tactic A resolves. Keep them exact.
+> The `## Act → Exercise the System` and `## Observe → Confirm Result` headings are the contract `/run-qa-test` Tactic A resolves *when scenarios exist*. Keep them exact — but leaving them empty is a legitimate, common, and often correct state. Tactic A falls back to the Daily Loop path and reports "no module scenarios (by design)".
 
 ### Playbook template
 
@@ -370,9 +382,10 @@ Every fixture carries, as a comment at the top:
 1. **Fixturing the step under test.** The one thing that must be driven for real. A fixture standing in for it proves nothing and hides the bug you were looking for.
 2. **Restating the plan.** A checklist whose every item mirrors an acceptance criterion tests only that the developer did what they said. The items that earn their place are the ones probing what the change could have broken.
 3. **Scaffolding empty fixture or checklist folders.** An empty `qa/checklists/` reads as "we have checklists" to everyone who sees it. Build per-flow, per-feature, or build nothing.
-4. **Claiming a fixture works before running it.** F7 exists because an unrun fixture is a belief, not an asset.
-5. **Skipping the fidelity check on a hand-rolled seed.** A rung-3 fixture is a guess about a stage's output; unchecked, it silently validates impossible states.
-6. **Vague expectations.** "Works correctly" cannot fail, so it can never catch a regression. Write the exact delta.
-7. **Inventing module knowledge to fill a runbook.** A `TODO:` is honest; a plausible-sounding wrong command costs the next person an hour.
-8. **Building the rig here.** Scripts, seeds, and config are `/build-qa-bench`'s. If the loop is missing, stop and send the user there — don't quietly build half a bench.
-9. **Restating bench commands in a runbook.** Link the mechanism from the README index instead; a copied command drifts the moment the script changes.
+4. **Pre-writing runbook scenarios for hypothetical failures.** An empty scenario section is the right default. A speculative scenario rots, and a stale one is worse than none because someone will trust it. Write one when a real bug earns it.
+5. **Claiming a fixture works before running it.** F7 exists because an unrun fixture is a belief, not an asset.
+6. **Skipping the fidelity check on a hand-rolled seed.** A rung-3 fixture is a guess about a stage's output; unchecked, it silently validates impossible states.
+7. **Vague expectations.** "Works correctly" cannot fail, so it can never catch a regression. Write the exact delta.
+8. **Inventing module knowledge to fill a runbook.** A `TODO:` is honest; a plausible-sounding wrong command costs the next person an hour.
+9. **Building the rig here.** Scripts, seeds, and config are `/build-qa-bench`'s. If the loop is missing, stop and send the user there — don't quietly build half a bench.
+10. **Restating bench commands in a runbook.** Link the mechanism from the README index instead; a copied command drifts the moment the script changes.

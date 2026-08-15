@@ -172,8 +172,10 @@ If `qa/README.md` is absent entirely → index status `missing`, and every phase
 |---|---|
 | RESET | scripts (RESET-role) + runbook "Reset" sections |
 | INJECT | seeds + scripts (INJECT-role) + config |
-| ACT | scripts (ACT-role) + runbooks + playbook boot-order |
+| ACT | scripts (ACT-role) + runbooks (daily-loop / quick-start path) + playbook boot-order |
 | OBSERVE | scripts (OBSERVE-role) + runbook "Observe" sections |
+
+> **Do not grade a runbook down for an empty scenario section.** A runbook earns `exists-documented` on its *how to run this module* content — preconditions, daily loop, config switching, gotchas. Optional Act/Observe scenarios are added only when a real bug earns one; empty is the healthy default, and grading it as a gap would push projects to pre-write scenarios that rot.
 
 A phase cannot grade `exists-documented` if its index row is `empty`, `dead link`, or `diverged` — discoverability *is* resolvability here.
 
