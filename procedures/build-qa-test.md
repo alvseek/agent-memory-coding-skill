@@ -242,6 +242,9 @@ Use the [Checklist template](#checklist-template) at `qa/checklists/{feature}.md
 - Give a **single happy-path scenario first** that walks the whole change end to end, then per-area sections to isolate a failure.
 - Mark each item **automated** (naming the test) or **manual**, so nobody re-runs by hand what CI already proves, and nobody assumes the automated half covers the manual half.
 - Note which items are UI-bound — those are the ones an all-green automated run does **not** cover.
+- Leave `## Result` as the template's *"not yet run"* placeholder. `/run-qa-test` owns it.
+
+> **A coverage row must be scoped to what the test can actually *fail on*, not to what it asserts.** The two differ whenever a test reconstructs a production sequence by hand instead of calling it: the assertions pass, but a change to the real caller — a branch rewired, a step dropped — leaves the test green. Before writing a row, ask *"what edit to production code would break this feature and NOT break this test?"* Anything on that list belongs in the **Still manual** column. An em-dash there is a strong claim: it says an all-green run leaves nothing unchecked for this item.
 
 ### K4: Report
 
@@ -365,8 +368,11 @@ File: `qa/checklists/{feature}.md` → archived to `completed/` on sign-off.
 - [ ] <edge case / error path + expected result>
 
 ## Result
-<sign-off + date, or defects found>
+
+*Not yet run. `/run-qa-test --checklist` writes this section — see its Run record.*
 ```
+
+> **`## Result` is created empty here and written only by `/run-qa-test`.** This skill builds the checklist; the runner records what happened to it. Keep the placeholder line in — an absent section reads as "this checklist has no result yet defined", while an explicit *"not yet run"* is a fact a reader can act on. One writer per section is what stops the record from drifting.
 
 ### Fixture header
 

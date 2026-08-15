@@ -155,7 +155,7 @@ Read the checklist at the given path. If it doesn't exist, offer `/build-qa-test
 1. **Bring the stack up** per the checklist's Preconditions (its runbook / the playbook).
 2. **Run the automated rows first** — the checklist's Automated coverage table names them. Report pass/fail per row; these need no human.
 3. **Walk the manual rows in order**, ticking each and noting defects inline. Do not tick a row you did not actually observe.
-4. **Record the result** in the checklist's Result section: sign-off + date, or the defects found.
+4. **Write the run record** into the checklist's `## Result` section (see [Run record](#run-record) below). This is the run's durable output — without it, findings live only in a chat window and die with the session.
 
 **On all-green — offer to archive, never archive automatically.** A checklist is archived *on sign-off*, and an automated green is not a human signing off: a checklist covering UI-bound steps can pass its automatable half while nobody looked at the rest. Present:
 
@@ -167,6 +167,42 @@ Archive to qa/checklists/completed/ as signed off? (y/n)
 On **y**, follow the [Archive Plan component]([path-to-agent-memory-coding-skill]/components/archive-plan.md) with destination `qa/checklists/completed/`.
 
 If **any** row failed or was skipped, do not offer the archive — say which rows are outstanding.
+
+### Run record
+
+A run's findings must outlive the session that produced them. The checklist's `## Result` section is where they go — it already sits beside the thing it verifies, and it archives to `completed/` with it, so the evidence and the verdict stay together.
+
+Write it in this shape:
+
+```markdown
+## Result
+
+**Run**: {date} · {agent} · Tactic {A|B|C, and any combination}
+**Automated**: {n}/{n} green · **Manual**: {n}/{n} walked
+**Sign-off**: {SIGNED OFF {date} by {who} | NOT SIGNED OFF — {what is outstanding}}
+
+### Findings
+| # | Finding | Owner | Status |
+|---|---|---|---|
+| 1 | {what is wrong} | {qa | dev | product-defect} | {open | fixed {date} | handed off {date}} |
+```
+
+**The Owner column is the point.** It is what turns a finding into someone's work rather than a note nobody owns. Assign it by **what has to be touched**, not by who found it:
+
+| Touching | Owner |
+|---|---|
+| Checklists, fixtures, scenarios, coverage claims | **qa** — this pipeline's own artifacts |
+| Production code, including adding a seam so a test can reach a branch | **dev** — a code change carries production risk; QA names the seam it needs and why, and does not refactor production code itself |
+| Behavior that is actually broken | **product-defect** — route to the project's tracker, then Step 4 |
+
+Rules that keep the record honest:
+
+- **Append, never rewrite.** A re-run adds a new `**Run**:` block above the old one. The history of what was believed, and when, is the record's value.
+- **One writer per section.** QA writes `## Result`; nobody else edits it. A dev fixing a `dev`-owned finding reports back and QA updates the status. Two writers on one section is how a record starts lying.
+- **`Sign-off` is a human decision**, never an automated green (see the archive rule above). A run that only proved the automated half says so.
+- **Never record a coverage claim the run did not earn.** If a row was skipped, it is outstanding — not green.
+
+> **Known limit — a run with no checklist has nowhere to write.** A Tactic-A smoke across several modules verifies no single feature, so no checklist owns its result; report those inline and, if a finding needs to persist, open it in the project's tracker. This is a stated gap, not an oversight: a `qa/` folder of orphan run-summaries nobody archives is worse than a chat message, and the shape a cross-feature record should take is not yet known. Build it when a real run needs it.
 
 ### Step 4: Present Findings
 
@@ -191,7 +227,8 @@ Apply approved fixes in one batch. Re-run the loop (Step 3A, 3B, or 3C, whicheve
   - Playbook run (if cross-module): result, or N/A
   - Bench status (all phases resolved / partial — name the gaps)
   - R/I/A/O loop results (pass/fail); confirm teardown left zero residue
-  - Findings + Fixed
+  - Findings + Fixed, each with its owner (qa / dev / product-defect)
+  - Where the [run record](#run-record) was written, or why there was none
 
 - **Embedded mode**: Write results into the caller's runtime-verification section:
   - **Scope**: touched modules
@@ -225,3 +262,5 @@ Apply approved fixes in one batch. Re-run the loop (Step 3A, 3B, or 3C, whicheve
 5. **Calling a boundary-driven run "e2e".** If the real entry point is UI-only, drive the nearest automatable seam and *say so* — don't relabel it.
 6. **Auto-archiving a green checklist.** Green is a result; sign-off is a decision. Offer, then let a human make it.
 7. **Resolving a phase by filename.** The index is the contract. Guessing from a filename is how a run silently exercises the wrong script.
+8. **Leaving findings in the chat.** A run whose result was never written to the checklist's `## Result` dies with the session — and the next reader sees unticked boxes with no idea anyone ever looked. Write the record, even when the run found nothing.
+9. **Fixing production code to close your own finding.** QA owns the test layer; a `dev`-owned finding is handed off with the seam named, not quietly patched. Crossing that line makes the reviewer of the change also its author.
