@@ -12,16 +12,11 @@ Pull the latest changes from the remote for the current working project reposito
 
 ## Procedure
 
-### Step 1: Check Repository State
+### Step 1: Pull
 
-Run `git status` in the current working directory.
-
-If there are uncommitted changes, warn user: "You have uncommitted changes. Pull may cause merge conflicts. Continue?" and wait for confirmation.
-
-### Step 2: Pull
-
-1. Run `git pull` in the current working directory
-2. Report result to user: "Project pulled: [result summary]"
+1. Run `git pull` in the current working directory 
+2. Run `git submodule update --remote --merge` and all of its submodules.
+3. Report result to user: "Project pulled: [result summary]"
 
 If pull fails (e.g., merge conflict), report the error and stop.
 

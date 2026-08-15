@@ -26,8 +26,7 @@ Report results for both:
 ```
 Pull summary:
   - Project: [pulled/already up to date/error] — [details]
-  - Agent memory: [pulled/already up to date/error] — [details]
-  - Control files: [updated/already up to date/error] — [details]
+  - Memory: [pulled/already up to date/error] — [details]
 ```
 
 ---
