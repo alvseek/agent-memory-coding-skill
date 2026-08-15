@@ -59,7 +59,7 @@ Four **artifact tiers** (the SRE/ops ontology) + three **loop-plumbing** categor
 > - **Fixture** (`qa/fixtures/{stage}.*`) — a **per-stage precondition-builder** that cheaply reproduces the end-state of one flow stage ("as if create-order completed"), so `/integration-test` Tactic B can reach a deep precondition without paying the full e2e cost for every upstream stage. Composable (each fixture feeds the next stage) and **fidelity-bound** (must mirror what the real stage writes). Built per-flow when needed, like checklists — not up front.
 
 Loop-plumbing categories:
-- **Scripts** (`qa/scripts/*`) — the R/I/A/O executables. Resolved by a `# R/I/A/O category:` header, **not** filename.
+- **Scripts** (`qa/scripts/*`) — the R/I/A/O executables. Resolved via the `qa/README.md` R/I/A/O table (its Mechanism links point at each phase's script), **not** by filename or in-script header.
 - **Config** (`qa/config/`) — the required-config inventory (`REQUIRED.md`) + per-environment templates.
 - **Seeds** (`qa/seeds/`) — the test-data sources (DB dumps, snapshots, generators) that INJECT consumes.
 
@@ -70,7 +70,7 @@ Every material is graded on **discoverability**, not mere existence. The tribal-
 | Grade | Meaning |
 |---|---|
 | `exists-documented` | Found **and** discoverable — lives in `qa/` with a proper header/index, or is referenced from a README a newcomer would find. Usable without insider knowledge. |
-| `exists-tribal` | Found **but** undiscoverable — a script with no `# R/I/A/O category:` header, run-steps buried in code/chat/someone's head, no index pointing to it. Works only if you already know it's there. |
+| `exists-tribal` | Found **but** undiscoverable — a script outside `qa/` or unreferenced, run-steps buried in code/chat/someone's head, nothing in an index (the README R/I/A/O table, a runbook) pointing to it. Works only if you already know it's there. |
 | `missing` | Nothing found. |
 
 ---
@@ -118,7 +118,7 @@ For each category, glob/grep the **whole project** (not just `qa/`) and link mat
 | **checklists** | `qa/checklists/` | existing `qa/checklists/**/*.md`; QA / test-plan / acceptance docs anywhere; `plans/**/deploy-instruction.md` checklists |
 | **fixtures** | `qa/fixtures/` | existing `qa/fixtures/*`; factory/builder/test-data code (`*Factory*`, `*Builder*`, `*Fixture*`, `fixtures/`); seed-builder scripts |
 | **config** | `qa/config/` | existing `qa/config/REQUIRED.md` + templates; config keys via `.env*`, `Web.config`/`App.config`, `appsettings*.json`, `process.env.X`, `Configuration["X"]`, `os.getenv(...)` |
-| **scripts** | `qa/scripts/` | existing `qa/scripts/*` (check each for the `# R/I/A/O category:` header); role scripts anywhere — RESET (`teardown`/`reset`/`drop`), INJECT (`seed`/`import`/`restore`), ACT (`start`/`run`/`up`), OBSERVE (`smoke`/`health`/`tail`); `Makefile`/`Justfile` targets; `package.json` scripts |
+| **scripts** | `qa/scripts/` | existing `qa/scripts/*` + role scripts anywhere — RESET (`teardown`/`reset`/`drop`), INJECT (`seed`/`import`/`restore`), ACT (`start`/`run`/`up`), OBSERVE (`smoke`/`health`/`tail`); `Makefile`/`Justfile` targets; `package.json` scripts. Identify each by role; grade `documented` if linked from the README R/I/A/O table, else `tribal`. |
 | **seeds** | `qa/seeds/` | existing `qa/seeds/**`; DB dumps (`*.bak`, `*.sql`, `*.dump`); snapshot exports; seed-data folders |
 
 > **Folder-name drift.** The "Canonical home" column is the ontology default, not a guarantee. If the project already has an equivalent folder under a different name (e.g. `qa/configs/` for config), **use the existing folder** — place that category's sub-map inside it (named for the real folder, e.g. `qa-configs-map.md`) and record the drift in that map's Gaps. Never create a second parallel folder just to satisfy the canonical name.
@@ -305,6 +305,6 @@ QA map rescanned: qa/qa-map.md
 ## Anti-Patterns
 
 1. **Building instead of mapping.** This skill writes *map docs* only — never a runbook, script, fixture, or checklist body. Gap-filling is `/build-qa-instrument`. Creating folders to *host maps* is fine; creating instrument *content* is not.
-2. **Grading on existence, not discoverability.** A script that runs but carries no `# R/I/A/O category:` header and no index pointing to it is `exists-tribal`, not `exists-documented`. The tribal grade is the point.
+2. **Grading on existence, not discoverability.** A script that runs but isn't linked from any index (the README R/I/A/O table, a runbook) is `exists-tribal`, not `exists-documented`. The tribal grade is the point.
 3. **Scanning only `qa/`.** The value is finding materials that live *outside* `qa/` (run steps in a submodule README, a reset script in `/tools`). Scan the whole project; link in-place.
 4. **Duplicating the ontology downward.** These definitions are canonical *here*. `/setup-qa-instrument` and `/build-qa-instrument` reference up; they do not re-state, and this skill does not reference down to them.

@@ -7,17 +7,26 @@ doc_type: qa-riao-readme
 <!-- ============================================================
   QA README TEMPLATE — the RIAO definition + front door for qa/
 
-  This file is /build-qa-instrument Step 1's output: it becomes qa/README.md,
-  the single front-door doc for the QA instrument.
+  This file is /build-qa-instrument's SPINE — one doc filled progressively across its
+  4 steps (not a one-shot). It becomes qa/README.md, the single front-door doc.
 
-  HOW TO USE:
-  1. Fill the R/I/A/O table FIRST — it is the point of this doc. Pull each phase's
-     Mechanism + Status straight from qa/qa-map.md (the audit /map-qa-instrument wrote).
-  2. A `missing` phase = write the INTENT (the "what it means here" cell) even before the
-     mechanism exists, so build knows the target it must create.
-  3. Fill the rest from the map's category sub-maps + the project's real setup.
-  4. Delete every <!-- tip --> and this HOW-TO block as you go.
-  5. Keep it honest — a phase that isn't built yet says so; never fictionalize a green loop.
+  THE 4-STEP LIFECYCLE (each step reads/writes this doc):
+  1. DEFINE   — fill ## The R/I/A/O Loop ONLY: what each phase MEANS in this project.
+                Pull Mechanism + Status from qa/qa-map.md. A `missing` phase still gets its
+                INTENT written (the "what it means" cell) — that's the spec step 2 builds to.
+  2. BUILD    — make each phase executable, scaling by its map grade:
+                  documented -> confirm it runs (no-op)
+                  tribal     -> promote it (add the `# R/I/A/O category:` header, link it here)
+                  missing    -> scaffold it from scratch
+                Update each Mechanism cell as it becomes real.
+  3. TEST     — run the loop; only now may a Status become a real `documented`. Never
+                fictionalize a green loop — an unbuilt/untested phase says so.
+  4. DOCUMENT — write the REST of this doc back from what now actually exists + works
+                (First-Time Setup, Daily Loop, Config Switching, Where Everything Lives,
+                Known Gaps), THEN re-run /map-qa-instrument --rescan so the map reflects
+                reality. The loop closes: map -> build -> map.
+
+  As you fill: delete every <!-- tip --> and this HOW-TO block. Keep it honest.
 ============================================================ -->
 
 > **What this is** *(one line)*: the QA instrument for [Project] — how to reset, seed, run, and observe it locally, and where every QA artifact lives.

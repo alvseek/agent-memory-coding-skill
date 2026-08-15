@@ -36,15 +36,15 @@ Embedded mode flow: caller hands off control → this procedure runs the R/I/A/O
 
 ### Step 1: Detect qa/ Instrument
 
-Check for a `qa/runbooks/` directory (the per-module **runbook** tier marks a present instrument).
+Check for `qa/README.md` with a filled **R/I/A/O Loop** table — that table is the index this procedure resolves the loop from.
 
 - **If missing**: STOP. Present to [USER-NAME]:
   ```
-  No qa/ instrument detected for this project.
-  A) Run /setup-qa-instrument now to build it (recommended)
+  No qa/ instrument (R/I/A/O index) detected for this project.
+  A) Build it: /map-qa-instrument create, then /build-qa-instrument (recommended)
   B) Skip integration test (log decision)
   ```
-  - If A: invoke `/setup-qa-instrument`, then return here.
+  - If A: run the map → build pipeline, then return here.
   - If B: log the skip:
     - **Standalone mode**: report `"Integration test skipped — no qa/ instrument"` to [USER-NAME] and end.
     - **Embedded mode**: write `"Final Integration Test skipped — no qa/ instrument"` into caller's plan `## FINAL INTEGRATION TEST` section, then return control to caller.
@@ -69,16 +69,16 @@ Often you run **both**: B to prove the changed feature works, A to confirm nothi
 
 ### Step 3A: Whole-Stack Module Smoke
 
-**Resolve scripts by category header, not filename.** Scan `qa/scripts/*`, read each script's `# R/I/A/O category:` header, and map it to its phase (RESET/INJECT/ACT/OBSERVE). Do NOT assume filenames like `reset-*` — a project's scripts may be named `teardown` / `import-seed` / `start-stack` / `smoke-check`; the header is the contract.
+**Resolve the loop from `qa/README.md`'s R/I/A/O table — the index, not the scripts.** Its Mechanism column links each phase (RESET / INJECT / ACT / OBSERVE) to the script that runs it; that link is the contract, written by `/build-qa-instrument`. Read the table — do NOT scan filenames or in-script headers.
 
 For each touched module's runbook, run the full loop:
 
 - **a.** Read `qa/runbooks/{module}.md`
-- **b.** Execute the **RESET**-category script (RESET to clean state)
-- **c.** Execute the **INJECT**-category script (INJECT test data)
-- **d.** Execute the **ACT**-category script (ACT — bring stack up)
+- **b.** Run the table's **RESET** mechanism (to clean state)
+- **c.** Run the table's **INJECT** mechanism (test data)
+- **d.** Run the table's **ACT** mechanism (bring stack up)
 - **e.** Execute the runbook's Act-section scenarios (per runbook instructions)
-- **f.** Execute the **OBSERVE**-category script (OBSERVE)
+- **f.** Run the table's **OBSERVE** mechanism
 - **g.** Compare results against the runbook's Observe-section expectations
 
 **Cross-module scope**: if the touched files span multiple modules (or the change is inherently cross-cutting), also run the **playbook** (`qa/playbook.md`) — its Full-System Boot Order, Full-System Smoke, and any End-to-End Scenarios covering the touched paths. Runbooks verify each module in isolation; the playbook verifies they still work *connected*.
