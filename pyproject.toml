@@ -1,0 +1,30 @@
+[project]
+name = "agent-memory-coding-skill"
+version = "0.1.0"
+description = "agent-memory-coding-skill — the coding/repo overlay procedures (wizards, doc-gen, QA, fleet) and their compile/install tooling, composing on top of the agent-memory core."
+readme = "README.md"
+authors = [
+    { name = "Alviandi Widiasto", email = "alviandi@msn.com" }
+]
+requires-python = ">=3.12"
+
+# This repo ships markdown procedures + the compile/install tooling, not an installable
+# package — so it is never built/distributed.
+[tool.uv]
+package = false
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "ruff>=0.16.2",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]  # pycodestyle, pyflakes, isort
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,45 +1,61 @@
 @echo off
-REM setup-all-claude-code.bat - Windows convenience wrapper for setup-all-claude-code.sh.
+REM setup-all-claude-code.bat - Windows convenience wrapper for setup-all-claude-code.py.
 REM
-REM Runs the .sh installer (single source of truth) via bash so there's no separate logic to
-REM keep in sync. Requires bash — Git for Windows (bundled bash) or WSL. Finds bash on PATH,
-REM else falls back to the standard Git-for-Windows location.
+REM Runs the .py installer (single source of truth) via Python so there's no separate logic to
+REM keep in sync. Requires Python 3. Prefers the official "py" launcher, then a PATH lookup,
+REM then the standard per-user install location.
 REM
 REM Usage:        setup-scripts\setup-all-claude-code.bat
-REM Env override: AGENT_MEMORY_TARGET_DIR (passed through to the .sh)
+REM Env override: AGENT_MEMORY_TARGET_DIR (passed through to the .py)
 
 setlocal
-set "SH=%~dp0setup-all-claude-code.sh"
+set "SCRIPT=%~dp0setup-all-claude-code.py"
 
 REM Detect a double-click launch (Explorer runs us via cmd /c "...bat") so we can keep the window
-REM open at the end — otherwise a fast success or failure just flashes a black window shut ("only black").
+REM open at the end — otherwise a fast success or failure just flashes a black window shut.
 set "DOUBLECLICK="
 echo %cmdcmdline% | find /i "%~nx0" >nul && set "DOUBLECLICK=1"
 
-if not exist "%SH%" (
-    echo Error: installer not found: %SH%
+if not exist "%SCRIPT%" (
+    echo Error: installer not found: %SCRIPT%
     if defined DOUBLECLICK pause
     exit /b 1
 )
 
-REM Prefer Git-for-Windows bash (MSYS2 — runs a Windows-path .sh fine). Fall back to a PATH lookup
-REM LAST, skipping the System32/WindowsApps WSL launchers: WSL can't run a C:\... path .sh, and with
-REM no distro installed it fails silently (no output/, nothing installed) — so it must never win here.
-set "BASH="
-if exist "%ProgramFiles%\Git\bin\bash.exe" set "BASH=%ProgramFiles%\Git\bin\bash.exe"
-if not defined BASH if exist "%ProgramFiles(x86)%\Git\bin\bash.exe" set "BASH=%ProgramFiles(x86)%\Git\bin\bash.exe"
-if not defined BASH if exist "%LocalAppData%\Programs\Git\bin\bash.exe" set "BASH=%LocalAppData%\Programs\Git\bin\bash.exe"
-if not defined BASH for /f "delims=" %%i in ('where bash 2^>nul ^| findstr /v /i "System32 WindowsApps"') do if not defined BASH set "BASH=%%i"
+REM Prefer the official py launcher (always resolves a real interpreter). Fall back to a PATH
+REM lookup, skipping the WindowsApps stub: that "python.exe" is an App Execution Alias which opens
+REM the Microsoft Store instead of running anything, so it must never win here — the same trap as
+REM the System32 WSL "bash" that used to break this installer.
+set "PY="
+set "PYARGS="
 
-if not defined BASH (
-    echo Error: Git Bash not found. Install Git for Windows ^(https://git-scm.com/download/win^),
-    echo        then re-run. Alternatively run the installer directly from Git Bash:
-    echo            bash setup-scripts/setup-all-claude-code.sh
+for /f "delims=" %%i in ('where py 2^>nul ^| findstr /v /i "WindowsApps"') do (
+    if not defined PY set "PY=%%i"
+)
+if defined PY set "PYARGS=-3"
+
+if not defined PY (
+    for /f "delims=" %%i in ('where python 2^>nul ^| findstr /v /i "WindowsApps"') do (
+        if not defined PY set "PY=%%i"
+    )
+)
+
+if not defined PY (
+    if exist "%LocalAppData%\Programs\Python\Launcher\py.exe" (
+        set "PY=%LocalAppData%\Programs\Python\Launcher\py.exe"
+        set "PYARGS=-3"
+    )
+)
+
+if not defined PY (
+    echo Error: Python 3 not found. Install it from https://www.python.org/downloads/
+    echo        ^(tick "Add python.exe to PATH"^), then re-run. Alternatively run directly:
+    echo            python setup-scripts\setup-all-claude-code.py
     if defined DOUBLECLICK pause
     exit /b 1
 )
 
-"%BASH%" "%SH%"
+"%PY%" %PYARGS% "%SCRIPT%" %*
 set "RC=%ERRORLEVEL%"
 if defined DOUBLECLICK pause
 exit /b %RC%

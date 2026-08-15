@@ -28,11 +28,13 @@ This overlay ships its **own** installers (`setup-scripts/`) — it does not dep
 
 ```bash
 # 1. Memory core (agent-memory-system / control-files):
-bash /path/to/control-files/procedures/setup-scripts/setup-all-claude-code.sh
+python /path/to/control-files/procedures/setup-scripts/setup-all-claude-code.py
 
 # 2. This overlay:
-bash setup-scripts/setup-all-claude-code.sh
+python setup-scripts/setup-all-claude-code.py
 ```
+
+On Windows, double-click (or run) `setup-scripts\setup-all-claude-code.bat` — a thin wrapper that finds Python and runs the same installer. Requires Python 3; no other dependencies.
 
 Both target `~/.claude/commands/` but keep **separate manifests** (core = `.agent-memory-manifest`, overlay = `.agent-memory-coding-skill-manifest`), so re-running either one cleans up only its own commands. Codex (`setup-all-codex.sh`) and Antigravity (`setup-all-antigravity.sh`) installers are provided too.
 
