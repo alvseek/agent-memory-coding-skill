@@ -96,7 +96,7 @@ After Quality Review is resolved, run **runtime** verification by delegating to 
    - `embedded_mode=true`: signals the procedure to write results into the QW plan's Final Runtime Verification section
 
 The delegated procedure will:
-- **Detect qa/ instrument** (its Step 1) — stop + offer `/setup-qa-instrument` if missing
+- **Detect the qa/ bench** (its Step 1) — stop + offer the `/map-qa-instrument` → `/build-qa-bench` → `/build-qa-test` pipeline if missing; warn and run partial if some phases are unbuilt
 - **Identify touched modules** and map to runbooks — plus the playbook if the change is cross-module (its Step 2)
 - **Run R/I/A/O loop per module** (its Step 3): reset → seed → start → act scenarios → smoke → compare
 - Present findings via /wait-options (its Step 4) — preamble: *"Runtime verification findings:"*
@@ -104,7 +104,13 @@ The delegated procedure will:
 - Apply approved fixes and re-run affected modules (its Step 5)
 - Log results into the QW plan's `## FINAL RUNTIME VERIFICATION` section (its Step 6)
 
-3. **Resume control** here after `/run-qa-test` completes. Proceed to Step 9 (Report Completion).
+3. **Offer the feature checklist.** Runtime verification proves the change works now; a checklist is what someone walks before sign-off, and it reaches the UI-bound paths an automated run can't. Ask [USER-NAME]:
+
+   > *"Build the QA checklist for this feature? (`/build-qa-test --checklist [this-plan]`)"*
+
+   If yes, delegate to `/build-qa-test --checklist` with this plan as the scope input, then resume here. The plan supplies *what changed*; the skill derives *what could break* — it is not a restatement of the acceptance criteria. If no, note the decline in the plan's Final Runtime Verification section so it's a recorded choice rather than an omission.
+
+4. **Resume control** here after the delegated procedures complete. Proceed to Step 9 (Report Completion).
 
 ### Step 9: Report Completion
 

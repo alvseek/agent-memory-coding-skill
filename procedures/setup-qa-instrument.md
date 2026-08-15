@@ -1,5 +1,18 @@
 # Setup QA Instrument
 
+> ## ⚠️ SUPERSEDED — prefer the four-skill pipeline
+>
+> This monolith has been decomposed. Use instead:
+> **`/map-qa-instrument` (audit) → `/build-qa-bench` (build the rig) → `/build-qa-test` (build the tests) → `/run-qa-test` (run them).**
+>
+> Those four own the canonical definitions now; this file is kept for reference and for projects
+> mid-migration. Two things here are **out of date** and must not be followed:
+> - **Step 7 Template 2's `# R/I/A/O category:` header is retired.** The loop is resolved from the
+>   `qa/README.md` R/I/A/O table's Mechanism links, written by `/build-qa-bench`. Do not add the
+>   header to new scripts; existing ones are inert.
+> - **The artifact template shapes have moved** — runbook / playbook / checklist / fixture to
+>   `/build-qa-test`, script / config / seeds to `/build-qa-bench`.
+
 Establish a reliable QA feedback loop for a project. Investigates the project's existing reset/inject/act/observe pieces, identifies gaps, then codifies them into 6 artifact types: **runbook(s)** (per-module how-to-run), **run-script framework** (R/I/A/O scripts), **fixtures** (composable per-stage precondition-builders), **playbook** (cross-module orchestration + end-to-end scenarios), **checklist(s)** (per-feature verification), and **config templates**. Works across any stack — the loop is universal, the implementations are project-specific.
 
 > **Artifact ontology (runbook vs playbook vs checklist vs fixture)** — distinct tiers, each named per the SRE/ops convention:
@@ -198,7 +211,11 @@ Content shape (an operational how-to — NOT a 7Q README). Per-feature scenarios
 
 #### Template 2 — Run-Script Framework (categorized by R/I/A/O)
 
-Files at `qa/scripts/` (or `qa/` root if there will be ≤4 scripts). The **`# R/I/A/O category:` header is the machine contract** — `/run-qa-test` resolves each script by reading that header, NOT by its filename. So existing project scripts keep their natural names (`teardown`, `import-seed`, `start-stack`, `smoke-check`); just ensure each carries the category header. The filename patterns below are a **human-readability suggestion for new scripts**, not a requirement:
+Files at `qa/scripts/` (or `qa/` root if there will be ≤4 scripts).
+
+> ⚠️ **Out of date.** This section used to declare the `# R/I/A/O category:` header the machine contract. It is **retired** — `/run-qa-test` resolves each phase from the `qa/README.md` R/I/A/O table's Mechanism links. Existing project scripts keep their natural names (`teardown`, `import-seed`, `start-stack`, `smoke-check`) and are wired by *linking them in that table*. The current shape lives in `/build-qa-bench`.
+
+The filename patterns below are a **human-readability suggestion for new scripts**, not a requirement:
 
 | Category | Suggested filename | Examples |
 |---|---|---|
@@ -208,7 +225,7 @@ Files at `qa/scripts/` (or `qa/` root if there will be ≤4 scripts). The **`# R
 | OBSERVE | `smoke-{scope}.{ext}` | `smoke-check`, `tail-logs` |
 
 Each generated (or adopted) script MUST carry:
-- Header comment: `# R/I/A/O category: {RESET|INJECT|ACT|OBSERVE} — scope: {scope}` — **required**; this is how the consumer finds it regardless of filename.
+- ~~Header comment: `# R/I/A/O category: ...`~~ — **retired**. Wire the script by linking it in the `qa/README.md` R/I/A/O table instead.
 - A newly generated stub adds a single `TODO:` line for the user/agent to fill, and nothing else — no boilerplate, no baked-in lessons.
 - When adopting an existing script that already works, just prepend the header — do not rewrite it.
 
@@ -347,7 +364,7 @@ QA instrument set up at qa/:
 - Required config inventory: {n} keys ({n_exists} exist, {n_tribal} tribal, {n_missing} missing)
 - Seed strategy: {A/B/C/D} — {brief why}
 - Runbooks generated: {count} ({list})
-- Scripts generated: {count} (R={n}, I={n}, A={n}, O={n}) — each with the `# R/I/A/O category:` header
+- Scripts generated: {count} (R={n}, I={n}, A={n}, O={n}) — each linked in the `qa/README.md` R/I/A/O table
 - Playbook (cross-module): {qa/playbook.md + orchestration file} or N/A (single-app)
 - Checklists: folder scaffolded (per-feature checklists created on ship)
 - Fixtures: folder scaffolded (per-stage fixtures built per-flow by /build-qa-test, then consumed by /run-qa-test Tactic B)

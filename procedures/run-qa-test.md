@@ -1,9 +1,15 @@
 # Run QA Test
 
-Run runtime verification through the qa/ instrument — execute the R/I/A/O loop to verify the system actually runs. Two tactics: **whole-stack module smoke** (did a change break the run path?) and the **goal-driven fixture→e2e ladder** (does a specific feature/flow produce the right outcome, driven the way the system really runs it?). Closes the loop on *"does it actually work?"*.
+Run runtime verification on the qa/ bench — execute the R/I/A/O loop to verify the system actually runs. Three tactics: **whole-stack module smoke** (did a change break the run path?), the **goal-driven fixture→e2e ladder** (does a specific feature produce the right outcome, driven the way the system really runs it?), and a **guided checklist pass** (walk a shipped feature's verification and sign it off). Closes the loop on *"does it actually work?"*.
 
-- **Standalone**: invoke directly after manual changes, bug fixes, or pre-deploy checks to verify runtime behavior on a scope.
+- **Standalone**: invoke after manual changes, bug fixes, or pre-deploy checks to verify runtime behavior on a scope.
 - **Embedded (wizard-delegated)**: called by `/high-wizard` Step 17, `/quick-wizard` Step 8, and `/pixel-wizard` Step 19 as the "Final Runtime Verification" step in their lifecycle.
+
+> **Canonical definitions live in `/map-qa-instrument`** — the R/I/A/O loop, the 7 artifact categories, the ownership split, and the grading. This skill references *up* to those; it does not restate them.
+
+Pipeline: **`/map-qa-instrument` (audit) → `/build-qa-bench` (build the rig) → `/build-qa-test` (build the tests) → `/run-qa-test` (run them).**
+
+> **This skill runs; it does not build.** Every missing asset is a hand-off, never an improvisation. That line is what keeps a run's result meaningful.
 
 ## Arguments
 
@@ -12,6 +18,7 @@ Run runtime verification through the qa/ instrument — execute the R/I/A/O loop
 ### Standalone invocation (user-invoked)
 
 - `/run-qa-test [scope]` → Run the QA tests on the given scope of touched modules
+- `/run-qa-test --checklist [file]` → Walk a per-feature checklist, then offer to archive it on sign-off
 - `/run-qa-test` → Will ask for scope
 
 **Scope examples:**
@@ -28,7 +35,7 @@ When called from `/high-wizard` Step 17, `/quick-wizard` Step 8, or `/pixel-wiza
 - `scope`: list of files from the caller's Execution Log (HW/pixel-wizard) or QW plan execution
 - `embedded_mode=true`: signals to write results into the caller's plan `## FINAL RUNTIME VERIFICATION` section (where the wizard step is labeled "Final Runtime Verification" — "final" is the wizard's positional descriptor, not a property of this procedure itself)
 
-Embedded mode flow: caller hands off control → this procedure runs the R/I/A/O loop → results embedded in caller's plan → caller resumes its next step.
+Embedded mode flow: caller hands off control → this procedure runs the loop → results embedded in caller's plan → caller resumes its next step.
 
 ---
 
@@ -36,7 +43,7 @@ Embedded mode flow: caller hands off control → this procedure runs the R/I/A/O
 
 ### Step 1: Detect the qa/ Bench
 
-Check for `qa/README.md` with a filled **R/I/A/O Loop** table — that table is the index this procedure resolves the loop from.
+Read `qa/README.md`'s **R/I/A/O Loop** table — that table is the index this procedure resolves the loop from.
 
 - **If missing**: STOP. Present to [USER-NAME]:
   ```
@@ -47,29 +54,53 @@ Check for `qa/README.md` with a filled **R/I/A/O Loop** table — that table is 
   - If A: run the map → bench → test pipeline, then return here.
   - If B: log the skip:
     - **Standalone mode**: report `"QA test run skipped — no qa/ bench"` to [USER-NAME] and end.
-    - **Embedded mode**: write `"Final Runtime Verification skipped — no qa/ instrument"` into caller's plan `## FINAL RUNTIME VERIFICATION` section, then return control to caller.
+    - **Embedded mode**: write `"Final Runtime Verification skipped — no qa/ bench"` into caller's plan `## FINAL RUNTIME VERIFICATION` section, then return control to caller.
+
+**If present**, also read each row's **Status** and check that each Mechanism link resolves to a real file:
+
+| Finding | Action |
+|---|---|
+| All four `documented` and resolving | Proceed. |
+| A phase is `tribal` | **Warn, proceed.** It runs, but nothing else points at it. |
+| A phase is `missing`, unlinked, or its link is dead | **Warn loudly, proceed on the phases that do resolve**, and mark the run **partial** in the report. Never silently substitute another script or scan for one by filename. |
+
+Warn rather than block: a wizard-embedded run must still report *something* useful on a half-built instrument, and a partial run honestly labeled is more valuable than no run. Say plainly which phases did not execute and what that means for confidence.
 
 ### Step 2: Identify Touched Modules
 
-From the scope (caller-passed in embedded mode, or asked in standalone mode), map each file to its qa/ runbook by matching directory or module name. Surface any files that don't map to a runbook — flag as *"no runbook coverage"* in the report/log.
+From the scope (caller-passed in embedded mode, or asked in standalone mode), map each file to its qa/ runbook by matching directory or module name.
+
+Surface any files that don't map to a runbook — flag as *"no runbook coverage"* in the report/log.
+
+**If a touched module has no runbook at all**, that module cannot be smoke-tested by Tactic A. Present:
+
+```
+Module {name} has no qa/runbooks/{name}.md — Tactic A can't resolve its scenarios.
+A) Build it now: /build-qa-test {module}  (recommended)
+B) Run the bench loop only for this module (RESET/INJECT/ACT/OBSERVE, no module scenarios) — partial coverage
+C) Skip this module (log it)
+```
+
+Never invent scenarios inline to fill the gap — an unreviewed scenario written under run pressure becomes the module's de-facto contract without anyone agreeing to it.
 
 ### Step 3: Choose the Tactic
 
-Runtime verification has two tactics. Pick by what you're actually verifying:
+Runtime verification has three tactics. Pick by what you're actually verifying:
 
 - **Tactic A — Whole-stack module smoke** (Step 3A). *"Did this change break the module's invariant run path?"* Broad, coarse. Use for post-change regression across touched modules, and for the embedded wizard step by default.
 - **Tactic B — Goal-driven fixture→e2e ladder** (Step 3B). *"Does this specific feature/flow produce the right outcome, driven through its real entry point?"* Surgical, high-confidence on one path. Use to verify a shipped feature end-to-end, or to reproduce + verify a bug fix.
+- **Tactic C — Guided checklist pass** (Step 3C). *"Has everything this shipped change could affect been walked and signed off?"* Human-paced, covers the UI-bound work the other two can't reach. Triggered by `--checklist`.
 
-Often you run **both**: B to prove the changed feature works, A to confirm nothing else regressed. In embedded (wizard) mode, default to A unless the caller named a specific feature/flow — then run B on it.
+Often you run **more than one**: B to prove the changed feature works, A to confirm nothing else regressed, C before sign-off. In embedded (wizard) mode, default to A unless the caller named a specific feature/flow — then run B on it.
 
-**Both tactics obey these standing refinements** (they are what make a run trustworthy and repeatable):
+**Tactics A and B obey these standing refinements** (they are what make a run trustworthy and repeatable):
 1. **Reset the baseline at the START and teardown at the END** — wrap the whole run in try/finally so a mid-run failure still cleans up. A run that leaves residue makes the next run start dirty.
 2. **Keep both layers** — the fast targeted check (a component/DB test) AND the slow full-flow. One does not replace the other; the pyramid wants many fast, few slow.
 3. **Fidelity** — any shortcut that stands in for a real stage MUST produce a state *equivalent* to that stage's real output, or downstream checks pass against states the system could never actually reach.
 
 ### Step 3A: Whole-Stack Module Smoke
 
-**Resolve the loop from `qa/README.md`'s R/I/A/O table — the index, not the scripts.** Its Mechanism column links each phase (RESET / INJECT / ACT / OBSERVE) to the script that runs it; that link is the contract, written by `/build-qa-bench`. Read the table — do NOT scan filenames or in-script headers.
+**Resolve the loop from `qa/README.md`'s R/I/A/O table — the index, not the scripts.** Its Mechanism column links each phase to the script that runs it; that link is the contract, written by `/build-qa-bench`. Read the table — do NOT scan filenames or in-script headers (the header contract is retired and may be stale).
 
 For each touched module's runbook, run the full loop:
 
@@ -77,9 +108,11 @@ For each touched module's runbook, run the full loop:
 - **b.** Run the table's **RESET** mechanism (to clean state)
 - **c.** Run the table's **INJECT** mechanism (test data)
 - **d.** Run the table's **ACT** mechanism (bring stack up)
-- **e.** Execute the runbook's Act-section scenarios (per runbook instructions)
+- **e.** Execute the scenarios under the runbook's `## Act → Exercise the System` heading
 - **f.** Run the table's **OBSERVE** mechanism
-- **g.** Compare results against the runbook's Observe-section expectations
+- **g.** Compare results against the runbook's `## Observe → Confirm Result` expectations
+
+> Those two headings are the resolution contract, written by `/build-qa-test`. If a runbook exists but lacks them, treat it as "no scenarios" — report it and offer the Step 2 options rather than guessing which prose was meant to be the scenario.
 
 **Cross-module scope**: if the touched files span multiple modules (or the change is inherently cross-cutting), also run the **playbook** (`qa/playbook.md`) — its Full-System Boot Order, Full-System Smoke, and any End-to-End Scenarios covering the touched paths. Runbooks verify each module in isolation; the playbook verifies they still work *connected*.
 
@@ -94,7 +127,11 @@ Use this to verify one specific feature/flow (e.g. *"auto fish-in quarantine"*).
 
 3. **RESET the baseline** — either the Tactic-A RESET, or a scoped **snapshot** of just the entities the run will touch (capture their pre-state so teardown can restore them exactly).
 
-4. **Build the precondition state by forward-chaining the upstream stages** — for each, use its `fixture(stage)` from `qa/fixtures/` (reuse existing snapshot data / call the real API with a cached token / a DB seed that mirrors that stage's real output). **No reset between stages** — each consumes the prior stage's accumulated state. Prefer the highest-fidelity fixture available; if a needed fixture doesn't exist, **stop and hand off to `/build-qa-test`** — fixtures are the test layer's to build, not this procedure's. Never improvise one mid-run: an ad-hoc fixture is unreviewed, unversioned, and its fidelity is unproven, so every later run inherits a shortcut nobody signed off on.
+4. **Build the precondition state by forward-chaining the upstream stages** — for each, use its `fixture(stage)` from `qa/fixtures/`. **No reset between stages** — each consumes the prior stage's accumulated state.
+
+   Before using a fixture, read its header: a fixture marked `fidelity-checked: PENDING` at rung 2 or 3 has never been proven against the real stage — say so, and treat any assertion downstream of it as provisional.
+
+   **If a needed fixture doesn't exist, stop and hand off to `/build-qa-test --fixture [stage]`.** Fixtures are the test layer's to build. Never improvise one mid-run: an ad-hoc fixture is unreviewed, unversioned, and its fidelity unproven, so every later run inherits a shortcut nobody signed off on.
 
 5. **Exercise the step under test for real** — drive its *actual* entry point: the HTTP endpoint the UI/mobile calls, the scheduler endpoint, the real service method at the true boundary. Not an internal shortcut that bypasses the wiring.
 
@@ -102,11 +139,31 @@ Use this to verify one specific feature/flow (e.g. *"auto fish-in quarantine"*).
 
 7. **TEARDOWN (finally)** — restore snapshots / delete created rows / reset touched entities, so the run leaves **zero residue** and is re-runnable. This runs even if an assertion failed.
 
-8. **Fidelity check (periodic, not every run)** — occasionally run the REAL upstream stage (not its fixture) and assert its output matches what `fixture(stage)` produced. If they diverge, the fixture has drifted and is lying — fix the fixture before trusting further Tactic-B runs off it.
+8. **Fidelity check (periodic, not every run)** — occasionally run the REAL upstream stage (not its fixture) and assert its output matches what `fixture(stage)` produced. If they diverge, the fixture has drifted and is lying — hand it back to `/build-qa-test` before trusting further Tactic-B runs off it.
 
 **Applicability & escape hatches.** The DB/HTTP mechanics above (SQL delta, cached token, endpoint) are *one common shape* — read them as examples, not the only form. Two assumptions ride under Tactic B; when either fails, adapt rather than force it:
 - **State must be resettable** for RESET + TEARDOWN to hold. If the step has *irreversible* side effects (a real email/SMS, a payment, a non-idempotent external call) you cannot `finally { undo }` — route it through a **sandbox / test double / idempotency key**, or fall to Tactic A and assert the *intent* (the outbound call was issued) rather than the irreversible effect. For **non-persistent** systems (stateless, streaming, pure compute) "snapshot the rows" has no meaning — OBSERVE via the system's real output channel (emitted event, return value, log/trace) and TEARDOWN is a no-op.
 - **The step under test needs an automatable entry point.** If it's **UI-only** (desktop GUI, mobile screen) with no service/HTTP seam, you cannot drive it for real — drive the **nearest automatable boundary** (the method/endpoint the UI calls) and **manual-verify** the UI layer, and say so. Do NOT relabel a boundary-driven run as full e2e.
+
+### Step 3C: Guided Checklist Pass
+
+Read the checklist at the given path. If it doesn't exist, offer `/build-qa-test --checklist [plan]` and stop.
+
+1. **Bring the stack up** per the checklist's Preconditions (its runbook / the playbook).
+2. **Run the automated rows first** — the checklist's Automated coverage table names them. Report pass/fail per row; these need no human.
+3. **Walk the manual rows in order**, ticking each and noting defects inline. Do not tick a row you did not actually observe.
+4. **Record the result** in the checklist's Result section: sign-off + date, or the defects found.
+
+**On all-green — offer to archive, never archive automatically.** A checklist is archived *on sign-off*, and an automated green is not a human signing off: a checklist covering UI-bound steps can pass its automatable half while nobody looked at the rest. Present:
+
+```
+Checklist {name}: {n}/{n} green ({a} automated, {m} manual).
+Archive to qa/checklists/completed/ as signed off? (y/n)
+```
+
+On **y**, follow the [Archive Plan component]([path-to-agent-memory-coding-skill]/components/archive-plan.md) with destination `qa/checklists/completed/`.
+
+If **any** row failed or was skipped, do not offer the archive — say which rows are outstanding.
 
 ### Step 4: Present Findings
 
@@ -115,48 +172,53 @@ Preamble: *"Runtime verification findings:"*
 
 **STOP**. Wait for [USER-NAME]'s response.
 
-If no findings, report: *"QA test run passed — runtime clean."*
+If no findings, report: *"QA test run passed — runtime clean."* If the run was partial (unresolved phases, skipped modules), say **"passed, partial"** and name what didn't run — a clean result on an incomplete run is the easiest false confidence to ship.
 
 ### Step 5: Fix Cycle
 
-Apply approved fixes in one batch. Re-run the loop (Step 3A or 3B, whichever this run used) for the affected modules/flow. Repeat until clean or [USER-NAME] explicitly defers remaining items.
+Apply approved fixes in one batch. Re-run the loop (Step 3A, 3B, or 3C, whichever this run used) for the affected modules/flow. Repeat until clean or [USER-NAME] explicitly defers remaining items.
 
 ### Step 6: Log Results
 
 - **Standalone mode**: Report results inline to [USER-NAME]:
-  - Tactic used (A whole-stack smoke / B fixture→e2e ladder / both)
-  - Touched modules + runbooks run
-  - For Tactic B: the flow, the step under test (driven for real), and the fixtures used for the upstream stages
+  - Tactic used (A whole-stack smoke / B fixture→e2e ladder / C checklist / combination)
+  - Touched modules + runbooks run; modules with no runbook coverage
+  - For Tactic B: the flow, the step under test (driven for real), the fixtures used + their fidelity rungs
+  - For Tactic C: rows green/red, automated vs manual split, archive decision
   - Playbook run (if cross-module): result, or N/A
-  - qa/ Status (detected / skipped)
+  - Bench status (all phases resolved / partial — name the gaps)
   - R/I/A/O loop results (pass/fail); confirm teardown left zero residue
   - Findings + Fixed
 
 - **Embedded mode**: Write results into caller's plan `## FINAL RUNTIME VERIFICATION` section:
   - **Scope**: touched modules
-  - **qa/ Status**: detected / missing / skipped
-  - **Runbooks Run**: list of `qa/runbooks/{module}.md` exercised
+  - **Bench Status**: all resolved / partial (which phases) / missing / skipped
+  - **Runbooks Run**: list of `qa/runbooks/{module}.md` exercised; any module without one
   - **Playbook Run**: `qa/playbook.md` if cross-module (boot order + full-system smoke + E2E scenarios), or N/A
   - **R/I/A/O Results**: per-module pass/fail summary
   - **Findings**: runtime failures + severity, or *"No findings — runtime clean"*
   - **Fixed**: what was fixed from approved findings, or *"N/A"*
 
-**Embedded mode return**: After Step 6, control returns to the wizard caller (HW Step 17, QW Step 8, or pixel-wizard Step 19), which then proceeds to its next step (Move to Completed or Report Completion).
+**Embedded mode return**: After Step 6, control returns to the wizard caller (HW Step 17, QW Step 8, or pixel-wizard Step 19), which then proceeds to its next step (offer the feature checklist, then Move to Completed or Report Completion).
 
 ---
 
 ## Integration With Other Procedures
 
-Pipeline: **`/map-qa-instrument` (audit) → `/build-qa-bench` (build the rig) → `/build-qa-test` (build the tests) → `/run-qa-test` (run them).**
-
-- **/map-qa-instrument** — canonical home for the R/I/A/O loop, the 7 artifact categories, and the `documented / tribal / missing` grading. This skill references *up* to those; it does not restate them.
-- **/build-qa-bench** — upstream. Builds the loop engine (scripts · seeds · config) and writes the `qa/README.md` R/I/A/O table that Step 3A resolves the loop from.
-- **/build-qa-test** — upstream. Builds what this skill *runs*: fixtures (Tactic B preconditions), checklists, and the runbook/playbook Act+Observe scenarios (Tactic A). A missing fixture is a hand-off to it, never an improvisation here.
+- **/map-qa-instrument** — canonical home for the loop, ontology, ownership, and grading. Its index-integrity check is what guarantees the table this skill reads still resolves.
+- **/build-qa-bench** — upstream. Builds the loop engine and writes the `qa/README.md` R/I/A/O table Step 3A resolves from.
+- **/build-qa-test** — upstream. Builds what this skill *runs*: fixtures (Tactic B), runbook and playbook scenarios (Tactic A), checklists (Tactic C). A missing fixture, runbook, or checklist is a hand-off to it, never an improvisation here.
 - **/high-wizard · /quick-wizard · /pixel-wizard** — callers. Each delegates here in embedded mode as its **Final Runtime Verification** step, then resumes.
+- **archive-plan component** — used by Tactic C to move a signed-off checklist into `qa/checklists/completed/`.
+
+---
 
 ## Anti-Patterns
 
-1. **Building a fixture mid-run.** A fixture invented under run pressure is unreviewed and its fidelity unproven — every later run inherits it. Hand off to `/build-qa-test`.
+1. **Building anything mid-run.** A fixture, scenario, or runbook invented under run pressure is unreviewed, and it silently becomes the contract everyone runs against afterwards. Hand off to `/build-qa-test`.
 2. **Fixturing the step under test.** A shortcut standing in for the behavior you're validating proves nothing (Tactic B, rule 2).
-3. **Leaving residue.** No teardown means the next run starts dirty and its result is meaningless. Wrap in try/finally.
-4. **Calling a boundary-driven run "e2e".** If the real entry point is UI-only, drive the nearest automatable seam and *say so* — don't relabel it.
+3. **Reporting a partial run as clean.** If phases didn't resolve or modules were skipped, the headline is "passed, partial" plus the gaps — not "passed".
+4. **Leaving residue.** No teardown means the next run starts dirty and its result is meaningless. Wrap in try/finally.
+5. **Calling a boundary-driven run "e2e".** If the real entry point is UI-only, drive the nearest automatable seam and *say so* — don't relabel it.
+6. **Auto-archiving a green checklist.** Green is a result; sign-off is a decision. Offer, then let a human make it.
+7. **Resolving a phase by filename.** The index is the contract. Guessing from a filename is how a run silently exercises the wrong script.

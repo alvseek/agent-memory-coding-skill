@@ -5,26 +5,35 @@ doc_type: qa-riao-readme
 # [Project] — QA Instrument
 
 <!-- ============================================================
-  QA README TEMPLATE — the RIAO definition + front door for qa/
+  QA README TEMPLATE — the R/I/A/O definition + front door for qa/
 
   This file is /build-qa-bench's SPINE — one doc filled progressively across its
-  4 steps (not a one-shot). It becomes qa/README.md, the single front-door doc.
+  4 PHASES (not a one-shot). It becomes qa/README.md, the single front-door doc.
 
-  THE 4-STEP LIFECYCLE (each step reads/writes this doc):
+  THE ONE CONTRACT: the R/I/A/O table below is the INDEX. Its Mechanism links are
+  how /run-qa-test finds each phase's script — not filenames, not in-script headers.
+  /build-qa-bench is this table's only writer. (An in-script `# R/I/A/O category:`
+  header is the RETIRED model; if you see one, it is inert — do not add new ones.)
+
+  THE 4-PHASE LIFECYCLE (each phase reads/writes this doc):
   1. DEFINE   — fill ## The R/I/A/O Loop ONLY: what each phase MEANS in this project.
                 Pull Mechanism + Status from qa/qa-map.md. A `missing` phase still gets its
-                INTENT written (the "what it means" cell) — that's the spec step 2 builds to.
-  2. BUILD    — make each phase executable, scaling by its map grade:
+                INTENT written (the "what it means" cell) — that's the spec phase 2 builds to.
+  2. BUILD    — make each phase executable, by its map grade:
                   documented -> confirm it runs (no-op)
-                  tribal     -> promote it (add the `# R/I/A/O category:` header, link it here)
-                  missing    -> scaffold it from scratch
-                Update each Mechanism cell as it becomes real.
-  3. TEST     — run the loop; only now may a Status become a real `documented`. Never
-                fictionalize a green loop — an unbuilt/untested phase says so.
+                  tribal     -> LINK it in the Mechanism cell (that link IS the promotion;
+                                leave the script's name and location alone)
+                  missing    -> build it from scratch, then link it
+  3. TEST     — self-smoke the loop; only now may a Status become a real `documented`.
+                Never fictionalize a green loop — an unbuilt/untested phase says so.
   4. DOCUMENT — write the REST of this doc back from what now actually exists + works
                 (First-Time Setup, Daily Loop, Config Switching, Where Everything Lives,
                 Known Gaps), THEN re-run /map-qa-instrument --rescan so the map reflects
                 reality. The loop closes: map -> build -> map.
+
+  SCOPE: this doc and the rig (scripts/seeds/config) are /build-qa-bench's. Runbooks,
+  the playbook, checklists, and fixtures are /build-qa-test's — link them here, don't
+  author them here.
 
   As you fill: delete every <!-- tip --> and this HOW-TO block. Keep it honest.
 ============================================================ -->
@@ -35,9 +44,9 @@ doc_type: qa-riao-readme
 
 ## The R/I/A/O Loop
 
-<!-- tip: THIS IS THE HEART OF THE DOC. Every QA cycle — a bug fix, an integration test,
-     a pre-deploy check — is one turn of this loop. Define what each phase MEANS in THIS
-     project (concrete, not the generic definition). Fill Mechanism + Status from qa/qa-map.md. -->
+<!-- tip: THIS IS THE HEART OF THE DOC, and the index /run-qa-test resolves from. Define what
+     each phase MEANS in THIS project (concrete, not the generic definition). Fill Mechanism +
+     Status from qa/qa-map.md. Every Mechanism cell must link a file that actually exists. -->
 
 Every QA cycle here is one turn of **RESET → INJECT → ACT → OBSERVE**:
 
@@ -48,9 +57,9 @@ Every QA cycle here is one turn of **RESET → INJECT → ACT → OBSERVE**:
 | **ACT** — exercise the system | [e.g. bring the dependency stack up; run the app from the IDE] | [`scripts/start-stack.ps1`](scripts/start-stack.ps1) | [status] |
 | **OBSERVE** — see what happened | [e.g. confirm services reachable; check logs / SQL asserts] | [`scripts/smoke-check.ps1`](scripts/smoke-check.ps1) | [status] |
 
-<!-- tip: A `missing` phase is a gap /build-qa-bench fills — the "what it means" cell is
-     the spec build works to. A `tribal` phase means the mechanism exists but isn't discoverable;
-     build promotes it (adds the header / links it here). -->
+<!-- tip: A `missing` phase is a gap /build-qa-bench fills — the "what it means" cell is the spec
+     it builds to. A `tribal` phase means the mechanism exists but nothing pointed at it; adding
+     the link above IS the promotion. Never rename or move an adopted script. -->
 
 ---
 
@@ -84,20 +93,19 @@ Every QA cycle here is one turn of **RESET → INJECT → ACT → OBSERVE**:
 
 ## Where Everything Lives
 
-<!-- tip: The front-door map. Link each category to its folder + the audit map. Drop rows for
-     categories this project doesn't have. -->
+<!-- tip: The front-door map. DROP any row this project doesn't have — never link a file that
+     isn't there. Add rows as /build-qa-test creates runbooks, checklists, and fixtures. -->
 
-| Layer | What | Where |
-|---|---|---|
-| Per-module "how to run" | Runbooks | [runbooks/](runbooks/) |
-| Cross-module orchestration + E2E | Playbook | [playbook.md](playbook.md) |
-| Per-feature manual QA | Checklists | [checklists/](checklists/) |
-| Per-stage test preconditions | Fixtures | [fixtures/](fixtures/) |
-| Required config + templates | Config | [config/](config/) |
-| R/I/A/O scripts | Scripts | [scripts/](scripts/) |
-| Test-data sources | Seeds | [seeds/](seeds/) |
-| Repeatable integration/e2e procedure | — | [integration-testing.md](integration-testing.md) |
-| What exists + maturity audit | Map | [qa-map.md](qa-map.md) |
+| Layer | What | Where | Built by |
+|---|---|---|---|
+| Per-module "how to run" | Runbooks | [runbooks/](runbooks/) | /build-qa-test |
+| Cross-module orchestration + E2E | Playbook | [playbook.md](playbook.md) | /build-qa-test |
+| Per-feature verification | Checklists | [checklists/](checklists/) | /build-qa-test |
+| Per-stage test preconditions | Fixtures | [fixtures/](fixtures/) | /build-qa-test |
+| R/I/A/O scripts | Scripts | [scripts/](scripts/) | /build-qa-bench |
+| Required config + templates | Config | [config/](config/) | /build-qa-bench |
+| Test-data sources | Seeds | [seeds/](seeds/) | /build-qa-bench |
+| What exists + maturity audit | Map | [qa-map.md](qa-map.md) | /map-qa-instrument |
 
 ---
 
@@ -113,11 +121,11 @@ localhost and never commit the edit. Link the config inventory / REQUIRED.md.]
 
 ## Known Gaps / Debts
 
-<!-- tip: Pull the tribal + missing rows straight from qa/qa-map.md. Be honest — this is what's
-     NOT yet trustworthy in the instrument. -->
+<!-- tip: Pull the tribal + missing rows straight from qa/qa-map.md, and mark which builder owns
+     each. Be honest — this is what's NOT yet trustworthy in the instrument. -->
 
-- [e.g. Fixtures are tribal — inline in the test suite, not extracted to fixtures/.]
-- [e.g. No REQUIRED.md config inventory yet.]
+- [e.g. Fixtures are tribal — inline in the test suite, not extracted to fixtures/. → /build-qa-test]
+- [e.g. No REQUIRED.md config inventory yet. → /build-qa-bench]
 
 ---
 
@@ -125,5 +133,6 @@ localhost and never commit the edit. Link the config inventory / REQUIRED.md.]
 
 - Run **one module** → its [runbook](runbooks/).
 - Verify the **whole connected system** → the [playbook](playbook.md).
-- Write a **repeatable** integration/e2e test → [integration-testing.md](integration-testing.md).
 - See **what exists + how mature** → [qa-map.md](qa-map.md).
+- **Build** a missing piece → `/build-qa-bench` (rig) or `/build-qa-test` (tests).
+- **Run** the verification → `/run-qa-test`.
