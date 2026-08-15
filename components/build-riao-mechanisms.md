@@ -1,11 +1,11 @@
 # Build R/I/A/O Mechanisms
 
-The per-phase scaffold recipes for `/build-qa-instrument` **Step 5**. Run a recipe when a phase is graded `missing` and its mechanism must be created from scratch. Each recipe is **technology-agnostic** — the shape holds across stacks; the commands are project-specific (stub them with a single `TODO:`).
+The per-phase scaffold recipes for `/build-qa-bench` **Step 5**. Run a recipe when a phase is graded `missing` and its mechanism must be created from scratch. Each recipe is **technology-agnostic** — the shape holds across stacks; the commands are project-specific (stub them with a single `TODO:`).
 
 ## Shared discipline (every recipe)
 
 - **Loop engine only** — you're building `scripts` / `seeds` / `config`, never docs, checklists, or fixtures (the map links those).
-- **One mechanism per phase**, then **link it** in the `qa/README.md` R/I/A/O table's Mechanism cell — that link is how `/integration-test` resolves the phase.
+- **One mechanism per phase**, then **link it** in the `qa/README.md` R/I/A/O table's Mechanism cell — that link is how `/run-qa-test` resolves the phase.
 - **Build in loop order** — RESET → INJECT → ACT → OBSERVE — because each phase's output is the next phase's precondition.
 - **Stub, don't guess** — where a project specific is unknown, leave one `TODO:` line rather than invent it.
 - **QA-scoped + idempotent** — a mechanism must be safe to run twice and physically unable to touch a prod/shared store.
@@ -58,7 +58,7 @@ Each recipe below has the same four beats: **Find → Build → Needs → Done w
 - **Find** — the cheapest reliable health signal: a health endpoint, a "services reachable" probe, a smoke query, a known log line.
 - **Build** — a smoke script that asserts those signals and **exits non-zero on failure**. Keep it to loop-level invariants ("SQL Server + MySQL + Dolibarr reachable"), **not** per-feature assertions — those are the tests, authored per feature.
 - **Needs** — ACT done (system up).
-- **Done when** — the script runs green against a healthy stack and red against a broken one — the signal `/integration-test` and the daily loop rely on.
+- **Done when** — the script runs green against a healthy stack and red against a broken one — the signal `/run-qa-test` and the daily loop rely on.
 
 ---
 

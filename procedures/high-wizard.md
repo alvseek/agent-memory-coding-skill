@@ -173,17 +173,17 @@ The delegated procedure will:
 - **STOP** at the WAIT Options prompt — wait for [USER-NAME]'s response
 - Apply approved fixes and update this plan's Quality Review section (its Step 8)
 
-3. **Resume control** here after `/analyze-code-quality` completes. Proceed to Step 17 (Final Integration Test).
+3. **Resume control** here after `/analyze-code-quality` completes. Proceed to Step 17 (Final Runtime Verification).
 
-### Step 17: Final Integration Test (Delegated to `/integration-test`)
+### Step 17: Final Runtime Verification (Delegated to `/run-qa-test`)
 
-After Quality Review is resolved, run **runtime** verification by delegating to `/integration-test` in embedded mode. Results are embedded directly into this plan's `## FINAL INTEGRATION TEST` section — static quality review (Step 16) answered "is the code clean?"; this step answers "does it actually work?".
+After Quality Review is resolved, run **runtime** verification by delegating to `/run-qa-test` in embedded mode. Results are embedded directly into this plan's `## FINAL RUNTIME VERIFICATION` section — static quality review (Step 16) answered "is the code clean?"; this step answers "does it actually work?".
 
 1. **Collect scope**: Identify all files created or modified during implementation from this plan's Execution Log. This file list is the **caller-passed scope** for the delegated procedure.
 
-2. **Invoke `/integration-test`** following the /integration-test with these inputs:
+2. **Invoke `/run-qa-test`** following the /run-qa-test with these inputs:
    - `scope`: the file list collected above (from Execution Log)
-   - `embedded_mode=true`: signals the procedure to write results into this plan's Final Integration Test section
+   - `embedded_mode=true`: signals the procedure to write results into this plan's Final Runtime Verification section
 
 The delegated procedure will:
 - **Detect qa/ instrument** (its Step 1) — stop + offer `/setup-qa-instrument` if missing
@@ -192,13 +192,13 @@ The delegated procedure will:
 - Present findings via /wait-options (its Step 4) — preamble: *"Runtime verification findings:"*
 - **STOP** at the WAIT Options prompt — wait for [USER-NAME]'s response
 - Apply approved fixes and re-run affected modules (its Step 5)
-- Log results into this plan's `## FINAL INTEGRATION TEST` section (its Step 6)
+- Log results into this plan's `## FINAL RUNTIME VERIFICATION` section (its Step 6)
 
-3. **Resume control** here after `/integration-test` completes. Proceed to Step 18 (Move Plan to Completed).
+3. **Resume control** here after `/run-qa-test` completes. Proceed to Step 18 (Move Plan to Completed).
 
 ### Step 18: Move Plan to Completed
 
-After all implementation phases are done, logged, and both Quality Review (Step 16) + Final Integration Test (Step 17) are resolved, follow the [Archive Plan component]([path-to-agent-memory-coding-skill]/components/archive-plan.md) — move the plan file `[plan-file].md`.
+After all implementation phases are done, logged, and both Quality Review (Step 16) + Final Runtime Verification (Step 17) are resolved, follow the [Archive Plan component]([path-to-agent-memory-coding-skill]/components/archive-plan.md) — move the plan file `[plan-file].md`.
 
 ### Step 19: Completion Report
 
@@ -206,7 +206,7 @@ Present a brief completion report to [USER-NAME]:
 - Plan file location (in `/plans/completed/`)
 - Summary of what was implemented
 - Quality Review status (clean / N findings fixed)
-- Final Integration Test status (clean / N runtime failures fixed / skipped — no qa/)
+- Final Runtime Verification status (clean / N runtime failures fixed / skipped — no qa/)
 - Any notes or follow-ups worth mentioning
 
 Then offer: "Would you like me to run `/wrap-up` to close the session?"

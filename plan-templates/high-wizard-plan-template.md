@@ -268,7 +268,7 @@ I have to use this document as my **ONLY** source of truth to execute and track 
 
 ---
 
-## **FINAL INTEGRATION TEST**
+## **FINAL RUNTIME VERIFICATION**
 *Filled by procedure Step 17 after Quality Review is resolved. **Runtime** verification through the qa/ instrument — answers "does it actually work end-to-end?".*
 
 - **Scope**: [Modules touched — mapped from Execution Log scope]
@@ -282,5 +282,5 @@ I have to use this document as my **ONLY** source of truth to execute and track 
 ---
 
 ## **POST-COMPLETION**
-After all phases are executed, logged, and both **Quality Review** + **Final Integration Test** are filled, move this plan to `plans/completed/`:
+After all phases are executed, logged, and both **Quality Review** + **Final Runtime Verification** are filled, move this plan to `plans/completed/`:
 `mkdir -p ./plans/completed && mv ./plans/[this-file].md ./plans/completed/[this-file].md`

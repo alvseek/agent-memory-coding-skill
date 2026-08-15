@@ -7,7 +7,7 @@ doc_type: qa-riao-readme
 <!-- ============================================================
   QA README TEMPLATE — the RIAO definition + front door for qa/
 
-  This file is /build-qa-instrument's SPINE — one doc filled progressively across its
+  This file is /build-qa-bench's SPINE — one doc filled progressively across its
   4 steps (not a one-shot). It becomes qa/README.md, the single front-door doc.
 
   THE 4-STEP LIFECYCLE (each step reads/writes this doc):
@@ -48,7 +48,7 @@ Every QA cycle here is one turn of **RESET → INJECT → ACT → OBSERVE**:
 | **ACT** — exercise the system | [e.g. bring the dependency stack up; run the app from the IDE] | [`scripts/start-stack.ps1`](scripts/start-stack.ps1) | [status] |
 | **OBSERVE** — see what happened | [e.g. confirm services reachable; check logs / SQL asserts] | [`scripts/smoke-check.ps1`](scripts/smoke-check.ps1) | [status] |
 
-<!-- tip: A `missing` phase is a gap /build-qa-instrument fills — the "what it means" cell is
+<!-- tip: A `missing` phase is a gap /build-qa-bench fills — the "what it means" cell is
      the spec build works to. A `tribal` phase means the mechanism exists but isn't discoverable;
      build promotes it (adds the header / links it here). -->
 

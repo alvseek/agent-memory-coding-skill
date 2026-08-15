@@ -1,9 +1,9 @@
-# Integration Test
+# Run QA Test
 
 Run runtime verification through the qa/ instrument — execute the R/I/A/O loop to verify the system actually runs. Two tactics: **whole-stack module smoke** (did a change break the run path?) and the **goal-driven fixture→e2e ladder** (does a specific feature/flow produce the right outcome, driven the way the system really runs it?). Closes the loop on *"does it actually work?"*.
 
 - **Standalone**: invoke directly after manual changes, bug fixes, or pre-deploy checks to verify runtime behavior on a scope.
-- **Embedded (wizard-delegated)**: called by `/high-wizard` Step 17, `/quick-wizard` Step 8, and `/pixel-wizard` Step 19 as the "Final Integration Test" step in their lifecycle.
+- **Embedded (wizard-delegated)**: called by `/high-wizard` Step 17, `/quick-wizard` Step 8, and `/pixel-wizard` Step 19 as the "Final Runtime Verification" step in their lifecycle.
 
 ## Arguments
 
@@ -11,22 +11,22 @@ Run runtime verification through the qa/ instrument — execute the R/I/A/O loop
 
 ### Standalone invocation (user-invoked)
 
-- `/integration-test [scope]` → Run integration tests on the given scope of touched modules
-- `/integration-test` → Will ask for scope
+- `/run-qa-test [scope]` → Run the QA tests on the given scope of touched modules
+- `/run-qa-test` → Will ask for scope
 
 **Scope examples:**
 - Module names: `auth`, `api`, `worker`
 - File paths: `src/auth/login.ts`, `src/api/users.ts`
 - Git-based: `all changes since last commit`
 
-If no arguments provided, ask: "What scope should I run integration tests on? (module names, file paths, or 'all changes since last commit')"
+If no arguments provided, ask: "What scope should I run the QA tests on? (module names, file paths, or 'all changes since last commit')"
 
 ### Embedded invocation (wizard-delegated)
 
 When called from `/high-wizard` Step 17, `/quick-wizard` Step 8, or `/pixel-wizard` Step 19, this procedure runs in **embedded mode** with two caller-passed inputs:
 
 - `scope`: list of files from the caller's Execution Log (HW/pixel-wizard) or QW plan execution
-- `embedded_mode=true`: signals to write results into the caller's plan `## FINAL INTEGRATION TEST` section (where the wizard step is labeled "Final Integration Test" — "final" is the wizard's positional descriptor, not a property of this procedure itself)
+- `embedded_mode=true`: signals to write results into the caller's plan `## FINAL RUNTIME VERIFICATION` section (where the wizard step is labeled "Final Runtime Verification" — "final" is the wizard's positional descriptor, not a property of this procedure itself)
 
 Embedded mode flow: caller hands off control → this procedure runs the R/I/A/O loop → results embedded in caller's plan → caller resumes its next step.
 
@@ -34,20 +34,20 @@ Embedded mode flow: caller hands off control → this procedure runs the R/I/A/O
 
 ## Procedure
 
-### Step 1: Detect qa/ Instrument
+### Step 1: Detect the qa/ Bench
 
 Check for `qa/README.md` with a filled **R/I/A/O Loop** table — that table is the index this procedure resolves the loop from.
 
 - **If missing**: STOP. Present to [USER-NAME]:
   ```
-  No qa/ instrument (R/I/A/O index) detected for this project.
-  A) Build it: /map-qa-instrument create, then /build-qa-instrument (recommended)
-  B) Skip integration test (log decision)
+  No qa/ bench (R/I/A/O index) detected for this project.
+  A) Build it: /map-qa-instrument create, then /build-qa-bench, then /build-qa-test (recommended)
+  B) Skip the QA test run (log decision)
   ```
-  - If A: run the map → build pipeline, then return here.
+  - If A: run the map → bench → test pipeline, then return here.
   - If B: log the skip:
-    - **Standalone mode**: report `"Integration test skipped — no qa/ instrument"` to [USER-NAME] and end.
-    - **Embedded mode**: write `"Final Integration Test skipped — no qa/ instrument"` into caller's plan `## FINAL INTEGRATION TEST` section, then return control to caller.
+    - **Standalone mode**: report `"QA test run skipped — no qa/ bench"` to [USER-NAME] and end.
+    - **Embedded mode**: write `"Final Runtime Verification skipped — no qa/ instrument"` into caller's plan `## FINAL RUNTIME VERIFICATION` section, then return control to caller.
 
 ### Step 2: Identify Touched Modules
 
@@ -55,7 +55,7 @@ From the scope (caller-passed in embedded mode, or asked in standalone mode), ma
 
 ### Step 3: Choose the Tactic
 
-Integration verification has two tactics. Pick by what you're actually verifying:
+Runtime verification has two tactics. Pick by what you're actually verifying:
 
 - **Tactic A — Whole-stack module smoke** (Step 3A). *"Did this change break the module's invariant run path?"* Broad, coarse. Use for post-change regression across touched modules, and for the embedded wizard step by default.
 - **Tactic B — Goal-driven fixture→e2e ladder** (Step 3B). *"Does this specific feature/flow produce the right outcome, driven through its real entry point?"* Surgical, high-confidence on one path. Use to verify a shipped feature end-to-end, or to reproduce + verify a bug fix.
@@ -69,7 +69,7 @@ Often you run **both**: B to prove the changed feature works, A to confirm nothi
 
 ### Step 3A: Whole-Stack Module Smoke
 
-**Resolve the loop from `qa/README.md`'s R/I/A/O table — the index, not the scripts.** Its Mechanism column links each phase (RESET / INJECT / ACT / OBSERVE) to the script that runs it; that link is the contract, written by `/build-qa-instrument`. Read the table — do NOT scan filenames or in-script headers.
+**Resolve the loop from `qa/README.md`'s R/I/A/O table — the index, not the scripts.** Its Mechanism column links each phase (RESET / INJECT / ACT / OBSERVE) to the script that runs it; that link is the contract, written by `/build-qa-bench`. Read the table — do NOT scan filenames or in-script headers.
 
 For each touched module's runbook, run the full loop:
 
@@ -94,7 +94,7 @@ Use this to verify one specific feature/flow (e.g. *"auto fish-in quarantine"*).
 
 3. **RESET the baseline** — either the Tactic-A RESET, or a scoped **snapshot** of just the entities the run will touch (capture their pre-state so teardown can restore them exactly).
 
-4. **Build the precondition state by forward-chaining the upstream stages** — for each, use its `fixture(stage)` from `qa/fixtures/` (reuse existing snapshot data / call the real API with a cached token / a DB seed that mirrors that stage's real output). **No reset between stages** — each consumes the prior stage's accumulated state. Prefer the highest-fidelity fixture available; if a needed fixture doesn't exist, flag it and offer to build it (it belongs to the qa/ instrument — see `/setup-qa-instrument`).
+4. **Build the precondition state by forward-chaining the upstream stages** — for each, use its `fixture(stage)` from `qa/fixtures/` (reuse existing snapshot data / call the real API with a cached token / a DB seed that mirrors that stage's real output). **No reset between stages** — each consumes the prior stage's accumulated state. Prefer the highest-fidelity fixture available; if a needed fixture doesn't exist, **stop and hand off to `/build-qa-test`** — fixtures are the test layer's to build, not this procedure's. Never improvise one mid-run: an ad-hoc fixture is unreviewed, unversioned, and its fidelity is unproven, so every later run inherits a shortcut nobody signed off on.
 
 5. **Exercise the step under test for real** — drive its *actual* entry point: the HTTP endpoint the UI/mobile calls, the scheduler endpoint, the real service method at the true boundary. Not an internal shortcut that bypasses the wiring.
 
@@ -115,7 +115,7 @@ Preamble: *"Runtime verification findings:"*
 
 **STOP**. Wait for [USER-NAME]'s response.
 
-If no findings, report: *"Integration test passed — runtime clean."*
+If no findings, report: *"QA test run passed — runtime clean."*
 
 ### Step 5: Fix Cycle
 
@@ -132,7 +132,7 @@ Apply approved fixes in one batch. Re-run the loop (Step 3A or 3B, whichever thi
   - R/I/A/O loop results (pass/fail); confirm teardown left zero residue
   - Findings + Fixed
 
-- **Embedded mode**: Write results into caller's plan `## FINAL INTEGRATION TEST` section:
+- **Embedded mode**: Write results into caller's plan `## FINAL RUNTIME VERIFICATION` section:
   - **Scope**: touched modules
   - **qa/ Status**: detected / missing / skipped
   - **Runbooks Run**: list of `qa/runbooks/{module}.md` exercised
@@ -142,3 +142,21 @@ Apply approved fixes in one batch. Re-run the loop (Step 3A or 3B, whichever thi
   - **Fixed**: what was fixed from approved findings, or *"N/A"*
 
 **Embedded mode return**: After Step 6, control returns to the wizard caller (HW Step 17, QW Step 8, or pixel-wizard Step 19), which then proceeds to its next step (Move to Completed or Report Completion).
+
+---
+
+## Integration With Other Procedures
+
+Pipeline: **`/map-qa-instrument` (audit) → `/build-qa-bench` (build the rig) → `/build-qa-test` (build the tests) → `/run-qa-test` (run them).**
+
+- **/map-qa-instrument** — canonical home for the R/I/A/O loop, the 7 artifact categories, and the `documented / tribal / missing` grading. This skill references *up* to those; it does not restate them.
+- **/build-qa-bench** — upstream. Builds the loop engine (scripts · seeds · config) and writes the `qa/README.md` R/I/A/O table that Step 3A resolves the loop from.
+- **/build-qa-test** — upstream. Builds what this skill *runs*: fixtures (Tactic B preconditions), checklists, and the runbook/playbook Act+Observe scenarios (Tactic A). A missing fixture is a hand-off to it, never an improvisation here.
+- **/high-wizard · /quick-wizard · /pixel-wizard** — callers. Each delegates here in embedded mode as its **Final Runtime Verification** step, then resumes.
+
+## Anti-Patterns
+
+1. **Building a fixture mid-run.** A fixture invented under run pressure is unreviewed and its fidelity unproven — every later run inherits it. Hand off to `/build-qa-test`.
+2. **Fixturing the step under test.** A shortcut standing in for the behavior you're validating proves nothing (Tactic B, rule 2).
+3. **Leaving residue.** No teardown means the next run starts dirty and its result is meaningless. Wrap in try/finally.
+4. **Calling a boundary-driven run "e2e".** If the real entry point is UI-only, drive the nearest automatable seam and *say so* — don't relabel it.

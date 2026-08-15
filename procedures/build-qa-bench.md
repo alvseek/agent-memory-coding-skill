@@ -1,20 +1,22 @@
-# Build QA Instrument
+# Build QA Bench
 
-Create (or promote) a project's QA instrument — map-driven and honest. Reads the audit from `/map-qa-instrument`, then fills the gaps by progressively writing `qa/README.md` (the RIAO spine) across a 4-phase lifecycle: **DEFINE → BUILD → TEST → DOCUMENT**. Builds the R/I/A/O loop first (the engine), then the artifact-layer categories. The repeatable runtime proof is delegated to `/integration-test`.
+Build a project's QA **bench** — the rig the tests run on — map-driven and honest. Reads the audit from `/map-qa-instrument`, then fills the gaps by progressively writing `qa/README.md` (the RIAO spine) across a 4-phase lifecycle: **DEFINE → BUILD → TEST → DOCUMENT**.
+
+Scope is the **R/I/A/O loop engine only** — scripts · seeds · config. A test bench resets to a known state, loads a specimen, drives it, and reads the output; that is exactly RESET → INJECT → ACT → OBSERVE. The **test layer** (fixtures · checklists · scenarios) belongs to `/build-qa-test`; the repeatable runtime proof belongs to `/run-qa-test`.
 
 > **Canonical definitions live in `/map-qa-instrument`** — the R/I/A/O loop, the 7 artifact categories, and the `documented / tribal / missing` grading. This skill references *up* to those; it does not restate them.
 
-Pipeline: **`/map-qa-instrument` (audit) → `/build-qa-instrument` (create) → `/integration-test` (run).**
+Pipeline: **`/map-qa-instrument` (audit) → `/build-qa-bench` (build the rig) → `/build-qa-test` (build the tests) → `/run-qa-test` (run them).**
 
-> **The `qa/README.md` R/I/A/O table is the single index.** `/integration-test` resolves the loop from it — which script is RESET / INJECT / ACT / OBSERVE — by the table's Mechanism **links**, not from in-script headers. Producing that table (and the mechanisms it points to) is this skill's core output.
+> **The `qa/README.md` R/I/A/O table is the single index.** `/run-qa-test` resolves the loop from it — which script is RESET / INJECT / ACT / OBSERVE — by the table's Mechanism **links**, not from in-script headers. Producing that table (and the mechanisms it points to) is this skill's core output.
 
 ## Arguments
 
 `$ARGUMENTS`
 
-- `/build-qa-instrument` → **Default (incremental)**. Read the map, show the gap list (`tribal` + `missing`), pick one to build. One gap per run keeps it reviewable.
-- `/build-qa-instrument [phase|category]` → Target one directly (e.g. `reset`, `inject`, `fixtures`, `config`).
-- `/build-qa-instrument all` → Sweep every gap the map found in one run.
+- `/build-qa-bench` → **Default (incremental)**. Read the map, show the gap list (`tribal` + `missing`), pick one to build. One gap per run keeps it reviewable.
+- `/build-qa-bench [phase|category]` → Target one directly (e.g. `reset`, `inject`, `fixtures`, `config`).
+- `/build-qa-bench all` → Sweep every gap the map found in one run.
 
 If no arguments provided, load the map and ask which gap to build.
 
@@ -53,14 +55,14 @@ Read the [QA README template]([path-to-agent-memory-coding-skill]/templates/qa-r
 
 ## Phase 1: DEFINE
 
-*Goal: turn the map into the **index** — write each phase's intent into the README R/I/A/O table and carry over any mechanism the map already found. That table is both the spec Phase 2 builds against and the table `/integration-test` later resolves the loop from.*
+*Goal: turn the map into the **index** — write each phase's intent into the README R/I/A/O table and carry over any mechanism the map already found. That table is both the spec Phase 2 builds against and the table `/run-qa-test` later resolves the loop from.*
 
 ### Step 4: Fill the R/I/A/O Loop table
 
 Fill **only** the [## The R/I/A/O Loop]([path-to-agent-memory-coding-skill]/templates/qa-readme-template.md#the-riao-loop) section. For each of RESET / INJECT / ACT / OBSERVE, fill its row:
 
 - **What it means here** — the concrete intent (e.g. RESET = "tear down containers, DBs back to last seed"). Write this **even for a `missing` phase** — it's the spec Step 5 builds to.
-- **Mechanism** — the link the map found (`documented` / `tribal`), or **leave empty** if `missing`. This link is the resolver: it's how `/integration-test` finds the mechanism, so linking an existing one here is all the wiring it needs — no header, no move.
+- **Mechanism** — the link the map found (`documented` / `tribal`), or **leave empty** if `missing`. This link is the resolver: it's how `/run-qa-test` finds the mechanism, so linking an existing one here is all the wiring it needs — no header, no move.
 - **Status** — carried from the map.
 
 Fill **nothing else** in the README yet — you can't honestly document a loop that isn't built.
@@ -84,13 +86,13 @@ The default posture is **build**. Work each phase by its Status:
 | Status | Action |
 |---|---|
 | `missing` | **Build** — create the mechanism (a reset script, a seed workflow, the config it needs), stubbed with a single `TODO:` for project specifics, then **link it in the table's Mechanism cell**. On a greenfield project, all four go this way. |
-| `documented` / `tribal` | **Confirm** — the mechanism exists and Step 4 already linked it. That link *is* the wiring (`/integration-test` resolves from the README table, not from in-script headers). Just confirm it runs. |
+| `documented` / `tribal` | **Confirm** — the mechanism exists and Step 4 already linked it. That link *is* the wiring (`/run-qa-test` resolves from the README table, not from in-script headers). Just confirm it runs. |
 
 Build in loop order — RESET → INJECT → ACT → OBSERVE (config feeds INJECT/ACT) — so each phase's clean state is ready for the next. As each mechanism becomes real, its Mechanism cell links it: by the end of Phase 2, every row points at a working script.
 
 For a `missing` phase, follow the [Build R/I/A/O Mechanisms component]([path-to-agent-memory-coding-skill]/components/build-riao-mechanisms.md) — the per-part (RESET / INJECT / ACT / OBSERVE) scaffold recipes.
 
-> *The hard line: build only the missing engine parts; the map links everything else, and the README table is the index `/integration-test` reads.*
+> *The hard line: build only the missing engine parts; the map links everything else, and the README table is the index `/run-qa-test` reads.*
 
 ---
 
@@ -100,7 +102,7 @@ For a `missing` phase, follow the [Build R/I/A/O Mechanisms component]([path-to-
 
 ### Step 6: Self-smoke each built phase
 
-Run a **light self-smoke** on what you just built: does RESET actually reach a clean state? does INJECT actually load? Only after it runs may that phase's Status become a real `documented` — never fictionalize a green loop. The full repeatable runtime proof is **not** built here; delegate it to `/integration-test` and point the user there.
+Run a **light self-smoke** on what you just built: does RESET actually reach a clean state? does INJECT actually load? Only after it runs may that phase's Status become a real `documented` — never fictionalize a green loop. The full repeatable runtime proof is **not** built here; delegate it to `/run-qa-test` and point the user there.
 
 ---
 
@@ -136,7 +138,7 @@ Present a brief report to [USER-NAME]:
 - R/I/A/O loop status after the self-smoke.
 - README sections filled.
 - Remaining gaps (deferred to a future run) + the `--rescan` result.
-- Pointer to `/integration-test` for the full runtime proof.
+- Pointer to `/run-qa-test` for the full runtime proof.
 
 ---
 
@@ -150,7 +152,8 @@ Present a brief report to [USER-NAME]:
 ## Integration With Other Procedures
 
 - **/map-qa-instrument** — upstream. Build requires its map (the gap list) and calls `--rescan` at the end to close the loop. Canonical home for the loop / ontology / grading definitions.
-- **/integration-test** — downstream. Build does a light self-smoke; the repeatable runtime proof is integration-test's job.
+- **/build-qa-test** — downstream sibling. Owns everything this skill deliberately refuses: fixtures, checklists, and the runbook/playbook Act+Observe scenarios. Bench first, then tests — a fixture has nothing to build against until the loop runs.
+- **/run-qa-test** — downstream. Build does a light self-smoke only; the repeatable runtime proof is `/run-qa-test`'s job.
 - **/setup-qa-instrument** — the legacy monolith that this skill + `/map-qa-instrument` replace. Its Step-7 template shapes are reused until they migrate here.
 
 ---

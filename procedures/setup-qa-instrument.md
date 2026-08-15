@@ -6,9 +6,9 @@ Establish a reliable QA feedback loop for a project. Investigates the project's 
 > - **Runbook** (`qa/runbooks/{module}.md`) — the operational how-to for **one module**: preconditions, launch, reset/inject/act/observe for that module, config-switching, gotchas. Evergreen. Atomic.
 > - **Playbook** (`qa/playbook.md`) — the **cross-module** strategy layer: connection map, full-system boot order, full-system smoke, and end-to-end scenarios that span modules. *References* the runbooks. Evergreen.
 > - **Checklist** (`qa/checklists/{feature}.md` → `completed/`) — **per-feature** manual verification tied to a specific shipped change. Ephemeral; archived on sign-off.
-> - **Fixture** (`qa/fixtures/{stage}.*`) — a **per-stage precondition-builder** that cheaply reproduces the end-state of one flow stage ("as if create-order completed"), so `/integration-test` Tactic B can reach a deep precondition without paying the full e2e cost for every upstream stage. Composable (each fixture feeds the next stage) and **fidelity-bound** (must mirror what the real stage writes). Built per-flow when needed, like checklists — not up front.
+> - **Fixture** (`qa/fixtures/{stage}.*`) — a **per-stage precondition-builder** that cheaply reproduces the end-state of one flow stage ("as if create-order completed"), so `/run-qa-test` Tactic B can reach a deep precondition without paying the full e2e cost for every upstream stage. Composable (each fixture feeds the next stage) and **fidelity-bound** (must mirror what the real stage writes). Built per-flow when needed, like checklists — not up front.
 
-> *Output (`qa/` folder) is consumed by /integration-test — the runtime verification procedure — invoked from the **Final Integration Test** step in /high-wizard (Step 17), /quick-wizard (Step 8), and /pixel-wizard (Step 19), or standalone for ad-hoc runtime checks.*
+> *Output (`qa/` folder) is consumed by /run-qa-test — the runtime verification procedure — invoked from the **Final Runtime Verification** step in /high-wizard (Step 17), /quick-wizard (Step 8), and /pixel-wizard (Step 19), or standalone for ad-hoc runtime checks.*
 
 ## The Universal QA Loop
 
@@ -198,7 +198,7 @@ Content shape (an operational how-to — NOT a 7Q README). Per-feature scenarios
 
 #### Template 2 — Run-Script Framework (categorized by R/I/A/O)
 
-Files at `qa/scripts/` (or `qa/` root if there will be ≤4 scripts). The **`# R/I/A/O category:` header is the machine contract** — `/integration-test` resolves each script by reading that header, NOT by its filename. So existing project scripts keep their natural names (`teardown`, `import-seed`, `start-stack`, `smoke-check`); just ensure each carries the category header. The filename patterns below are a **human-readability suggestion for new scripts**, not a requirement:
+Files at `qa/scripts/` (or `qa/` root if there will be ≤4 scripts). The **`# R/I/A/O category:` header is the machine contract** — `/run-qa-test` resolves each script by reading that header, NOT by its filename. So existing project scripts keep their natural names (`teardown`, `import-seed`, `start-stack`, `smoke-check`); just ensure each carries the category header. The filename patterns below are a **human-readability suggestion for new scripts**, not a requirement:
 
 | Category | Suggested filename | Examples |
 |---|---|---|
@@ -214,7 +214,7 @@ Each generated (or adopted) script MUST carry:
 
 #### Template 2b — Fixtures (composable per-stage preconditions; scaffold the folder, not the content)
 
-Where INJECT (Template 2) seeds one realistic-data baseline, a **fixture** cheaply reproduces the end-state of **one flow stage** ("as if create-order completed") so `/integration-test` **Tactic B** can reach a deep precondition without paying the full e2e cost for every upstream stage. They compose (each stage's fixture feeds the next) and are the cost lever that makes e2e affordable: pay the *real* cost only for the one step under test; reach everything before it via fixtures.
+Where INJECT (Template 2) seeds one realistic-data baseline, a **fixture** cheaply reproduces the end-state of **one flow stage** ("as if create-order completed") so `/run-qa-test` **Tactic B** can reach a deep precondition without paying the full e2e cost for every upstream stage. They compose (each stage's fixture feeds the next) and are the cost lever that makes e2e affordable: pay the *real* cost only for the one step under test; reach everything before it via fixtures.
 
 **Scaffold the folder only** — do NOT generate fixtures up front (there's no flow to fixture yet; they're built per-flow when a Tactic-B run needs one, like checklists):
 
@@ -224,7 +224,7 @@ Where INJECT (Template 2) seeds one realistic-data baseline, a **fixture** cheap
 Each fixture (created later, per flow) carries a header:
 - `# fixture: {stage} — produces: {end-state it reproduces} — fidelity: {how it mirrors the real stage's output (reuse-snapshot / real-API-with-token / DB-seed-mirroring-writes)}`
 
-**Fidelity is the discipline that keeps fixtures honest**: a fixture must produce a state *equivalent* to the real stage's output, or Tactic-B runs validate states the system could never reach. Prefer the highest-fidelity buildable form (reuse existing snapshot rows > call the real stage's API > hand-rolled DB seed). Note in the README that `/integration-test` should periodically run the REAL stage and assert its output matches the fixture (drift check).
+**Fidelity is the discipline that keeps fixtures honest**: a fixture must produce a state *equivalent* to the real stage's output, or Tactic-B runs validate states the system could never reach. Prefer the highest-fidelity buildable form (reuse existing snapshot rows > call the real stage's API > hand-rolled DB seed). Note in the README that `/run-qa-test` should periodically run the REAL stage and assert its output matches the fixture (drift check).
 
 #### Template 3 — Playbook (cross-module; only if Step 5 = A/B/D)
 
@@ -350,7 +350,7 @@ QA instrument set up at qa/:
 - Scripts generated: {count} (R={n}, I={n}, A={n}, O={n}) — each with the `# R/I/A/O category:` header
 - Playbook (cross-module): {qa/playbook.md + orchestration file} or N/A (single-app)
 - Checklists: folder scaffolded (per-feature checklists created on ship)
-- Fixtures: folder scaffolded (per-stage fixtures created per-flow by /integration-test Tactic B)
+- Fixtures: folder scaffolded (per-stage fixtures built per-flow by /build-qa-test, then consumed by /run-qa-test Tactic B)
 - Config templates: {count}
 
 Next steps:

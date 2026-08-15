@@ -83,17 +83,17 @@ The delegated procedure will:
 - **STOP** at the WAIT Options prompt — wait for [USER-NAME]'s response
 - Apply approved fixes and update the QW plan's Quality Review section (its Step 8)
 
-3. **Resume control** here after `/analyze-code-quality` completes. Proceed to Step 8 (Final Integration Test).
+3. **Resume control** here after `/analyze-code-quality` completes. Proceed to Step 8 (Final Runtime Verification).
 
-### Step 8: Final Integration Test (Delegated to `/integration-test`)
+### Step 8: Final Runtime Verification (Delegated to `/run-qa-test`)
 
-After Quality Review is resolved, run **runtime** verification by delegating to `/integration-test` in embedded mode. Results are embedded directly into this plan's `## FINAL INTEGRATION TEST` section — static quality review (Step 7) answered "is the code clean?"; this step answers "does it actually work?".
+After Quality Review is resolved, run **runtime** verification by delegating to `/run-qa-test` in embedded mode. Results are embedded directly into this plan's `## FINAL RUNTIME VERIFICATION` section — static quality review (Step 7) answered "is the code clean?"; this step answers "does it actually work?".
 
 1. **Collect scope**: Identify all files created or modified during execution (from the plan's execution tracking — plan-mode steps or in-conversation tracking). This file list is the **caller-passed scope** for the delegated procedure.
 
-2. **Invoke `/integration-test`** following the /integration-test with these inputs:
+2. **Invoke `/run-qa-test`** following the /run-qa-test with these inputs:
    - `scope`: the file list collected above
-   - `embedded_mode=true`: signals the procedure to write results into the QW plan's Final Integration Test section
+   - `embedded_mode=true`: signals the procedure to write results into the QW plan's Final Runtime Verification section
 
 The delegated procedure will:
 - **Detect qa/ instrument** (its Step 1) — stop + offer `/setup-qa-instrument` if missing
@@ -102,16 +102,16 @@ The delegated procedure will:
 - Present findings via /wait-options (its Step 4) — preamble: *"Runtime verification findings:"*
 - **STOP** at the WAIT Options prompt — wait for [USER-NAME]'s response
 - Apply approved fixes and re-run affected modules (its Step 5)
-- Log results into the QW plan's `## FINAL INTEGRATION TEST` section (its Step 6)
+- Log results into the QW plan's `## FINAL RUNTIME VERIFICATION` section (its Step 6)
 
-3. **Resume control** here after `/integration-test` completes. Proceed to Step 9 (Report Completion).
+3. **Resume control** here after `/run-qa-test` completes. Proceed to Step 9 (Report Completion).
 
 ### Step 9: Report Completion
 
-After all steps are executed and both Quality Review (Step 7) + Final Integration Test (Step 8) are resolved, present a brief completion summary to [USER-NAME]:
+After all steps are executed and both Quality Review (Step 7) + Final Runtime Verification (Step 8) are resolved, present a brief completion summary to [USER-NAME]:
 - What was done
 - Quality Review status (clean / N findings fixed)
-- Final Integration Test status (clean / N runtime failures fixed / skipped — no qa/)
+- Final Runtime Verification status (clean / N runtime failures fixed / skipped — no qa/)
 - Any issues encountered
 - Any tech debts or follow-up items
 
@@ -139,7 +139,7 @@ Use this structure when writing the plan in plan mode (or presenting in conversa
 ## Success Criteria
 - [ ] [How we know it's done]
 - [ ] Static quality review completed (Step 7 — delegated to `/analyze-code-quality`)
-- [ ] Final Integration Test completed (Step 8 — runtime via qa/ instrument, or explicitly skipped)
+- [ ] Final Runtime Verification completed (Step 8 — runtime via qa/ instrument, or explicitly skipped)
 
 ## Execution Steps
 1. **[Step name]**: [What to do] → [How to verify]
@@ -154,7 +154,7 @@ Use this structure when writing the plan in plan mode (or presenting in conversa
 - **Findings**: [Issues found, or "No findings — implementation meets quality dimensions"]
 - **Fixed**: [What was fixed from approved findings, or "N/A"]
 
-## Final Integration Test
+## Final Runtime Verification
 *Filled by Step 8 after Quality Review is resolved. **Runtime** verification through the qa/ instrument — answers "does it actually work end-to-end?".*
 
 - **Scope**: [Modules touched]
