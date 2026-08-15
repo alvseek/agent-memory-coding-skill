@@ -21,7 +21,7 @@ Establish a reliable QA feedback loop for a project. Investigates the project's 
 > - **Checklist** (`qa/checklists/{feature}.md` → `completed/`) — **per-feature** manual verification tied to a specific shipped change. Ephemeral; archived on sign-off.
 > - **Fixture** (`qa/fixtures/{stage}.*`) — a **per-stage precondition-builder** that cheaply reproduces the end-state of one flow stage ("as if create-order completed"), so `/run-qa-test` Tactic B can reach a deep precondition without paying the full e2e cost for every upstream stage. Composable (each fixture feeds the next stage) and **fidelity-bound** (must mirror what the real stage writes). Built per-flow when needed, like checklists — not up front.
 
-> *Output (`qa/` folder) is consumed by /run-qa-test — the runtime verification procedure — invoked from the **Final Runtime Verification** step in /high-wizard (Step 17), /quick-wizard (Step 8), and /pixel-wizard (Step 19), or standalone for ad-hoc runtime checks.*
+> *Output (`qa/` folder) is consumed by /run-qa-test — the runtime verification procedure — invoked standalone in a QA session with the stack up. The wizards do NOT run it; they stop at their **QA Handoff** step (/build-qa-test --checklist).*
 
 ## The Universal QA Loop
 

@@ -83,41 +83,34 @@ The delegated procedure will:
 - **STOP** at the WAIT Options prompt — wait for [USER-NAME]'s response
 - Apply approved fixes and update the QW plan's Quality Review section (its Step 8)
 
-3. **Resume control** here after `/analyze-code-quality` completes. Proceed to Step 8 (Final Runtime Verification).
+3. **Resume control** here after `/analyze-code-quality` completes. Proceed to Step 8 (Build QA Checklist).
 
-### Step 8: Final Runtime Verification (Delegated to `/run-qa-test`)
+### Step 8: Build QA Checklist (Delegated to `/build-qa-test --checklist`)
 
-After Quality Review is resolved, run **runtime** verification by delegating to `/run-qa-test` in embedded mode. Results are embedded directly into this plan's `## FINAL RUNTIME VERIFICATION` section — static quality review (Step 7) answered "is the code clean?"; this step answers "does it actually work?".
+After Quality Review is resolved, hand this plan off to QA by building its verification checklist. Static quality review (Step 7) answered *"is the code clean?"*; this step produces the artifact that will answer *"is it actually right?"* — **later, by a human, with the stack up.**
 
-1. **Collect scope**: Identify all files created or modified during execution (from the plan's execution tracking — plan-mode steps or in-conversation tracking). This file list is the **caller-passed scope** for the delegated procedure.
+> **This step does not verify anything, and must never claim to.** A wizard sweep is a coding session: the QA stack is almost certainly down, so running the R/I/A/O loop here would mean a cold start plus a full seed restore on every sweep. Runtime verification belongs to a dedicated QA session (`/run-qa-test`). What this step guarantees is that the sweep never ends without a written plan for that verification.
 
-2. **Invoke `/run-qa-test`** following the /run-qa-test with these inputs:
-   - `scope`: the file list collected above
-   - `embedded_mode=true`: signals the procedure to write results into the QW plan's Final Runtime Verification section
+1. **Collect scope**: Identify all files created or modified during execution (from the plan's execution tracking — plan-mode steps or in-conversation tracking). That list, plus this plan itself, is the **caller-passed scope**.
+
+2. **Invoke `/build-qa-test --checklist`** with this plan as the scope input.
 
 The delegated procedure will:
-- **Detect the qa/ bench** (its Step 1) — stop + offer the `/map-qa-instrument` → `/build-qa-bench` → `/build-qa-test` pipeline if missing; warn and run partial if some phases are unbuilt
-- **Identify touched modules** and map to runbooks — plus the playbook if the change is cross-module (its Step 2)
-- **Run R/I/A/O loop per module** (its Step 3): reset → seed → start → act scenarios → smoke → compare
-- Present findings via /wait-options (its Step 4) — preamble: *"Runtime verification findings:"*
-- **STOP** at the WAIT Options prompt — wait for [USER-NAME]'s response
-- Apply approved fixes and re-run affected modules (its Step 5)
-- Log results into the QW plan's `## FINAL RUNTIME VERIFICATION` section (its Step 6)
+- **Check the QA instrument is set up** — a `qa/qa-map.md` from `/map-qa-instrument`, and a built bench from `/build-qa-bench`. If either is absent it **notifies loudly and auto-skips** rather than inventing a `qa/` folder this project never opted into.
+- Read the plan for **scope**, then derive **risk independently** — invariants to disprove, regression surface, boundaries, cross-module effects. The plan is input, never authority.
+- Write `qa/checklists/{feature}.md`, marking each item automated vs manual
 
-3. **Offer the feature checklist.** Runtime verification proves the change works now; a checklist is what someone walks before sign-off, and it reaches the UI-bound paths an automated run can't. Ask [USER-NAME]:
+3. **Record the outcome in the plan's `## QA HANDOFF` section** — the checklist path, or the skip and its reason. Never leave it blank.
 
-   > *"Build the QA checklist for this feature? (`/build-qa-test --checklist [this-plan]`)"*
-
-   If yes, delegate to `/build-qa-test --checklist` with this plan as the scope input, then resume here. The plan supplies *what changed*; the skill derives *what could break* — it is not a restatement of the acceptance criteria. If no, note the decline in the plan's Final Runtime Verification section so it's a recorded choice rather than an omission.
-
-4. **Resume control** here after the delegated procedures complete. Proceed to Step 9 (Report Completion).
+4. **Resume control** here after the delegated procedure completes. Proceed to Step 9 (Report Completion).
 
 ### Step 9: Report Completion
 
-After all steps are executed and both Quality Review (Step 7) + Final Runtime Verification (Step 8) are resolved, present a brief completion summary to [USER-NAME]:
+After all steps are executed and both Quality Review (Step 7) + QA Handoff (Step 8) are resolved, present a brief completion summary to [USER-NAME]:
 - What was done
 - Quality Review status (clean / N findings fixed)
-- Final Runtime Verification status (clean / N runtime failures fixed / skipped — no qa/)
+- **QA Handoff**: `qa/checklists/{feature}.md` built, or skipped + reason
+- ⚠️ **State plainly: "Not runtime-verified."** Then the exact next action — *"run `/run-qa-test --checklist qa/checklists/{feature}.md` when the stack is up"*, or the instrument-setup commands if the step auto-skipped.
 - Any issues encountered
 - Any tech debts or follow-up items
 
@@ -145,7 +138,7 @@ Use this structure when writing the plan in plan mode (or presenting in conversa
 ## Success Criteria
 - [ ] [How we know it's done]
 - [ ] Static quality review completed (Step 7 — delegated to `/analyze-code-quality`)
-- [ ] Final Runtime Verification completed (Step 8 — runtime via qa/ instrument, or explicitly skipped)
+- [ ] QA Handoff completed (Step 8 — checklist built, or auto-skipped with reason recorded)
 
 ## Execution Steps
 1. **[Step name]**: [What to do] → [How to verify]
@@ -160,16 +153,14 @@ Use this structure when writing the plan in plan mode (or presenting in conversa
 - **Findings**: [Issues found, or "No findings — implementation meets quality dimensions"]
 - **Fixed**: [What was fixed from approved findings, or "N/A"]
 
-## Final Runtime Verification
-*Filled by Step 8 after Quality Review is resolved. **Runtime** verification through the qa/ instrument — answers "does it actually work end-to-end?".*
+## QA Handoff
+*Filled by Step 8 after Quality Review is resolved. This plan is **not** runtime-verified — this section records the plan for that verification, which happens in a QA session with the stack up.*
 
 - **Scope**: [Modules touched]
-- **qa/ Status**: [Detected / Missing / Skipped — reason if skipped]
-- **Runbooks Run**: [List of `qa/runbooks/{module}.md` exercised, or "N/A — skipped"]
-- **Playbook Run**: [`qa/playbook.md` if cross-module, or "N/A"]
-- **R/I/A/O Results**: [Per-module pass/fail summary, or "N/A — skipped"]
-- **Findings**: [Runtime failures + severity, or "No findings — runtime clean", or "N/A — skipped"]
-- **Fixed**: [What was fixed from approved findings, or "N/A"]
+- **QA instrument**: [Set up (map + bench) / NOT SET UP — auto-skipped]
+- **Checklist**: [`qa/checklists/{feature}.md`, or "none — skipped, reason"]
+- **Coverage split**: [N automated (named tests) / N manual — of which N are UI-bound]
+- **Runtime verification**: **NOT DONE.** Next action: [`/run-qa-test --checklist qa/checklists/{feature}.md` once the stack is up | set up the instrument first: `/map-qa-instrument create` → `/build-qa-bench`]
 ```
 
 ---

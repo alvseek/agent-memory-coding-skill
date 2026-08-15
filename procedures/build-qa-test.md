@@ -48,7 +48,20 @@ Read `qa/README.md`'s **R/I/A/O Loop** table, and the map's **index-integrity** 
 
 > **Why this gate is hard.** A fixture's job is to produce the state a real stage would have left behind. Without a working RESET you cannot reach a known baseline to build against, and without OBSERVE you cannot prove the fixture landed. Tests built on an unbuilt bench are unverifiable by construction — they look like coverage and are not.
 
-**Exception — checklist mode.** A checklist is human-runnable and does not require a scripted loop, so `--checklist` may proceed on a `missing` bench. Warn once, and record in the checklist's Preconditions that the stack must be brought up by hand.
+**Checklist mode gates differently — instrument set up, or auto-skip.** `--checklist` is usually invoked by a wizard mid-sweep, where a blocking prompt would stall an automated flow. So it checks one thing — **is the QA instrument set up at all?** — meaning both a `qa/qa-map.md` from `/map-qa-instrument` **and** a built bench from `/build-qa-bench`.
+
+- **Both present** → proceed.
+- **Either absent** → **notify loudly and auto-skip.** Do not prompt, do not build:
+
+  ```
+  ⚠️ QA instrument not set up — checklist SKIPPED.
+     Missing: [no qa/qa-map.md | bench not built | both]
+     To enable: /map-qa-instrument create  →  /build-qa-bench
+  ```
+
+  Return the skip + reason to the caller (a wizard records it in its `## QA HANDOFF` section). Never invent a `qa/` folder for a project that hasn't opted into the ontology — a checklist appearing in a repo with no QA instrument is an artifact nobody agreed to own.
+
+> The bench requirement here is about **opt-in, not capability**. A checklist is human-runnable and would work fine without a scripted loop; the gate exists so "the project uses this QA system" is one unambiguous condition rather than a judgment call made differently each run.
 
 Then jump to the matching mode block below — read only that block.
 
@@ -189,7 +202,9 @@ Re-run `/map-qa-instrument --rescan` so the map's grades reflect the newly-built
 
 ## Checklist Mode (`--checklist [plan]` arg)
 
-*Builds a per-feature checklist from a shipped change. Called by the wizards after Final Runtime Verification, or standalone.*
+*Builds a per-feature checklist from a shipped change. This is the wizards' **QA Handoff** step (HW 17 / QW 8 / pixel 19) — the last thing a sweep does before archiving the plan — or standalone.*
+
+> **The wizard does not verify; it hands off.** A sweep is a coding session with the QA stack almost certainly down, so it produces the verification *plan* and leaves the verification itself to `/run-qa-test` in a session where the stack is up. That makes this checklist the sweep's only QA output — if it's thin or restates the plan, the feature effectively ships unverified.
 
 ### K1: Read the plan for SCOPE
 
@@ -372,7 +387,7 @@ Every fixture carries, as a comment at the top:
 - **/map-qa-instrument** — upstream. Canonical home for the loop / ontology / ownership / grading. Supplies the gap list; called with `--rescan` at the end.
 - **/build-qa-bench** — upstream sibling. Builds the rig these tests run on and owns the `qa/README.md` index. Phase 0 gates on its output: no working R/I/A/O loop, no tests.
 - **/run-qa-test** — downstream. Consumes everything built here: fixtures for Tactic B, runbook scenarios for Tactic A, checklists for a guided manual pass. A missing fixture comes back here via `--fixture`, never improvised there.
-- **/high-wizard · /quick-wizard · /pixel-wizard** — callers. After Final Runtime Verification, each offers to build the shipped feature's checklist via `--checklist`.
+- **/high-wizard · /quick-wizard · /pixel-wizard** — callers. Each delegates here as its **QA Handoff** step (HW 17 / QW 8 / pixel 19), automatically and without prompting, then records the checklist path or the auto-skip reason in the plan's `## QA HANDOFF` section.
 - **/setup-qa-instrument** — the legacy monolith whose runbook / playbook / checklist / fixture shapes now live here.
 
 ---

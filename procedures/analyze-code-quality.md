@@ -176,6 +176,6 @@ Fix all approved items in a single batch. After fixing:
    - **Embedded**: update the **Fixed** field in the caller's plan `## QUALITY REVIEW` section with what was fixed
 2. **Briefly report** what was changed to [USER-NAME]
 
-**Embedded mode return**: After Step 8 completes, control returns to the wizard caller (HW Step 16, QW Step 7, or pixel-wizard Step 18), which then proceeds to its next step (Final Runtime Verification).
+**Embedded mode return**: After Step 8 completes, control returns to the wizard caller (HW Step 16, QW Step 7, or pixel-wizard Step 18), which then proceeds to its next step (Build QA Checklist).
 
 ---

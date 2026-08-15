@@ -2,8 +2,8 @@
 
 Run runtime verification on the qa/ bench — execute the R/I/A/O loop to verify the system actually runs. Three tactics: **whole-stack module smoke** (did a change break the run path?), the **goal-driven fixture→e2e ladder** (does a specific feature produce the right outcome, driven the way the system really runs it?), and a **guided checklist pass** (walk a shipped feature's verification and sign it off). Closes the loop on *"does it actually work?"*.
 
-- **Standalone**: invoke after manual changes, bug fixes, or pre-deploy checks to verify runtime behavior on a scope.
-- **Embedded (wizard-delegated)**: called by `/high-wizard` Step 17, `/quick-wizard` Step 8, and `/pixel-wizard` Step 19 as the "Final Runtime Verification" step in their lifecycle.
+- **Standalone** (the normal way): invoke in a QA session — with the stack up — after changes, bug fixes, or before a deploy. This is also where a wizard's handed-off checklist gets walked and signed off.
+- **Embedded (caller-delegated)**: an available mode for any orchestrator that wants results written into its own plan section. **No wizard currently calls it.** Wizards deliberately stop at building the checklist (their QA Handoff step), because a coding sweep almost never has a live stack and a cold start-plus-seed on every sweep is a cost nobody asked for.
 
 > **Canonical definitions live in `/map-qa-instrument`** — the R/I/A/O loop, the 7 artifact categories, the ownership split, and the grading. This skill references *up* to those; it does not restate them.
 
@@ -28,12 +28,12 @@ Pipeline: **`/map-qa-instrument` (audit) → `/build-qa-bench` (build the rig) �
 
 If no arguments provided, ask: "What scope should I run the QA tests on? (module names, file paths, or 'all changes since last commit')"
 
-### Embedded invocation (wizard-delegated)
+### Embedded invocation (orchestrator-delegated)
 
-When called from `/high-wizard` Step 17, `/quick-wizard` Step 8, or `/pixel-wizard` Step 19, this procedure runs in **embedded mode** with two caller-passed inputs:
+When an orchestrator delegates here, this procedure runs in **embedded mode** with two caller-passed inputs:
 
-- `scope`: list of files from the caller's Execution Log (HW/pixel-wizard) or QW plan execution
-- `embedded_mode=true`: signals to write results into the caller's plan `## FINAL RUNTIME VERIFICATION` section (where the wizard step is labeled "Final Runtime Verification" — "final" is the wizard's positional descriptor, not a property of this procedure itself)
+- `scope`: the list of touched files the caller supplies (typically from its own execution log)
+- `embedded_mode=true`: signals to write results into the caller's plan under a `## RUNTIME VERIFICATION` section (or whatever section name the caller names)
 
 Embedded mode flow: caller hands off control → this procedure runs the loop → results embedded in caller's plan → caller resumes its next step.
 
@@ -54,7 +54,7 @@ Read `qa/README.md`'s **R/I/A/O Loop** table — that table is the index this pr
   - If A: run the map → bench → test pipeline, then return here.
   - If B: log the skip:
     - **Standalone mode**: report `"QA test run skipped — no qa/ bench"` to [USER-NAME] and end.
-    - **Embedded mode**: write `"Final Runtime Verification skipped — no qa/ bench"` into caller's plan `## FINAL RUNTIME VERIFICATION` section, then return control to caller.
+    - **Embedded mode**: write `"Runtime verification skipped — no qa/ bench"` into the caller's runtime-verification section, then return control to caller.
 
 **If present**, also read each row's **Status** and check that each Mechanism link resolves to a real file:
 
@@ -64,7 +64,7 @@ Read `qa/README.md`'s **R/I/A/O Loop** table — that table is the index this pr
 | A phase is `tribal` | **Warn, proceed.** It runs, but nothing else points at it. |
 | A phase is `missing`, unlinked, or its link is dead | **Warn loudly, proceed on the phases that do resolve**, and mark the run **partial** in the report. Never silently substitute another script or scan for one by filename. |
 
-Warn rather than block: a wizard-embedded run must still report *something* useful on a half-built instrument, and a partial run honestly labeled is more valuable than no run. Say plainly which phases did not execute and what that means for confidence.
+Warn rather than block: an embedded run must still report *something* useful on a half-built instrument, and a partial run honestly labeled is more valuable than no run. Say plainly which phases did not execute and what that means for confidence.
 
 ### Step 2: Identify Touched Modules
 
@@ -87,11 +87,11 @@ Never invent scenarios inline to fill the gap — an unreviewed scenario written
 
 Runtime verification has three tactics. Pick by what you're actually verifying:
 
-- **Tactic A — Whole-stack module smoke** (Step 3A). *"Did this change break the module's invariant run path?"* Broad, coarse. Use for post-change regression across touched modules, and for the embedded wizard step by default.
+- **Tactic A — Whole-stack module smoke** (Step 3A). *"Did this change break the module's invariant run path?"* Broad, coarse. Use for post-change regression across touched modules, and as the default in embedded mode.
 - **Tactic B — Goal-driven fixture→e2e ladder** (Step 3B). *"Does this specific feature/flow produce the right outcome, driven through its real entry point?"* Surgical, high-confidence on one path. Use to verify a shipped feature end-to-end, or to reproduce + verify a bug fix.
 - **Tactic C — Guided checklist pass** (Step 3C). *"Has everything this shipped change could affect been walked and signed off?"* Human-paced, covers the UI-bound work the other two can't reach. Triggered by `--checklist`.
 
-Often you run **more than one**: B to prove the changed feature works, A to confirm nothing else regressed, C before sign-off. In embedded (wizard) mode, default to A unless the caller named a specific feature/flow — then run B on it.
+Often you run **more than one**: B to prove the changed feature works, A to confirm nothing else regressed, C before sign-off. In embedded mode, default to A unless the caller named a specific feature/flow — then run B on it.
 
 **Tactics A and B obey these standing refinements** (they are what make a run trustworthy and repeatable):
 1. **Reset the baseline at the START and teardown at the END** — wrap the whole run in try/finally so a mid-run failure still cleans up. A run that leaves residue makes the next run start dirty.
@@ -193,7 +193,7 @@ Apply approved fixes in one batch. Re-run the loop (Step 3A, 3B, or 3C, whicheve
   - R/I/A/O loop results (pass/fail); confirm teardown left zero residue
   - Findings + Fixed
 
-- **Embedded mode**: Write results into caller's plan `## FINAL RUNTIME VERIFICATION` section:
+- **Embedded mode**: Write results into the caller's runtime-verification section:
   - **Scope**: touched modules
   - **Bench Status**: all resolved / partial (which phases) / missing / skipped
   - **Runbooks Run**: list of `qa/runbooks/{module}.md` exercised; any module without one
@@ -202,7 +202,7 @@ Apply approved fixes in one batch. Re-run the loop (Step 3A, 3B, or 3C, whicheve
   - **Findings**: runtime failures + severity, or *"No findings — runtime clean"*
   - **Fixed**: what was fixed from approved findings, or *"N/A"*
 
-**Embedded mode return**: After Step 6, control returns to the wizard caller (HW Step 17, QW Step 8, or pixel-wizard Step 19), which then proceeds to its next step (offer the feature checklist, then Move to Completed or Report Completion).
+**Embedded mode return**: After Step 6, control returns to the caller, which proceeds to its next step.
 
 ---
 
@@ -211,7 +211,7 @@ Apply approved fixes in one batch. Re-run the loop (Step 3A, 3B, or 3C, whicheve
 - **/map-qa-instrument** — canonical home for the loop, ontology, ownership, and grading. Its index-integrity check is what guarantees the table this skill reads still resolves.
 - **/build-qa-bench** — upstream. Builds the loop engine and writes the `qa/README.md` R/I/A/O table Step 3A resolves from.
 - **/build-qa-test** — upstream. Builds what this skill *runs*: fixtures (Tactic B), runbook and playbook scenarios (Tactic A), checklists (Tactic C). A missing fixture, runbook, or checklist is a hand-off to it, never an improvisation here.
-- **/high-wizard · /quick-wizard · /pixel-wizard** — callers. Each delegates here in embedded mode as its **Final Runtime Verification** step, then resumes.
+- **/high-wizard · /quick-wizard · /pixel-wizard** — **not** callers. Each stops at its **QA Handoff** step, delegating to `/build-qa-test --checklist` and leaving the plan explicitly *not runtime-verified*. Running that checklist is a separate, later invocation of this skill — which is why a wizard's completion report names the exact `/run-qa-test --checklist` command to run.
 - **archive-plan component** — used by Tactic C to move a signed-off checklist into `qa/checklists/completed/`.
 
 ---

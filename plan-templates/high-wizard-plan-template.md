@@ -268,19 +268,19 @@ I have to use this document as my **ONLY** source of truth to execute and track 
 
 ---
 
-## **FINAL RUNTIME VERIFICATION**
-*Filled by procedure Step 17 after Quality Review is resolved. **Runtime** verification through the qa/ instrument — answers "does it actually work end-to-end?".*
+## **QA HANDOFF**
+*Filled by procedure Step 17 after Quality Review is resolved. This plan is **not** runtime-verified — this section records the plan for that verification, which happens in a QA session with the stack up.*
 
 - **Scope**: [Modules touched — mapped from Execution Log scope]
-- **qa/ Status**: [Detected / Missing / Skipped — reason if skipped]
-- **Runbooks Run**: [List of `qa/runbooks/{module}.md` exercised, or "N/A — skipped"]
-- **Playbook Run**: [`qa/playbook.md` if cross-module, or "N/A"]
-- **R/I/A/O Results**: [Per-module pass/fail summary, or "N/A — skipped"]
-- **Findings**: [Runtime failures + severity, or "No findings — runtime clean", or "N/A — skipped"]
-- **Fixed**: [What was fixed from approved findings, or "N/A"]
+- **QA instrument**: [Set up (map + bench) / NOT SET UP — auto-skipped]
+- **Checklist**: [`qa/checklists/{feature}.md`, or "none — skipped, reason"]
+- **Coverage split**: [N automated (named tests) / N manual — of which N are UI-bound]
+- **Runtime verification**: **NOT DONE.** Next action: [`/run-qa-test --checklist qa/checklists/{feature}.md` once the stack is up | set up the instrument first: `/map-qa-instrument create` → `/build-qa-bench`]
+
+> Do not read a filled checklist as a passed one. This section says a verification *plan* exists, nothing more.
 
 ---
 
 ## **POST-COMPLETION**
-After all phases are executed, logged, and both **Quality Review** + **Final Runtime Verification** are filled, move this plan to `plans/completed/`:
+After all phases are executed, logged, and both **Quality Review** + **QA Handoff** are filled, move this plan to `plans/completed/`:
 `mkdir -p ./plans/completed && mv ./plans/[this-file].md ./plans/completed/[this-file].md`

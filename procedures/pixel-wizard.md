@@ -263,38 +263,32 @@ The delegated procedure will:
 - **STOP** at the WAIT Options prompt — wait for [USER-NAME]'s response
 - Apply approved fixes and update this plan's Quality Review section (its Step 8)
 
-3. **Resume control** here after `/analyze-code-quality` completes. Proceed to Step 19 (Final Runtime Verification).
+3. **Resume control** here after `/analyze-code-quality` completes. Proceed to Step 19 (Build QA Checklist).
 
-### Step 19: Final Runtime Verification (Delegated to `/run-qa-test`)
+### Step 19: Build QA Checklist (Delegated to `/build-qa-test --checklist`)
 
-After Quality Review is resolved (Step 18), run **runtime** verification by delegating to `/run-qa-test` in embedded mode. Results are embedded directly into this plan's `## FINAL RUNTIME VERIFICATION` section — static quality review (Step 18) answered "is the code clean?"; this step answers "does it actually work?".
+After Quality Review is resolved (Step 18), hand this plan off to QA by building its verification checklist. Static quality review answered *"is the code clean?"*; this step produces the artifact that will answer *"is it actually right?"* — **later, by a human, with the stack up.**
 
-1. **Collect scope**: Identify all files created or modified during implementation from this plan's Execution Log. This file list is the **caller-passed scope** for the delegated procedure.
+> **This step does not verify anything, and must never claim to.** A wizard sweep is a coding session: the QA stack is almost certainly down, so running the R/I/A/O loop here would mean a cold start plus a full seed restore on every sweep. Runtime verification belongs to a dedicated QA session (`/run-qa-test`). What this step guarantees is that the sweep never ends without a written plan for that verification.
+>
+> **This matters most here.** Pixel work is UI work, and UI paths are exactly what no automated run can judge — the checklist *is* the verification for a large share of what this wizard ships.
 
-2. **Invoke `/run-qa-test`** following the /run-qa-test with these inputs:
-   - `scope`: the file list collected above (from Execution Log)
-   - `embedded_mode=true`: signals the procedure to write results into this plan's Final Runtime Verification section
+1. **Collect scope**: Identify all files created or modified during implementation from this plan's Execution Log. That list, plus this plan itself, is the **caller-passed scope**.
+
+2. **Invoke `/build-qa-test --checklist`** with this plan as the scope input.
 
 The delegated procedure will:
-- **Detect the qa/ bench** (its Step 1) — stop + offer the `/map-qa-instrument` → `/build-qa-bench` → `/build-qa-test` pipeline if missing; warn and run partial if some phases are unbuilt
-- **Identify touched modules** and map to runbooks — plus the playbook if the change is cross-module (its Step 2)
-- **Run R/I/A/O loop per module** (its Step 3): reset → seed → start → act scenarios → smoke → compare
-- Present findings via /wait-options (its Step 4) — preamble: *"Runtime verification findings:"*
-- **STOP** at the WAIT Options prompt — wait for [USER-NAME]'s response
-- Apply approved fixes and re-run affected modules (its Step 5)
-- Log results into this plan's `## FINAL RUNTIME VERIFICATION` section (its Step 6)
+- **Check the QA instrument is set up** — a `qa/qa-map.md` from `/map-qa-instrument`, and a built bench from `/build-qa-bench`. If either is absent it **notifies loudly and auto-skips** rather than inventing a `qa/` folder this project never opted into.
+- Read the plan for **scope**, then derive **risk independently** — invariants to disprove, regression surface, boundaries, cross-module effects. The plan is input, never authority.
+- Write `qa/checklists/{feature}.md`, marking each item automated vs manual and flagging the UI-bound ones (for pixel work, expect most to be manual — say so rather than implying coverage)
 
-3. **Offer the feature checklist.** Runtime verification proves the change works now; a checklist is what someone walks before sign-off, and for UI work it reaches exactly the paths an automated run can't. Ask [USER-NAME]:
+3. **Record the outcome in this plan's `## QA HANDOFF` section** — the checklist path, or the skip and its reason. Never leave it blank.
 
-   > *"Build the QA checklist for this feature? (`/build-qa-test --checklist [this-plan]`)"*
-
-   If yes, delegate to `/build-qa-test --checklist` with this plan as the scope input, then resume here. The plan supplies *what changed*; the skill derives *what could break* — it is not a restatement of the acceptance criteria. If no, note the decline in the plan's Final Runtime Verification section so it's a recorded choice rather than an omission.
-
-4. **Resume control** here after the delegated procedures complete. Proceed to Step 20 (Move Plan to Completed).
+4. **Resume control** here after the delegated procedure completes. Proceed to Step 20 (Move Plan to Completed).
 
 ### Step 20: Move Plan to Completed
 
-After all implementation phases are done, logged, and both Quality Review (Step 18) + Final Runtime Verification (Step 19) are resolved, follow the [Archive Plan component]([path-to-agent-memory-coding-skill]/components/archive-plan.md) — move the plan file `[plan-file].md`.
+After all implementation phases are done, logged, and both Quality Review (Step 18) + QA Handoff (Step 19) are resolved, follow the [Archive Plan component]([path-to-agent-memory-coding-skill]/components/archive-plan.md) — move the plan file `[plan-file].md`.
 
 ### Step 21: Completion Report
 
@@ -303,7 +297,8 @@ Present a brief completion report to [USER-NAME]:
 - Summary of what was implemented
 - Visual match status
 - Quality Review status (clean / N findings fixed)
-- Final Runtime Verification status (clean / N runtime failures fixed / skipped — no qa/)
+- **QA Handoff**: `qa/checklists/{feature}.md` built, or skipped + reason
+- ⚠️ **State plainly: "Not runtime-verified."** Then the exact next action — *"run `/run-qa-test --checklist qa/checklists/{feature}.md` when the stack is up"*, or the instrument-setup commands if the step auto-skipped. A plan moving to `completed/` must never imply verification it didn't do.
 - Any notes or follow-ups worth mentioning
 
 Then offer: "Would you like me to run `/wrap-up` to close the session?"
