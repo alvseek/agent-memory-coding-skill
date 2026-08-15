@@ -8,7 +8,7 @@ This repo holds every coding- and repository-oriented procedure that sits **on t
 
 - **Standalone, independent repo** — a *peer* of the core ([`agent-memory-system`](https://github.com/alvseek/agent-memory-system) / `control-files`). It is **not** a git submodule of the core or of the parent aggregator.
 - **One-way dependency**: this overlay references the core; the **core never references this overlay by name** (enforced by the core's `check-core-invariant.sh` guard).
-- **Additive composition, not override**: the consuming agent is the composition point. `procedures/awaken-coder.md` simply orchestrates *"run the core `/awaken-agent`, then localized-home + orientation map + fleet."* Nothing here overrides a core procedure.
+- **Additive composition, not override**: the consuming agent is the composition point. `procedures/awaken-coder.md` simply orchestrates *"run the core `/awaken-agent`, then coding reasoning + localized-home + orientation map + fleet."* Nothing here overrides a core procedure.
 
 ## Contents (`procedures/`)
 
@@ -16,7 +16,7 @@ This repo holds every coding- and repository-oriented procedure that sits **on t
 - **Lifecycle**: `project-wrap-up.md` (composes the core `/wrap-up`, then push + map-orientation)
 - **Wizards**: `high-wizard`, `quick-wizard`, `council-of-wizards`, `rite-of-creation`, `forge-of-covenant`, `implement-plan`
 - **Doc-gen**: `generate-readme`, `generate-docs`, `generate-architecture-docs`, `generate-domain-docs`, `generate-flow-docs`, `discovery-contract`
-- **QA**: `analyze-code-quality`, `generate-standard`, `integration-test`, `setup-qa-instrument`, `setup-qa-visual-instrument`, `pixel-wizard`
+- **QA**: `analyze-code-quality`, `generate-standard`, `pixel-wizard`, `setup-qa-visual-instrument`, `setup-qa-instrument` (legacy monolith, being decomposed) — plus the QA instrument pipeline: `map-qa-instrument` (audit) → `build-qa-bench` (build the rig) → `build-qa-test` (build the tests) → `run-qa-test` (run them)
 - **Repo / integration**: `map-orientation`, `localize-context`, `update-project-context`, `load-project-context`, `pull-all`/`pull-project`, `push-all`/`push-project`/`push-agent-work`, `push-exclude-policy`
 - **Fleet**: `ask-agent`, `delegate-agent`, `setup-fleet` (+ `fleet-scripts/` and fleet templates) — agent-to-agent consult/delegate via Claude-Code session spawn/resume (a mechanism a chat agent can't use, so it's an overlay capability)
 
