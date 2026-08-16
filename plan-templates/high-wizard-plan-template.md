@@ -11,6 +11,22 @@
 
 ---
 
+## **INHERITED CONTEXT**
+*Filled at investigation step 0 when this plan was launched as a sub-plan — from the parent's handoff payload (or the parent `core-plan.md` beside this file). Write "None — standalone plan" if there is no parent.*
+*These decisions are **not yours to reopen**. If one looks wrong, STOP and surface it to [USER-NAME] — do not silently re-decide it here or in Confirmed Decisions below.*
+
+- **Parent plan**: [path to parent `core-plan.md`, or "None — standalone plan"]
+- **Assigned scope**: [requirement IDs / phase / milestone this plan owns, and what it must deliver]
+
+| # | Inherited decision | Chosen | Parent's reason | Status |
+|---|--------------------|--------|-----------------|--------|
+| 1 | [Decision topic] | [Chosen option] | [Reason, verbatim from the parent] | Settled / My call |
+
+- **Integration contracts**: [`contracts/*.yaml` paths this plan must honor, and whether it produces or consumes each — or "None"]
+- **Pushed-down open items**: [decisions the parent deliberately left to this plan — or "None"]
+
+---
+
 ## **OBJECTIVES**
 [Clear, concise statement of what we want to achieve]
 
@@ -39,7 +55,8 @@
 ---
 
 ## **CONFIRMED DECISIONS**
-*These decisions were collected during investigation — both **asked-and-confirmed** by [USER-NAME] AND **written-through** (Zone A/B decisions made by the agent with reasoning, per /wait-options). The reasons serve as the analysis record.*
+*Decisions made **by this plan** — both **asked-and-confirmed** by [USER-NAME] AND **written-through** (Zone A/B decisions made by the agent with reasoning, per /wait-options). The reasons serve as the analysis record.*
+*Decisions inherited from a parent belong in [INHERITED CONTEXT](#inherited-context) above, not here — keeping them separate is what shows which decisions this plan actually owns.*
 
 | # | Decision | Chosen | Reason |
 |---|----------|--------|--------|

@@ -19,6 +19,17 @@ If no arguments provided, ask: "What feature or task should I create a High Wiza
 
 *This procedure is split into 3 phases. Each phase ends with a STOP gate. Do NOT read ahead into later phases — complete and confirm the current phase before proceeding.*
 
+*This is a **Level 1** wizard protocol — a single coherent deliverable. It is a leaf: it never orchestrates sub-plans, and it may be launched as a sub-plan by `/council-of-wizards`, `/rite-of-creation`, or `/forge-of-covenant`.*
+
+## WAIT Options Scope
+
+`/wait-options` defines *how* to present a decision; it does not define which decisions are yours. At Level 1, these are:
+
+- **Ask about**: implementation — which modules and entrypoints carry the change, the core algorithm or logic pattern, integration points and what they affect, contracts this deliverable **consumes**, reusable existing code, and the constraints that could break it.
+- **Technical disclosure vocabulary**: implementation nouns — main function/module entrypoints, core algorithm, execution flow touchpoints. At this altitude that IS the right vocabulary.
+- **Push down**: nothing. This is a leaf; there is no lower altitude to defer to.
+- **Launched as a sub-plan?** Then decisions about *why this deliverable exists*, how it is bounded against its siblings, and which contracts it must honor were already settled by the parent. They arrive in the handoff — read them, do not re-ask them.
+
 ---
 
 ## Phase 1: Discovery & Planning Frame
@@ -45,7 +56,9 @@ Fill the [Project Info]([path-to-agent-memory-coding-skill]/plan-templates/high-
 
 ### Step 5: Investigate and Collect Decisions
 
-Read and follow the [Investigate & Collect Decisions component]([path-to-agent-memory-coding-skill]/components/investigate-and-collect-decisions.md) — it runs the shared investigation checklist and collects decision items for the WAIT Options form. This is where the thinking happens — NOT in the plan document.
+**First, if launched as a sub-plan**: read and follow the [Subplan Handoff component]([path-to-agent-memory-coding-skill]/components/subplan-handoff.md) — **read side**. It tells you what you inherited, what you may not reopen, and where to find the payload if none was passed. Record it under `## INHERITED CONTEXT` before investigating anything.
+
+Then read and follow the [Investigate & Collect Decisions component]([path-to-agent-memory-coding-skill]/components/investigate-and-collect-decisions.md) — it runs the shared investigation checklist and collects decision items for the WAIT Options form. This is where the thinking happens — NOT in the plan document.
 
 ### Step 6: Present WAIT Options
 

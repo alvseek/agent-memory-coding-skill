@@ -21,6 +21,17 @@ If no arguments provided, ask: "What feature or task should I create a Pixel Wiz
 
 *This procedure is split into 3 phases. Each phase ends with a STOP gate. Do NOT read ahead into later phases — complete and confirm the current phase before proceeding.*
 
+*This is a **Level 1v** wizard protocol — the visual variant of `/high-wizard` (same rung, same plan template, plus the three visual additions). It is a leaf: it never orchestrates sub-plans, and it may be launched as a sub-plan by `/council-of-wizards`, `/rite-of-creation`, or `/forge-of-covenant` when the deliverable is design-driven.*
+
+## WAIT Options Scope
+
+`/wait-options` defines *how* to present a decision; it does not define which decisions are yours. At Level 1v, these are everything `/high-wizard` asks at Level 1, plus:
+
+- **Ask about**: the visual fidelity target (pixel-match vs categorical match), which design source is authoritative when reference and spec disagree, screenshot tooling and how the running result is captured, and how many iteration rounds are acceptable before stopping.
+- **Technical disclosure vocabulary**: implementation nouns, plus the visual ones — component boundaries, style tokens, the capture command.
+- **Push down**: nothing. This is a leaf; there is no lower altitude to defer to.
+- **Launched as a sub-plan?** The parent already settled why this deliverable exists and how it is bounded. It arrives in the handoff — read it, do not re-ask it. Note the **design reference itself** may come through the handoff rather than the invocation; check there before failing the Visual Design Gate.
+
 ---
 
 ## Phase 1: Discovery & Planning Frame
@@ -35,7 +46,9 @@ Read the [High Wizard Plan Template]([path-to-agent-memory-coding-skill]/plan-te
 
 ⛔ **GATE**: Pixel Wizard requires a visual design reference. Check if a `.html` file path or image file path (`.png`, `.jpg`, `.jpeg`, `.webp`, `.gif`) is present in the request context.
 
-**If NO visual reference found:**
+**If launched as a sub-plan**, the reference may be in the handoff rather than the invocation — check the parent's payload (and the parent `core-plan.md` beside your plan file) **before** failing this gate. Do not reject a correctly-assigned visual sub-plan just because its reference arrived one level up.
+
+**If NO visual reference found anywhere:**
 > "Pixel Wizard requires a visual design reference (`.html` file or image). Please provide one, or use `/high-wizard` or `/quick-wizard` instead."
 
 STOP. Do NOT proceed without a visual reference.
@@ -71,7 +84,9 @@ Fill the [Project Info]([path-to-agent-memory-coding-skill]/plan-templates/high-
 
 This is where the thinking happens - NOT in the plan document. Follow the investigation checklist below IN ORDER. Each step from 3-6 produces decision items for the WAIT Options form.
 
-Invoke the `/wait-options` command procedure to guide collecting decisions — run the command; its format rules are not in context.
+**First, if launched as a sub-plan**: read and follow the [Subplan Handoff component]([path-to-agent-memory-coding-skill]/components/subplan-handoff.md) — **read side**. It tells you what you inherited, what you may not reopen, and where to find the payload if none was passed. Record it under `## INHERITED CONTEXT` before investigating anything. *(The Visual Design Gate at Step 2 already checks the handoff for the design reference — this is the full read.)*
+
+Invoke the `/wait-options` command procedure to guide collecting decisions — run the command; its format rules are not in context. **What to ask about at this altitude is defined by `## WAIT Options Scope` above, not by `/wait-options`** — check it before building the form.
 
 **Investigation checklist (in order):**
 

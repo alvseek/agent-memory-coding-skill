@@ -17,9 +17,21 @@ If no arguments provided, ask: "What feature or task should I create a Quick Wiz
 
 *IMPORTANT: This procedure structurally enforces UUID f3a8b2c1 (VERIFY FIRST) - the agent MUST collect and confirm decisions BEFORE executing. Jumping directly into implementation is prohibited.*
 
+*This is a **Level 0** wizard protocol — the smallest unit of planned work. It is a leaf: it never orchestrates sub-plans, and it may be launched as a sub-plan by `/council-of-wizards`, `/rite-of-creation`, or `/forge-of-covenant`.*
+
+## WAIT Options Scope
+
+`/wait-options` defines *how* to present a decision; it does not define which decisions are yours. At Level 0, these are:
+
+- **Ask about**: the concrete change — which files and functions are touched, the approach taken, what is reused, what could break.
+- **Technical disclosure vocabulary**: implementation nouns — entrypoints, core logic, execution touchpoints. At this altitude that IS the right vocabulary.
+- **Push down**: nothing. This is a leaf; there is no lower altitude to defer to. If a decision feels too large to settle here, that is the **scope gate** telling you to escalate to `/high-wizard` (Step 2), not something to hand off.
+
 ### Step 1: Investigate and Collect Decisions
 
-Read and follow the [Investigate & Collect Decisions component]([path-to-agent-memory-coding-skill]/components/investigate-and-collect-decisions.md) — it runs the shared investigation checklist and collects decision items for the WAIT Options form.
+**First, if launched as a sub-plan**: read and follow the [Subplan Handoff component]([path-to-agent-memory-coding-skill]/components/subplan-handoff.md) — **read side**. It tells you what you inherited, what you may not reopen, and where to find the payload if none was passed. Record it under `## Inherited Context` before investigating anything.
+
+Then read and follow the [Investigate & Collect Decisions component]([path-to-agent-memory-coding-skill]/components/investigate-and-collect-decisions.md) — it runs the shared investigation checklist and collects decision items for the WAIT Options form.
 
 ### Step 2: Scope Gate Assessment
 
@@ -125,11 +137,20 @@ Use this structure when writing the plan in plan mode (or presenting in conversa
 ```markdown
 # Quick Wizard Plan: [Theme]
 
+## Inherited Context
+*Filled at investigation step 0 when launched as a sub-plan — from the parent's handoff (or the parent `core-plan.md`). Write "None — standalone plan" if there is no parent.*
+*Not yours to reopen. If an inherited decision looks wrong, STOP and surface it — do not silently re-decide it below.*
+
+- **Parent plan**: [path, or "None — standalone plan"]
+- **Assigned scope**: [what this plan owns]
+- **Inherited decisions**: [decision → chosen → parent's reason; mark each Settled or My call]
+- **Contracts / pushed-down items**: [paths + produce/consume, and any decisions left to this plan — or "None"]
+
 ## Objective
 [1-2 sentence description of what we're doing and why]
 
 ## Confirmed Decisions
-*Both asked-and-confirmed by [USER-NAME] AND written-through (Zone A/B decisions with reasoning) — see /wait-options.*
+*Decisions made **by this plan** — both asked-and-confirmed by [USER-NAME] AND written-through (Zone A/B decisions with reasoning) — see /wait-options. Inherited decisions belong above, not here.*
 
 | # | Decision | Chosen | Reason |
 |---|----------|--------|--------|

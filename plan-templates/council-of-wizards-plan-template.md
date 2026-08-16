@@ -53,11 +53,13 @@
 
 | ID | Sub-Plan Name | Description | Requirements | Protocol | Plan File | Status |
 |----|--------------|-------------|--------------|----------|-----------|--------|
-| SP-1 | [Name] | [What this sub-plan delivers] | R1, R2 | HW / QW | `SP-1-[name].md` | NOT STARTED |
-| SP-2 | [Name] | [What this sub-plan delivers] | R3 | HW / QW | `SP-2-[name].md` | NOT STARTED |
-| SP-3 | [Name] | [What this sub-plan delivers] | R4, R5 | HW / QW | `SP-3-[name].md` | NOT STARTED |
+| SP-1 | [Name] | [What this sub-plan delivers] | R1, R2 | HW / PW / QW | `SP-1-[name].md` | NOT STARTED |
+| SP-2 | [Name] | [What this sub-plan delivers] | R3 | HW / PW / QW | `SP-2-[name].md` | NOT STARTED |
+| SP-3 | [Name] | [What this sub-plan delivers] | R4, R5 | HW / PW / QW | `SP-3-[name].md` | NOT STARTED |
 
-**How to fill**: Each sub-plan groups related requirements into a coherent deliverable. Protocol column indicates whether to use `/high-wizard` (complex) or `/quick-wizard` (simple). Plan File links to the actual sub-plan file once created. Status tracks: NOT STARTED → IN PROGRESS → DONE.
+**How to fill**: Each sub-plan groups related requirements into a coherent deliverable. Protocol column indicates `/high-wizard` (complex), `/pixel-wizard` (design-driven, with a visual reference to match), or `/quick-wizard` (simple). Plan File links to the actual sub-plan file once created. Status tracks: NOT STARTED → IN PROGRESS → DONE.
+
+**Each sub-plan launch carries a handoff payload** — the decisions, contracts, and scope that bind it. See the Subplan Handoff component; a path alone is not a handoff.
 
 ---
 

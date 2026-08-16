@@ -4,18 +4,22 @@ Reusable format definition for **WAIT Options** (What Am I Thinking? Options) �
 
 This file is the single source of truth. Procedures reference it instead of defining the format inline.
 
+**This file defines HOW to present a decision. It never defines WHICH decisions are yours — your procedure does.** It is deliberately caller-blind: it does not know who invoked it, what scope that caller works at, or what belongs in their decision set. A caller that needs to bound its own decision set declares that in its own procedure.
+
 ---
 
 ## What to Surface
 
-Not every decision warrants WAIT Options. Use this taxonomy to decide which decisions to surface and which to write directly into the plan.
+Not every decision warrants WAIT Options. Use this taxonomy to decide which of *your* decisions to surface and which to write directly into the plan.
+
+*The taxonomy classifies a decision you already hold; it does not tell you which decisions you hold. That is scope, and it belongs to your procedure — a decision that is not yours at this altitude should not be zoned here at all, it should be handed to whoever owns it.*
 
 ### Zone Taxonomy
 
 | Zone | What | Action |
 |------|------|--------|
 | **A — Mechanical/Obvious** | One real choice, no judgment call (e.g. reuse the only existing `UserService`) | Write to plan. No surface. |
-| **B — Technical Core** | Main function/algorithm/touchpoints driving the behavior | Write to plan **AND** disclose in WAIT (visibility, not decision) |
+| **B — Technical Core** | The mechanism the decision commits to, at the altitude the decision lives | Write to plan **AND** disclose in WAIT (visibility, not decision) |
 | **C — Genuine Uncertainty** | Agent honestly does not know which option is right | Surface in WAIT. Options + confidence + reason. |
 | **D — Value-Loaded Tradeoff** | Both options valid; answer depends on [USER-NAME]'s priorities (time horizon, tech debt tolerance, risk appetite). "Quick fix vs long-term fix" lives here. | Surface in WAIT. Options + tradeoff dimensions. |
 | **E — Risky/Irreversible** | Even when judgment is clear, cost of being wrong is high (data migration, destructive op, API contract change, security boundary) | Surface in WAIT even when confident. Cost asymmetry justifies the question. |
@@ -23,7 +27,7 @@ Not every decision warrants WAIT Options. Use this taxonomy to decide which deci
 ### How to Apply
 
 - **Default to writing through (Zone A)** when the choice is genuinely mechanical. Over-asking trains [USER-NAME] to skim — silent decisions for non-decisions.
-- **Always disclose technical core (Zone B)** even when the implementation direction is clear. The agent should never quietly make architectural commitments — surface the main function/module entrypoints, core algorithm, and critical execution flow.
+- **Always disclose technical core (Zone B)** even when the direction is clear. The agent should never quietly make a commitment [USER-NAME] cannot see — surface the mechanism the decision actually commits to, expressed at the altitude the decision lives.
 - **Ask Zone C and D** because the agent shouldn't decide alone — C because correctness is uncertain, D because the answer depends on [USER-NAME]'s priorities the agent cannot know.
 - **Always ask Zone E** even when the answer feels clear. Reversal cost asymmetry is the trigger, not uncertainty.
 
@@ -52,13 +56,17 @@ Not every decision needs all 4 — a simple naming choice may only need the prob
 
 ### Critical Technical Disclosure (Mandatory)
 
-Even when the implementation direction is already clear to the agent, [USER-NAME] still needs visibility into the technical core. For implementation-related decisions, always include the relevant technical points in the decision context:
+Even when the direction is already clear to the agent, [USER-NAME] still needs visibility into the core of what is being committed to. Always name the concrete mechanism in the decision context — named, not gestured at.
+
+**Express it at the altitude the decision lives.** The calling procedure defines that altitude; this file does not. A decision about where a milestone boundary falls and a decision about how a function is written both have a technical core, but they are not made of the same nouns — disclosing one in the vocabulary of the other either commits prematurely or invents detail.
+
+At implementation altitude, for example, that core is typically:
 
 1. **Main function(s) or module entrypoint(s)** — the primary function/class/module that drives the behavior
 2. **Engine algorithm or core logic pattern** — the key algorithm, transformation flow, or decision mechanism
 3. **Execution flow touchpoints** — critical call path, integration boundary, or state transition that matters for this decision
 
-Do not hide these details just because there is no ambiguity. WAIT Options should surface them so [USER-NAME] can make informed decisions.
+Do not hide the mechanism just because there is no ambiguity. WAIT Options should surface it so [USER-NAME] can make informed decisions.
 
 ### Concrete Examples & Visualizations
 
@@ -79,7 +87,7 @@ For each decision:
 - Include **per-option analysis** (pros/cons) on indented lines below each option — only when applicable (skip for self-explanatory options)
 - After the options, include a **reason paragraph** explaining the recommendation and tradeoffs
 - If any questions remain that don't fit into options format, collect them as **named open questions** (OQ1, OQ2, ...) to present alongside decisions
-- Include mandatory technical disclosure details in the decision context whenever the decision affects implementation behavior
+- Include the mandatory technical disclosure in the decision context whenever the decision commits to a mechanism — expressed at the altitude that decision lives
 
 Order decisions by dependency (foundational choices first, dependent ones after).
 
@@ -115,9 +123,9 @@ Use this template when presenting decisions to [USER-NAME]. Replace `[preamble]`
 
 **1. [Decision topic]:**
 
-- [Context: problem statement, evidence from codebase, example scenario showing impact.
-  Include as many context depth items as the decision warrants. Include critical technical points
-  (main function/module, core algorithm, key execution flow) when implementation behavior is involved.]
+- [Context: problem statement, evidence found, example scenario showing impact.
+  Include as many context depth items as the decision warrants. Name the mechanism this decision
+  commits to, at the altitude the decision lives.]
 
   > A) [Option] `✓✓`
   > - [Pro/con analysis — only when applicable]
@@ -219,8 +227,15 @@ If [USER-NAME] changes a foundational decision that affects downstream decisions
 
 ## Customization Guidance
 
-- **Preamble text** is procedure-specific — customize it to match the context (planning decisions, requirements, quality findings, gap analysis, etc.)
-- **Core format** (context depth + options + confidence signals + per-option analysis + reason + open questions) is fixed — do not modify per-procedure
-- **Presentation style** (bullet-indented explanation, blockquoted options, bullet-indented reason) is fixed — follow the style rules for consistent readability
-- **Reply instruction** is fixed — always include it so [USER-NAME] knows how to respond
-- **Context grouping** can be adapted — the quality review variant groups by severity; other procedures may group by milestone, by phase, etc. as long as each group has a heading and the per-decision format is preserved
+The split is between **shape** and **scope**: the shape of a presented decision is fixed so every procedure looks the same to [USER-NAME]; the scope — *which* decisions belong in the set at all — is the caller's, and this file has no opinion on it.
+
+**Fixed — do not modify per-procedure:**
+- **Core format** — context depth + options + confidence signals + per-option analysis + reason + open questions
+- **Presentation style** — bullet-indented explanation, blockquoted options, bullet-indented reason
+- **Reply instruction** — always include it so [USER-NAME] knows how to respond
+
+**Caller-owned — decide these in your own procedure:**
+- **Scope** — which decisions belong at your altitude, and which belong to something you delegate to. This file cannot know that; do not read the fixed shape above as a claim that it can.
+- **Technical disclosure vocabulary** — the mechanism you name is the one your altitude is made of (see *Critical Technical Disclosure*)
+- **Preamble text** — match it to your context (planning decisions, requirements, quality findings, gap analysis, etc.)
+- **Context grouping** — the quality review variant groups by severity; others may group by milestone, by phase, etc., as long as each group has a heading and the per-decision format is preserved
