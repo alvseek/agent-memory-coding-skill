@@ -15,17 +15,11 @@ If no arguments provided, ask: "What feature or task should I create a Quick Wiz
 
 ## Procedure
 
+This is a **Level 0** wizard protocol: the smallest unit of planned work. It is a leaf — it never orchestrates sub-plans — and it may itself be launched as a sub-plan by `/council-of-wizards`, `/rite-of-creation`, or `/forge-of-covenant`.
+
+Level 0 is the concrete change, so that is what you collect decisions about: which files and functions are touched, the approach taken, what gets reused, what could break. Implementation nouns — entrypoints, core logic, execution touchpoints — are the right vocabulary to disclose in, because they are what this altitude is made of. (`/wait-options` governs *how* you present a decision, never *which* decisions are yours — that is this section.) Nothing gets pushed down; a decision that feels too large to settle here is not something to hand off, it is the scope gate in Step 2 telling you to escalate to `/high-wizard`.
+
 *IMPORTANT: This procedure structurally enforces UUID f3a8b2c1 (VERIFY FIRST) - the agent MUST collect and confirm decisions BEFORE executing. Jumping directly into implementation is prohibited.*
-
-*This is a **Level 0** wizard protocol — the smallest unit of planned work. It is a leaf: it never orchestrates sub-plans, and it may be launched as a sub-plan by `/council-of-wizards`, `/rite-of-creation`, or `/forge-of-covenant`.*
-
-## WAIT Options Scope
-
-`/wait-options` defines *how* to present a decision; it does not define which decisions are yours. At Level 0, these are:
-
-- **Ask about**: the concrete change — which files and functions are touched, the approach taken, what is reused, what could break.
-- **Technical disclosure vocabulary**: implementation nouns — entrypoints, core logic, execution touchpoints. At this altitude that IS the right vocabulary.
-- **Push down**: nothing. This is a leaf; there is no lower altitude to defer to. If a decision feels too large to settle here, that is the **scope gate** telling you to escalate to `/high-wizard` (Step 2), not something to hand off.
 
 ### Step 1: Investigate and Collect Decisions
 

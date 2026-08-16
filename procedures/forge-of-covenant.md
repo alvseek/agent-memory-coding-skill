@@ -15,21 +15,11 @@ If no arguments provided, ask: "What project do you want to plan across multiple
 
 ## Procedure
 
-*This is a **Level 4** wizard protocol — the highest level. It orchestrates milestones where each milestone can invoke `/rite-of-creation` (Level 3), `/council-of-wizards` (Level 2), `/high-wizard` (Level 1), `/pixel-wizard` (Level 1v), or `/quick-wizard` (Level 0). The key flow is: Explore (7Q) → Decide (WAIT Options Round 1) → Plan (Roadmap + WAIT Options Round 2) → Detail (Milestones + WAIT Options Round 3) → Review → Execute.*
+This is a **Level 4** wizard protocol, the highest: it orchestrates milestones, where each milestone runs as a `/rite-of-creation` (Level 3), `/council-of-wizards` (Level 2), `/high-wizard` (Level 1), `/pixel-wizard` (Level 1v), or `/quick-wizard` (Level 0). The flow is: Explore (7Q) → Decide (WAIT Options Round 1) → Plan (Roadmap + WAIT Options Round 2) → Detail (Milestones + WAIT Options Round 3) → Review → Execute.
 
-## WAIT Options Scope
+Level 4 is milestone altitude, so that is what you collect decisions about: the project vision and what "done" means for the whole of it, where each release boundary falls and what ships inside it, what is deliberately deferred and to which milestone, the principles and non-negotiables that bind every one of them, and the known debt along with where it gets paid. Disclose milestone-level shape: which services or components a release spans, and what must exist before the next milestone can begin. Everything below that belongs to someone else — phase structure to `/rite-of-creation`, feature decomposition to `/council-of-wizards`, implementation to `/high-wizard`, `/pixel-wizard`, or `/quick-wizard` — because at this altitude a stack or module choice is a guess about work three levels down. (`/wait-options` governs *how* you present a decision, never *which* decisions are yours — that is this section.)
 
-`/wait-options` defines *how* to present a decision; it does not define which decisions are yours. At Level 4, these are:
-
-- **Ask about**: milestones — the project vision and what "done" means for the whole thing, where each release boundary falls and what ships in it, what is deliberately deferred and to which milestone, the principles and non-negotiables that bind every milestone, and known debt with where it gets paid.
-- **Technical disclosure vocabulary**: milestone-level shape — which services or components a release spans, and what must exist before the next milestone can start.
-- **Push down**: phase structure to `/rite-of-creation`, feature decomposition to `/council-of-wizards`, and implementation to `/high-wizard` / `/pixel-wizard` / `/quick-wizard`. At this altitude a stack or module choice is a guess about work three levels down.
-
-*A decision you push down does not disappear — record it in the handoff payload for the child that owns it.* The **Deferral & Debt Tracker** is the milestone-scoped form of the same discipline.
-
-## Handoffs
-
-Whenever you launch a milestone **or** de-escalate to a lower wizard, read and follow the [Subplan Handoff component]([path-to-agent-memory-coding-skill]/components/subplan-handoff.md) — **write side** — and pass that payload. This applies to every such point in this procedure; **a path alone is not a handoff.**
+A decision you push down does not disappear; it travels in the handoff, and the **Deferral & Debt Tracker** is the milestone-scoped form of the same discipline. That handoff is what every transfer out of this procedure carries — whether you are launching a milestone at Step 16 or de-escalating to `/rite-of-creation` at Step 10, read and follow the [Subplan Handoff component]([path-to-agent-memory-coding-skill]/components/subplan-handoff.md) (**write side**) and pass that payload with it. **A path alone is not a handoff.**
 
 ---
 
@@ -214,7 +204,7 @@ Fill the assessment and decision.
 **If scope gate fails** (single milestone suffices):
 1. Tell [USER-NAME]: "This project fits a single `/rite-of-creation`. De-escalating."
 2. Delete the covenant plan folder
-3. Launch `/rite-of-creation` with the project context — pass the handoff payload (see **Handoffs** above) so the vision, decisions, and principles gathered above carry forward
+3. Launch `/rite-of-creation` with the project context — passing the handoff payload so the vision, decisions, and principles gathered above carry forward
 4. STOP this procedure
 
 ---
@@ -303,7 +293,7 @@ After [USER-NAME] instructs to start, execute milestones following the dependenc
 
 **For each milestone:**
 1. Check dependency graph — are all prerequisite milestones DONE?
-2. If prerequisites met, launch the milestone using its designated protocol (`/rite-of-creation`, `/council-of-wizards`, `/high-wizard`, `/pixel-wizard`, or `/quick-wizard`) and **pass the handoff payload** (see **Handoffs** above). **Important**: The milestone's plan file must also be created inside the milestone sub-folder within the covenant folder (e.g., `M1-name/core-plan.md`), overriding the sub-protocol's default `plans/` location.
+2. If prerequisites met, launch the milestone using its designated protocol (`/rite-of-creation`, `/council-of-wizards`, `/high-wizard`, `/pixel-wizard`, or `/quick-wizard`) and **pass the handoff payload** with it. **Important**: The milestone's plan file must also be created inside the milestone sub-folder within the covenant folder (e.g., `M1-name/core-plan.md`), overriding the sub-protocol's default `plans/` location.
 3. Update the Execution Log: status → IN PROGRESS, record start date, record protocol used
 4. After milestone completes, update: status → DONE, record completion date
 5. If milestone is blocked, update: status → BLOCKED, record reason in Notes

@@ -15,21 +15,11 @@ If no arguments provided, ask: "What feature should I create a Council of Wizard
 
 ## Procedure
 
-*This is a **Level 2** wizard protocol. It orchestrates sub-plans at Level 1 (`/high-wizard`), Level 1v (`/pixel-wizard`), or Level 0 (`/quick-wizard`). The key flow is: WAIT Options → Requirements → Scope Gate → Decompose → Contracts → Dependencies → Execute → Complete.*
+This is a **Level 2** wizard protocol: it breaks one feature into sub-plans and orchestrates them at Level 1 (`/high-wizard`), Level 1v (`/pixel-wizard`), or Level 0 (`/quick-wizard`). The flow is: WAIT Options → Requirements → Scope Gate → Decompose → Contracts → Dependencies → Execute → Complete.
 
-## WAIT Options Scope
+Level 2 is decomposition altitude, so that is what you collect decisions about: where the sub-plan boundaries fall, which requirements group together, the integration contracts *between* sub-plans, what can run in parallel, and which protocol fits each one. Disclose the seams rather than the internals — what crosses each boundary, the shape of each contract, which side produces and which consumes. How a sub-plan is built *inside* is not yours: its modules, algorithms, file layout and local trade-offs belong to the `/high-wizard`, `/pixel-wizard`, or `/quick-wizard` it is assigned to, and settling them here commits that child before it has investigated — which it will then re-ask anyway. (`/wait-options` governs *how* you present a decision, never *which* decisions are yours — that is this section.)
 
-`/wait-options` defines *how* to present a decision; it does not define which decisions are yours. At Level 2, these are:
-
-- **Ask about**: decomposition — where the sub-plan boundaries fall, which requirements group together, the integration contracts *between* sub-plans, what can run in parallel, and which protocol fits each sub-plan.
-- **Technical disclosure vocabulary**: the seams, not the internals — what crosses each boundary, the shape of each contract, which side produces and which consumes.
-- **Push down**: how any single sub-plan is built internally — its modules, algorithms, file layout, and local trade-offs go to `/high-wizard`, `/pixel-wizard`, or `/quick-wizard`, whichever that sub-plan is assigned. Deciding them here commits the child before it has investigated, and the child will re-ask anyway.
-
-*A decision you push down does not disappear — record it in the handoff payload for the child that owns it.*
-
-## Handoffs
-
-Whenever you launch a sub-plan **or** de-escalate to a lower wizard, read and follow the [Subplan Handoff component]([path-to-agent-memory-coding-skill]/components/subplan-handoff.md) — **write side** — and pass that payload. This applies to every such point in this procedure; **a path alone is not a handoff.**
+A decision you push down does not disappear; it travels in the handoff. That handoff is what every transfer out of this procedure carries — whether you are launching a sub-plan at Step 16 or de-escalating to `/high-wizard` at Step 7, read and follow the [Subplan Handoff component]([path-to-agent-memory-coding-skill]/components/subplan-handoff.md) (**write side**) and pass that payload with it. **A path alone is not a handoff.**
 
 ### Step 1: Read Template
 
@@ -94,7 +84,7 @@ STOP. Present to [USER-NAME] for review. Do NOT proceed to sub-plan decompositio
 **If scope gate fails** (single `/high-wizard` suffices):
 1. Tell [USER-NAME]: "This feature fits a single `/high-wizard`. De-escalating."
 2. Delete the council plan file
-3. Launch `/high-wizard` with the feature context — pass the handoff payload (see **Handoffs** above) so the requirements gathered via WAIT Options carry forward
+3. Launch `/high-wizard` with the feature context — passing the handoff payload so the requirements gathered via WAIT Options carry forward
 4. STOP this procedure
 
 ### Step 8: Investigate & Collect Decomposition Decisions
@@ -206,7 +196,7 @@ After [USER-NAME] instructs to start, execute sub-plans following the dependency
 
 **For each sub-plan:**
 1. Check dependency graph — are all prerequisite sub-plans DONE?
-2. If prerequisites met, launch the sub-plan using its designated protocol (`/high-wizard`, `/pixel-wizard`, or `/quick-wizard`) and **pass the handoff payload** (see **Handoffs** above). **Important**: The sub-plan's plan file must also be created at the path specified in the Sub-Plans Table (inside the council folder), overriding the protocol's default `plans/` location.
+2. If prerequisites met, launch the sub-plan using its designated protocol (`/high-wizard`, `/pixel-wizard`, or `/quick-wizard`) and **pass the handoff payload** with it. **Important**: The sub-plan's plan file must also be created at the path specified in the Sub-Plans Table (inside the council folder), overriding the protocol's default `plans/` location.
 3. Update the Execution Log: status → IN PROGRESS, record start date
 4. After sub-plan completes, update: status → DONE, record completion date
 5. If sub-plan is blocked, update: status → BLOCKED, record reason in Notes

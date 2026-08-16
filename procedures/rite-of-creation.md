@@ -15,21 +15,11 @@ If no arguments provided, ask: "What project do you want to create from scratch?
 
 ## Procedure
 
-*This is a **Level 3** wizard protocol. It orchestrates SDLC phases where each phase can contain a `/council-of-wizards` (Level 2), `/high-wizard` (Level 1), `/pixel-wizard` (Level 1v), or `/quick-wizard` (Level 0). The key flow is: Vision → WAIT Options Round 1 (project decisions) → Phase Menu + Scope Gate → WAIT Options Round 2 (phase planning) → Exit Criteria → Dependencies → Execute → Complete.*
+This is a **Level 3** wizard protocol: it orchestrates SDLC phases, where each phase runs as a `/council-of-wizards` (Level 2), `/high-wizard` (Level 1), `/pixel-wizard` (Level 1v), or `/quick-wizard` (Level 0). The flow is: Vision → WAIT Options Round 1 (project decisions) → Phase Menu + Scope Gate → WAIT Options Round 2 (phase planning) → Exit Criteria → Dependencies → Execute → Complete.
 
-## WAIT Options Scope
+Level 3 is phase altitude, so that is what you collect decisions about: which SDLC phases apply and which are skipped, the protocol and role assigned to each, the exit criteria that gate them, dependencies and parallel opportunities, and the project-wide constraints that bind every phase — platform, stack direction, hard deadlines. Disclose phase-level shape: what each phase must produce before the next can start, and where the sequencing is genuinely hard rather than merely convenient. Feature decomposition is not yours — it belongs to `/council-of-wizards` — and neither is implementation, which belongs to `/high-wizard`, `/pixel-wizard`, or `/quick-wizard`; choosing a module layout or an algorithm here decides for a phase nobody has investigated yet. (`/wait-options` governs *how* you present a decision, never *which* decisions are yours — that is this section.)
 
-`/wait-options` defines *how* to present a decision; it does not define which decisions are yours. At Level 3, these are:
-
-- **Ask about**: phases — which SDLC phases apply and which are skipped, the protocol and role assigned to each, exit criteria per phase, dependencies and parallel opportunities, and project-wide constraints that bind every phase (platform, stack direction, hard deadlines).
-- **Technical disclosure vocabulary**: phase-level shape — what each phase must produce for the next one to start, and where the hard sequencing constraints are.
-- **Push down**: feature decomposition to `/council-of-wizards`, and implementation to `/high-wizard` / `/pixel-wizard` / `/quick-wizard`. Choosing a module layout or an algorithm here decides for a phase that has not been investigated yet.
-
-*A decision you push down does not disappear — record it in the handoff payload for the child that owns it.*
-
-## Handoffs
-
-Whenever you launch a phase **or** de-escalate to a lower wizard, read and follow the [Subplan Handoff component]([path-to-agent-memory-coding-skill]/components/subplan-handoff.md) — **write side** — and pass that payload. This applies to every such point in this procedure; **a path alone is not a handoff.**
+A decision you push down does not disappear; it travels in the handoff. That handoff is what every transfer out of this procedure carries — whether you are launching a phase at Step 15 or de-escalating to `/council-of-wizards` or `/high-wizard` at Step 7, read and follow the [Subplan Handoff component]([path-to-agent-memory-coding-skill]/components/subplan-handoff.md) (**write side**) and pass that payload with it. **A path alone is not a handoff.**
 
 ### Step 1: Read Template
 
@@ -101,13 +91,13 @@ STOP. Present to [USER-NAME] for review. Do NOT proceed to phase planning until 
 **If scope gate fails to Council** (scope is actually a single phase):
 1. Tell [USER-NAME]: "This project fits a single `/council-of-wizards`. De-escalating."
 2. Delete the rite plan folder
-3. Launch `/council-of-wizards` with the project context — pass the handoff payload (see **Handoffs** above) so the decisions gathered via WAIT Options carry forward
+3. Launch `/council-of-wizards` with the project context — passing the handoff payload so the decisions gathered via WAIT Options carry forward
 4. STOP this procedure
 
 **If scope gate fails to HW** (scope is a single deliverable):
 1. Tell [USER-NAME]: "This project fits a single `/high-wizard`. De-escalating."
 2. Delete the rite plan folder
-3. Launch `/high-wizard` with the project context — pass the handoff payload (see **Handoffs** above) so the decisions gathered via WAIT Options carry forward
+3. Launch `/high-wizard` with the project context — passing the handoff payload so the decisions gathered via WAIT Options carry forward
 4. STOP this procedure
 
 ### Step 8: Investigate Phases + Prepare WAIT Options Round 2
@@ -192,7 +182,7 @@ After [USER-NAME] instructs to start, execute phases following the dependency gr
 
 **For each phase:**
 1. Check dependency graph — are all prerequisite phases DONE? Are exit criteria for prerequisites verified?
-2. If prerequisites met, launch the phase using its designated protocol (`/council-of-wizards`, `/high-wizard`, `/pixel-wizard`, or `/quick-wizard`) and **pass the handoff payload** (see **Handoffs** above). **Important**: The phase's plan file must also be created at a path inside the rite folder, overriding the sub-protocol's default `plans/` location.
+2. If prerequisites met, launch the phase using its designated protocol (`/council-of-wizards`, `/high-wizard`, `/pixel-wizard`, or `/quick-wizard`) and **pass the handoff payload** with it. **Important**: The phase's plan file must also be created at a path inside the rite folder, overriding the sub-protocol's default `plans/` location.
 3. Update the Execution Log: status → IN PROGRESS, record start date, record protocol used
 4. After phase completes, verify its exit criteria (check Status column in Phase Exit Criteria table)
 5. Update the Execution Log: status → DONE, record completion date

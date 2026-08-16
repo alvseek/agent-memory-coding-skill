@@ -15,20 +15,15 @@ If no arguments provided, ask: "What feature or task should I create a High Wiza
 
 ## Procedure
 
+This is a **Level 1** wizard protocol: one coherent deliverable, planned in a file. It is a leaf — it never orchestrates sub-plans — and it may itself be launched as a sub-plan by `/council-of-wizards`, `/rite-of-creation`, or `/forge-of-covenant`.
+
+Level 1 is implementation altitude, so that is what you collect decisions about: which modules and entrypoints carry the change, the core algorithm or logic pattern, integration points and what they affect, the contracts this deliverable **consumes**, reusable existing code, and the constraints that could break it. Implementation nouns — main function, module entrypoint, execution flow — are the right vocabulary to disclose in, because they are what this altitude is made of. Nothing gets pushed down; there is no lower rung. (`/wait-options` governs *how* you present a decision, never *which* decisions are yours — that is this section.)
+
+If a parent launched you, then why this deliverable exists, how it is bounded against its siblings, and which contracts it must honor were settled one level up. Those arrive in the handoff that Step 5 reads before any investigation begins — treat them as given, and do not re-ask them.
+
 *IMPORTANT: This procedure structurally enforces UUID f3a8b2c1 (VERIFY FIRST) - the agent MUST collect and confirm decisions BEFORE writing any plan sections. Writing ahead on assumptions is prohibited.*
 
 *This procedure is split into 3 phases. Each phase ends with a STOP gate. Do NOT read ahead into later phases — complete and confirm the current phase before proceeding.*
-
-*This is a **Level 1** wizard protocol — a single coherent deliverable. It is a leaf: it never orchestrates sub-plans, and it may be launched as a sub-plan by `/council-of-wizards`, `/rite-of-creation`, or `/forge-of-covenant`.*
-
-## WAIT Options Scope
-
-`/wait-options` defines *how* to present a decision; it does not define which decisions are yours. At Level 1, these are:
-
-- **Ask about**: implementation — which modules and entrypoints carry the change, the core algorithm or logic pattern, integration points and what they affect, contracts this deliverable **consumes**, reusable existing code, and the constraints that could break it.
-- **Technical disclosure vocabulary**: implementation nouns — main function/module entrypoints, core algorithm, execution flow touchpoints. At this altitude that IS the right vocabulary.
-- **Push down**: nothing. This is a leaf; there is no lower altitude to defer to.
-- **Launched as a sub-plan?** Then decisions about *why this deliverable exists*, how it is bounded against its siblings, and which contracts it must honor were already settled by the parent. They arrive in the handoff — read them, do not re-ask them.
 
 ---
 

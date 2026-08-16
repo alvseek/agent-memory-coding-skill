@@ -17,20 +17,15 @@ If no arguments provided, ask: "What feature or task should I create a Pixel Wiz
 
 ## Procedure
 
+This is a **Level 1v** wizard protocol: the visual variant of `/high-wizard`, sharing its rung, its plan template, and its decision discipline, plus three visual additions. It is a leaf — it never orchestrates sub-plans — and it may itself be launched as a sub-plan by `/council-of-wizards`, `/rite-of-creation`, or `/forge-of-covenant` when a deliverable is design-driven.
+
+Because the rung is shared, so is the decision scope: everything `/high-wizard` collects at Level 1 — modules and entrypoints, core logic, integration points, contracts consumed, constraints — and on top of it the visual questions. What is the fidelity target, pixel-match or categorical? Which source wins when the design reference and the written spec disagree? What captures the running result, and how many iteration rounds are acceptable before stopping? Disclose in implementation nouns plus the visual ones — component boundaries, style tokens, the capture command. Nothing gets pushed down; there is no lower rung. (`/wait-options` governs *how* you present a decision, never *which* decisions are yours — that is this section.)
+
+If a parent launched you, why this deliverable exists and how it is bounded were settled one level up and arrive in the handoff, which Step 6 reads in full. The **design reference itself** may travel that way too, which is why the Visual Design Gate below looks there before it fails.
+
 *IMPORTANT: This procedure structurally enforces UUID f3a8b2c1 (VERIFY FIRST) - the agent MUST collect and confirm decisions BEFORE writing any plan sections. Writing ahead on assumptions is prohibited.*
 
 *This procedure is split into 3 phases. Each phase ends with a STOP gate. Do NOT read ahead into later phases — complete and confirm the current phase before proceeding.*
-
-*This is a **Level 1v** wizard protocol — the visual variant of `/high-wizard` (same rung, same plan template, plus the three visual additions). It is a leaf: it never orchestrates sub-plans, and it may be launched as a sub-plan by `/council-of-wizards`, `/rite-of-creation`, or `/forge-of-covenant` when the deliverable is design-driven.*
-
-## WAIT Options Scope
-
-`/wait-options` defines *how* to present a decision; it does not define which decisions are yours. At Level 1v, these are everything `/high-wizard` asks at Level 1, plus:
-
-- **Ask about**: the visual fidelity target (pixel-match vs categorical match), which design source is authoritative when reference and spec disagree, screenshot tooling and how the running result is captured, and how many iteration rounds are acceptable before stopping.
-- **Technical disclosure vocabulary**: implementation nouns, plus the visual ones — component boundaries, style tokens, the capture command.
-- **Push down**: nothing. This is a leaf; there is no lower altitude to defer to.
-- **Launched as a sub-plan?** The parent already settled why this deliverable exists and how it is bounded. It arrives in the handoff — read it, do not re-ask it. Note the **design reference itself** may come through the handoff rather than the invocation; check there before failing the Visual Design Gate.
 
 ---
 
