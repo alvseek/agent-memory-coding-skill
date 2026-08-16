@@ -81,7 +81,7 @@ This is where the thinking happens - NOT in the plan document. Follow the invest
 
 **First, if launched as a sub-plan**: read and follow the [Subplan Handoff component]([path-to-agent-memory-coding-skill]/components/subplan-handoff.md) — **read side**. It tells you what you inherited, what you may not reopen, and where to find the payload if none was passed. Record it under `## INHERITED CONTEXT` before investigating anything. *(The Visual Design Gate at Step 2 already checks the handoff for the design reference — this is the full read.)*
 
-Invoke the `/wait-options` command procedure to guide collecting decisions — run the command; its format rules are not in context. **What to ask about at this altitude is defined by `## WAIT Options Scope` above, not by `/wait-options`** — check it before building the form.
+Invoke the `/wait-options` command procedure to guide collecting decisions — run the command; its format rules are not in context. It governs *how* to present a decision, not which decisions are yours: **this procedure's opening states what Level 1v collects decisions about** — re-read it before building the form.
 
 **Investigation checklist (in order):**
 

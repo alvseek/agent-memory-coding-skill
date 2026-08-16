@@ -1,18 +1,14 @@
 # WAIT Options Format Reference
 
-Reusable format definition for **WAIT Options** (What Am I Thinking? Options) — the structured decision-collection pattern used across all wizard protocols and quality procedures.
+Reusable format definition for **WAIT Options** (What Am I Thinking? Options) — the structured decision-collection pattern used across all wizard protocols and quality procedures. It is the single source of truth for that format, so procedures reference it instead of defining the format inline.
 
-This file is the single source of truth. Procedures reference it instead of defining the format inline.
-
-**This file defines HOW to present a decision. It never defines WHICH decisions are yours — your procedure does.** It is deliberately caller-blind: it does not know who invoked it, what scope that caller works at, or what belongs in their decision set. A caller that needs to bound its own decision set declares that in its own procedure.
+What it defines is **how** to present a decision, never **which** decisions are yours. This file is deliberately caller-blind: it does not know who invoked it, what scope that caller works at, or what belongs in their decision set — a caller that needs to bound its own decision set declares that in its own procedure.
 
 ---
 
 ## What to Surface
 
-Not every decision warrants WAIT Options. Use this taxonomy to decide which of *your* decisions to surface and which to write directly into the plan.
-
-*The taxonomy classifies a decision you already hold; it does not tell you which decisions you hold. That is scope, and it belongs to your procedure — a decision that is not yours at this altitude should not be zoned here at all, it should be handed to whoever owns it.*
+Not every decision warrants WAIT Options. Use this taxonomy to decide which of *your* decisions to surface and which to write directly into the plan. It classifies a decision you already hold — one that is not yours at this altitude should not be zoned here at all, but handed to whoever owns it.
 
 ### Zone Taxonomy
 

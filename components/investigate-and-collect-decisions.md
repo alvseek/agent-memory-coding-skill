@@ -2,17 +2,13 @@
 
 Shared investigation checklist for the planning wizards. **This is a component, not a standalone skill** — a wizard's "Investigate and Collect Decisions" step invokes it by reading and following this file. It produces decision items for the WAIT Options form.
 
-*Consumed by `/quick-wizard` and `/high-wizard` (identical decision-collection discipline). Wizards with a different investigation shape — e.g. `/pixel-wizard` (visual framework check), `/council-of-wizards` (feature decomposition), `/forge-of-covenant` (7Q exploration) — keep their own variant.*
-
-*Reading the parent's handoff is a **precondition** to this checklist, not a step in it — every wizard that can be launched as a sub-plan invokes the Subplan Handoff component in its own procedure, before it gets here.*
+*Consumed by `/quick-wizard` and `/high-wizard` (identical decision-collection discipline). Wizards with a different investigation shape — e.g. `/pixel-wizard` (visual framework check), `/council-of-wizards` (feature decomposition), `/forge-of-covenant` (7Q exploration) — keep their own variant. Any wizard that can be launched as a sub-plan reads the parent's handoff in its own procedure before reaching this checklist; that read is a precondition to investigating, not a step within it.*
 
 ---
 
 This is where the thinking happens — NOT in the plan document. Follow the investigation checklist below IN ORDER. Each item can produce decision items for the WAIT Options form.
 
-Invoke the `/wait-options` command procedure to guide collecting decisions — run the command; its format rules are not in context. **What to ask about at this altitude is defined by your own procedure's `## WAIT Options Scope`, not by `/wait-options`** — check it before building the form.
-
-*If you were launched as a sub-plan, your procedure has already had you read the parent's handoff. Investigate only the gap it left, and do not re-ask a decision it settled.*
+Invoke the `/wait-options` command procedure to guide collecting decisions — run the command; its format rules are not in context. It governs *how* to present a decision, not which decisions are yours: **your own procedure's opening states what your altitude collects decisions about** — re-read it before building the form. If a parent launched you, it has already had you read the handoff, so investigate only the gap that left and do not re-ask what it settled.
 
 **Investigation checklist (in order):**
 
