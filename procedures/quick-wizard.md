@@ -17,7 +17,7 @@ If no arguments provided, ask: "What feature or task should I create a Quick Wiz
 
 This is a **Level 0** wizard protocol: the smallest unit of planned work. It is a leaf — it never orchestrates sub-plans — and it may itself be launched as a sub-plan by `/council-of-wizards`, `/rite-of-creation`, or `/forge-of-covenant`.
 
-Level 0 is the concrete change, so that is what you collect decisions about: which files and functions are touched, the approach taken, what gets reused, what could break. Implementation nouns — entrypoints, core logic, execution touchpoints — are the right vocabulary to disclose in, because they are what this altitude is made of. (`/wait-options` governs *how* you present a decision, never *which* decisions are yours — that is this section.) Nothing gets pushed down; a decision that feels too large to settle here is not something to hand off, it is the scope gate in Step 2 telling you to escalate to `/high-wizard`.
+Level 0 is the concrete change, so that is what you collect decisions about: which files and functions are touched, the approach taken, what gets reused, what could break. Implementation nouns — entrypoints, core logic, execution touchpoints — are the right vocabulary to disclose in, because they are what this altitude is made of. (`/wait-options-coding` governs *how* you present a decision, never *which* decisions are yours — that is this section.) Nothing gets pushed down; a decision that feels too large to settle here is not something to hand off, it is the scope gate in Step 2 telling you to escalate to `/high-wizard`.
 
 *IMPORTANT: This procedure structurally enforces UUID f3a8b2c1 (VERIFY FIRST) - the agent MUST collect and confirm decisions BEFORE executing. Jumping directly into implementation is prohibited.*
 
@@ -47,7 +47,7 @@ After investigation, assess whether this task is suitable for Quick Wizard (dire
 
 ### Step 3: Present WAIT Options
 
-Present the WAIT Options form to [USER-NAME] by invoking the `/wait-options` command procedure.
+Present the WAIT Options form to [USER-NAME] by invoking the `/wait-options-coding` command procedure.
 Preamble: "I've investigated the codebase. Here are the decisions I need before proceeding"
 
 STOP. Present to [USER-NAME] for review. Do NOT proceed until decisions are confirmed.
@@ -85,7 +85,7 @@ The delegated procedure will:
 - Run **Scope Reconciliation** (its Step 3) — surface any git-diff vs tracked-scope discrepancies for [USER-NAME] to reconcile
 - **Discover quality standard** (its Step 4) — looks for `**/quality-standard.md`; if found, applies Dimension 8; if not, freeform
 - Walk quality dimensions against the reconciled scope (its Steps 5-6)
-- Present findings via /wait-options (its Step 7) — preamble: *"Code quality review for implementation:"*
+- Present findings via /wait-options-coding (its Step 7) — preamble: *"Code quality review for implementation:"*
 - **STOP** at the WAIT Options prompt — wait for [USER-NAME]'s response
 - Apply approved fixes and update the QW plan's Quality Review section (its Step 8)
 
@@ -144,7 +144,7 @@ Use this structure when writing the plan in plan mode (or presenting in conversa
 [1-2 sentence description of what we're doing and why]
 
 ## Confirmed Decisions
-*Decisions made **by this plan** — both asked-and-confirmed by [USER-NAME] AND written-through (Zone A/B decisions with reasoning) — see /wait-options. Inherited decisions belong above, not here.*
+*Decisions made **by this plan** — both asked-and-confirmed by [USER-NAME] AND written-through (Zone A/B decisions with reasoning) — see /wait-options-coding. Inherited decisions belong above, not here.*
 
 | # | Decision | Chosen | Reason |
 |---|----------|--------|--------|

@@ -17,7 +17,7 @@ If no arguments provided, ask: "What project do you want to plan across multiple
 
 This is a **Level 4** wizard protocol, the highest: it orchestrates milestones, where each milestone runs as a `/rite-of-creation` (Level 3), `/council-of-wizards` (Level 2), `/high-wizard` (Level 1), `/pixel-wizard` (Level 1v), or `/quick-wizard` (Level 0). The flow is: Explore (7Q) → Decide (WAIT Options Round 1) → Plan (Roadmap + WAIT Options Round 2) → Detail (Milestones + WAIT Options Round 3) → Review → Execute.
 
-Level 4 is milestone altitude, so that is what you collect decisions about: the project vision and what "done" means for the whole of it, where each release boundary falls and what ships inside it, what is deliberately deferred and to which milestone, the principles and non-negotiables that bind every one of them, and the known debt along with where it gets paid. Disclose milestone-level shape: which services or components a release spans, and what must exist before the next milestone can begin. Everything below that belongs to someone else — phase structure to `/rite-of-creation`, feature decomposition to `/council-of-wizards`, implementation to `/high-wizard`, `/pixel-wizard`, or `/quick-wizard` — because at this altitude a stack or module choice is a guess about work three levels down. (`/wait-options` governs *how* you present a decision, never *which* decisions are yours — that is this section.)
+Level 4 is milestone altitude, so that is what you collect decisions about: the project vision and what "done" means for the whole of it, where each release boundary falls and what ships inside it, what is deliberately deferred and to which milestone, the principles and non-negotiables that bind every one of them, and the known debt along with where it gets paid. Disclose milestone-level shape: which services or components a release spans, and what must exist before the next milestone can begin. Everything below that belongs to someone else — phase structure to `/rite-of-creation`, feature decomposition to `/council-of-wizards`, implementation to `/high-wizard`, `/pixel-wizard`, or `/quick-wizard` — because at this altitude a stack or module choice is a guess about work three levels down. (`/wait-options-coding` governs *how* you present a decision, never *which* decisions are yours — that is this section.)
 
 A decision you push down does not disappear; it travels in the handoff, and the **Deferral & Debt Tracker** is the milestone-scoped form of the same discipline. That handoff is what every transfer out of this procedure carries — whether you are launching a milestone at Step 16 or de-escalating to `/rite-of-creation` at Step 10, read and follow the [Subplan Handoff component]([path-to-agent-memory-coding-skill]/components/subplan-handoff.md) (**write side**) and pass that payload with it. **A path alone is not a handoff.**
 
@@ -110,7 +110,7 @@ This understanding informs the WAIT Options in Step 6.
 
 Based on the exploration discussion (Step 5), prepare concrete decisions that need to be confirmed before planning milestones. These are PROJECT-LEVEL decisions.
 
-Invoke the `/wait-options` command procedure to guide collecting project-level decisions — run the command; its format rules are not in context.
+Invoke the `/wait-options-coding` command procedure to guide collecting project-level decisions — run the command; its format rules are not in context.
 
 **Typical project-level decisions:**
 - Tech stack choices (languages, frameworks, cloud provider)
@@ -122,7 +122,7 @@ Invoke the `/wait-options` command procedure to guide collecting project-level d
 - Risk mitigation strategy (for any high-likelihood/high-impact risks identified)
 - Timeline targets (rough dates per milestone)
 
-Present the project decisions to [USER-NAME] by invoking the `/wait-options` command procedure.
+Present the project decisions to [USER-NAME] by invoking the `/wait-options-coding` command procedure.
 Preamble: "Based on our exploration, here are the project decisions I need to confirm (WAIT Options Round 1):"
 
 STOP. Present to [USER-NAME] for review. Do NOT fill any tables or proceed until [USER-NAME] confirms the project decisions.
@@ -224,11 +224,11 @@ For each milestone in the confirmed roadmap, discuss the detailed scope with [US
 - What protocol level fits? (RoC for complex milestones with multiple SDLC phases, CoW for multi-feature milestones, HW for simple milestones, PW when the milestone is design-driven with a visual reference to match)
 - Any known technical debt that will be created?
 
-Invoke the `/wait-options` command procedure to guide collecting milestone-level decisions — run the command; its format rules are not in context. These are decisions about HOW each milestone will be executed. Group decisions by milestone (M1, M2, etc.).
+Invoke the `/wait-options-coding` command procedure to guide collecting milestone-level decisions — run the command; its format rules are not in context. These are decisions about HOW each milestone will be executed. Group decisions by milestone (M1, M2, etc.).
 
 ### Step 12: Present Milestone WAIT Options (Round 3)
 
-Present the milestone planning decisions to [USER-NAME] by invoking the `/wait-options` command procedure.
+Present the milestone planning decisions to [USER-NAME] by invoking the `/wait-options-coding` command procedure.
 Preamble: "Here are the milestone-level decisions (WAIT Options Round 3):"
 Group decisions by milestone (M1, M2, etc.).
 
@@ -273,7 +273,7 @@ Do a self-review by thinking critically:
 - h. Does each milestone have a clear protocol assignment?
 - i. Are target dates realistic given scope and constraints?
 
-**If issues are found**: Auto-fix consistency issues (wrong protocol assignments, dependency errors, incomplete tracker entries) directly in the plan file. For issues that require a NEW decision (scope changes, milestone restructuring), STOP and present to [USER-NAME] by invoking the `/wait-options` command procedure before continuing.
+**If issues are found**: Auto-fix consistency issues (wrong protocol assignments, dependency errors, incomplete tracker entries) directly in the plan file. For issues that require a NEW decision (scope changes, milestone restructuring), STOP and present to [USER-NAME] by invoking the `/wait-options-coding` command procedure before continuing.
 
 **Report**: Briefly list any auto-fixes made. If no issues found, proceed silently to Step 15.
 

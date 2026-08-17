@@ -19,7 +19,7 @@ If no arguments provided, ask: "What feature or task should I create a Pixel Wiz
 
 This is a **Level 1v** wizard protocol: the visual variant of `/high-wizard`, sharing its rung, its plan template, and its decision discipline, plus three visual additions. It is a leaf — it never orchestrates sub-plans — and it may itself be launched as a sub-plan by `/council-of-wizards`, `/rite-of-creation`, or `/forge-of-covenant` when a deliverable is design-driven.
 
-Because the rung is shared, so is the decision scope: everything `/high-wizard` collects at Level 1 — modules and entrypoints, core logic, integration points, contracts consumed, constraints — and on top of it the visual questions. What is the fidelity target, pixel-match or categorical? Which source wins when the design reference and the written spec disagree? What captures the running result, and how many iteration rounds are acceptable before stopping? Disclose in implementation nouns plus the visual ones — component boundaries, style tokens, the capture command. Nothing gets pushed down; there is no lower rung. (`/wait-options` governs *how* you present a decision, never *which* decisions are yours — that is this section.)
+Because the rung is shared, so is the decision scope: everything `/high-wizard` collects at Level 1 — modules and entrypoints, core logic, integration points, contracts consumed, constraints — and on top of it the visual questions. What is the fidelity target, pixel-match or categorical? Which source wins when the design reference and the written spec disagree? What captures the running result, and how many iteration rounds are acceptable before stopping? Disclose in implementation nouns plus the visual ones — component boundaries, style tokens, the capture command. Nothing gets pushed down; there is no lower rung. (`/wait-options-coding` governs *how* you present a decision, never *which* decisions are yours — that is this section.)
 
 If a parent launched you, why this deliverable exists and how it is bounded were settled one level up and arrive in the handoff, which Step 6 reads in full. The **design reference itself** may travel that way too, which is why the Visual Design Gate below looks there before it fails.
 
@@ -81,7 +81,7 @@ This is where the thinking happens - NOT in the plan document. Follow the invest
 
 **First, if launched as a sub-plan**: read and follow the [Subplan Handoff component]([path-to-agent-memory-coding-skill]/components/subplan-handoff.md) — **read side**. It tells you what you inherited, what you may not reopen, and where to find the payload if none was passed. Record it under `## INHERITED CONTEXT` before investigating anything. *(The Visual Design Gate at Step 2 already checks the handoff for the design reference — this is the full read.)*
 
-Invoke the `/wait-options` command procedure to guide collecting decisions — run the command; its format rules are not in context. It governs *how* to present a decision, not which decisions are yours: **this procedure's opening states what Level 1v collects decisions about** — re-read it before building the form.
+Invoke the `/wait-options-coding` command procedure to guide collecting decisions — run the command; its format rules are not in context. It governs *how* to present a decision, not which decisions are yours: **this procedure's opening states what Level 1v collects decisions about** — re-read it before building the form.
 
 **Investigation checklist (in order):**
 
@@ -99,7 +99,7 @@ Invoke the `/wait-options` command procedure to guide collecting decisions — r
 
 ### Step 7: Present WAIT Options
 
-Present the WAIT Options form to [USER-NAME] by invoking the `/wait-options` command procedure.
+Present the WAIT Options form to [USER-NAME] by invoking the `/wait-options-coding` command procedure.
 Preamble: "I've investigated the codebase. Here are the decisions I need before planning"
 
 STOP. Present to [USER-NAME] for review. Do NOT write any plan sections until decisions are confirmed.
@@ -269,7 +269,7 @@ The delegated procedure will:
 - Run **Scope Reconciliation** (its Step 3) — surface any git-diff vs Execution Log discrepancies for [USER-NAME] to reconcile
 - **Discover quality standard** (its Step 4) — looks for `**/quality-standard.md`; if found, applies Dimension 8; if not, freeform
 - Walk quality dimensions against the reconciled scope (its Steps 5-6)
-- Present findings via /wait-options (its Step 7) — preamble: *"Code quality review for implementation:"*
+- Present findings via /wait-options-coding (its Step 7) — preamble: *"Code quality review for implementation:"*
 - **STOP** at the WAIT Options prompt — wait for [USER-NAME]'s response
 - Apply approved fixes and update this plan's Quality Review section (its Step 8)
 

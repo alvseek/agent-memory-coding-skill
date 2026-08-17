@@ -148,7 +148,7 @@ Walk through each quality dimension in the [Code Quality Analysis Template]([pat
 
 ### Step 7: Present Findings
 
-Present findings to [USER-NAME] by invoking the `/wait-options` command procedure — run the command; its format rules are not in context.
+Present findings to [USER-NAME] by invoking the `/wait-options-coding` command procedure — run the command; its format rules are not in context.
 Preamble: "Code quality review for [scope]:"
 
 STOP. Wait for [USER-NAME]'s response before fixing anything.

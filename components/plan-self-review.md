@@ -13,6 +13,6 @@ Do a self-review by thinking critically:
 - d. Is there anything redundant?
 - e. Are implementation phases in the right order?
 
-**If issues are found**: Auto-fix consistency issues (conflicts, redundancies, ordering) directly in the plan file. For issues that require a NEW decision (scope changes, missing requirements), STOP and present to [USER-NAME] by invoking the `/wait-options` command procedure before continuing.
+**If issues are found**: Auto-fix consistency issues (conflicts, redundancies, ordering) directly in the plan file. For issues that require a NEW decision (scope changes, missing requirements), STOP and present to [USER-NAME] by invoking the `/wait-options-coding` command procedure before continuing.
 
 **Report**: Briefly list any auto-fixes made. If no issues found, proceed silently to the next step.

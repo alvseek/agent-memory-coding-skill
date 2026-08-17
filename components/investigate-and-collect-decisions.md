@@ -8,7 +8,7 @@ Shared investigation checklist for the planning wizards. **This is a component, 
 
 This is where the thinking happens — NOT in the plan document. Follow the investigation checklist below IN ORDER. Each item can produce decision items for the WAIT Options form.
 
-Invoke the `/wait-options` command procedure to guide collecting decisions — run the command; its format rules are not in context. It governs *how* to present a decision, not which decisions are yours: **your own procedure's opening states what your altitude collects decisions about** — re-read it before building the form. If a parent launched you, it has already had you read the handoff, so investigate only the gap that left and do not re-ask what it settled.
+Invoke the `/wait-options-coding` command procedure to guide collecting decisions — run the command; its format rules are not in context. It governs *how* to present a decision, not which decisions are yours: **your own procedure's opening states what your altitude collects decisions about** — re-read it before building the form. If a parent launched you, it has already had you read the handoff, so investigate only the gap that left and do not re-ask what it settled.
 
 **Investigation checklist (in order):**
 

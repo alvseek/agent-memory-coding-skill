@@ -17,7 +17,7 @@ If no arguments provided, ask: "What feature should I create a Council of Wizard
 
 This is a **Level 2** wizard protocol: it breaks one feature into sub-plans and orchestrates them at Level 1 (`/high-wizard`), Level 1v (`/pixel-wizard`), or Level 0 (`/quick-wizard`). The flow is: WAIT Options → Requirements → Scope Gate → Decompose → Contracts → Dependencies → Execute → Complete.
 
-Level 2 is decomposition altitude, so that is what you collect decisions about: where the sub-plan boundaries fall, which requirements group together, the integration contracts *between* sub-plans, what can run in parallel, and which protocol fits each one. Disclose the seams rather than the internals — what crosses each boundary, the shape of each contract, which side produces and which consumes. How a sub-plan is built *inside* is not yours: its modules, algorithms, file layout and local trade-offs belong to the `/high-wizard`, `/pixel-wizard`, or `/quick-wizard` it is assigned to, and settling them here commits that child before it has investigated — which it will then re-ask anyway. (`/wait-options` governs *how* you present a decision, never *which* decisions are yours — that is this section.)
+Level 2 is decomposition altitude, so that is what you collect decisions about: where the sub-plan boundaries fall, which requirements group together, the integration contracts *between* sub-plans, what can run in parallel, and which protocol fits each one. Disclose the seams rather than the internals — what crosses each boundary, the shape of each contract, which side produces and which consumes. How a sub-plan is built *inside* is not yours: its modules, algorithms, file layout and local trade-offs belong to the `/high-wizard`, `/pixel-wizard`, or `/quick-wizard` it is assigned to, and settling them here commits that child before it has investigated — which it will then re-ask anyway. (`/wait-options-coding` governs *how* you present a decision, never *which* decisions are yours — that is this section.)
 
 A decision you push down does not disappear; it travels in the handoff. That handoff is what every transfer out of this procedure carries — whether you are launching a sub-plan at Step 16 or de-escalating to `/high-wizard` at Step 7, read and follow the [Subplan Handoff component]([path-to-agent-memory-coding-skill]/components/subplan-handoff.md) (**write side**) and pass that payload with it. **A path alone is not a handoff.**
 
@@ -51,13 +51,13 @@ Investigate the feature to understand what [USER-NAME] wants delivered. This hap
 2. **Identify all parts** — What distinct pieces need to be built? (data models, APIs, UI, infrastructure, migrations, etc.)
 3. **Research context** — Scan relevant codebase, architecture, and existing patterns
 
-Invoke the `/wait-options` command procedure to guide collecting requirement decisions — run the command; its format rules are not in context.
+Invoke the `/wait-options-coding` command procedure to guide collecting requirement decisions — run the command; its format rules are not in context.
 
 Be exhaustive — missing a requirement here means a missing sub-plan later.
 
 ### Step 6: Present Requirements WAIT Options
 
-Present the requirements to [USER-NAME] by invoking the `/wait-options` command procedure.
+Present the requirements to [USER-NAME] by invoking the `/wait-options-coding` command procedure.
 Preamble: "Based on my investigation, here's what I think you want"
 
 STOP. Present to [USER-NAME] for review. Do NOT fill any tables or proceed until [USER-NAME] confirms the requirements.
@@ -98,11 +98,11 @@ Before decomposing into sub-plans, investigate the codebase and feature context 
 4. **Parallel strategy** — Which sub-plans can run concurrently? Any hard sequential dependencies?
 5. **Conflicts and constraints** — Are there requirements that must be in the same sub-plan? Cross-cutting concerns?
 
-Invoke the `/wait-options` command procedure to guide collecting decomposition decisions — run the command; its format rules are not in context.
+Invoke the `/wait-options-coding` command procedure to guide collecting decomposition decisions — run the command; its format rules are not in context.
 
 ### Step 9: Present Decomposition WAIT Options
 
-Present the decomposition decisions to [USER-NAME] by invoking the `/wait-options` command procedure.
+Present the decomposition decisions to [USER-NAME] by invoking the `/wait-options-coding` command procedure.
 Preamble: "Here are the decomposition decisions I need before breaking this into sub-plans"
 
 STOP. Present to [USER-NAME] for review. Do NOT proceed to decomposition until decisions are confirmed.

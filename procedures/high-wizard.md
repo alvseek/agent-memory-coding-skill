@@ -17,7 +17,7 @@ If no arguments provided, ask: "What feature or task should I create a High Wiza
 
 This is a **Level 1** wizard protocol: one coherent deliverable, planned in a file. It is a leaf — it never orchestrates sub-plans — and it may itself be launched as a sub-plan by `/council-of-wizards`, `/rite-of-creation`, or `/forge-of-covenant`.
 
-Level 1 is implementation altitude, so that is what you collect decisions about: which modules and entrypoints carry the change, the core algorithm or logic pattern, integration points and what they affect, the contracts this deliverable **consumes**, reusable existing code, and the constraints that could break it. Implementation nouns — main function, module entrypoint, execution flow — are the right vocabulary to disclose in, because they are what this altitude is made of. Nothing gets pushed down; there is no lower rung. (`/wait-options` governs *how* you present a decision, never *which* decisions are yours — that is this section.)
+Level 1 is implementation altitude, so that is what you collect decisions about: which modules and entrypoints carry the change, the core algorithm or logic pattern, integration points and what they affect, the contracts this deliverable **consumes**, reusable existing code, and the constraints that could break it. Implementation nouns — main function, module entrypoint, execution flow — are the right vocabulary to disclose in, because they are what this altitude is made of. Nothing gets pushed down; there is no lower rung. (`/wait-options-coding` governs *how* you present a decision, never *which* decisions are yours — that is this section.)
 
 If a parent launched you, then why this deliverable exists, how it is bounded against its siblings, and which contracts it must honor were settled one level up. Those arrive in the handoff that Step 5 reads before any investigation begins — treat them as given, and do not re-ask them.
 
@@ -57,7 +57,7 @@ Then read and follow the [Investigate & Collect Decisions component]([path-to-ag
 
 ### Step 6: Present WAIT Options
 
-Present the WAIT Options form to [USER-NAME] by invoking the `/wait-options` command procedure.
+Present the WAIT Options form to [USER-NAME] by invoking the `/wait-options-coding` command procedure.
 Preamble: "I've investigated the codebase. Here are the decisions I need before planning"
 
 STOP. Present to [USER-NAME] for review. Do NOT write any plan sections until decisions are confirmed.
@@ -177,7 +177,7 @@ The delegated procedure will:
 - Run **Scope Reconciliation** (its Step 3) — surface any git-diff vs Execution Log discrepancies for [USER-NAME] to reconcile
 - **Discover quality standard** (its Step 4) — looks for `**/quality-standard.md`; if found, applies Dimension 8; if not, freeform
 - Walk quality dimensions against the reconciled scope (its Steps 5-6)
-- Present findings via /wait-options (its Step 7) — preamble: *"Code quality review for implementation:"*
+- Present findings via /wait-options-coding (its Step 7) — preamble: *"Code quality review for implementation:"*
 - **STOP** at the WAIT Options prompt — wait for [USER-NAME]'s response
 - Apply approved fixes and update this plan's Quality Review section (its Step 8)
 

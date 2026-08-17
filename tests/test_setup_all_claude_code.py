@@ -28,7 +28,7 @@ _SIBLING_MANIFEST = ".agent-memory-manifest"
 
 # overlay commands every healthy tree carries — asserted by presence, not exact count, so a
 # newly-added or renamed procedure doesn't break the suite.
-_KNOWN = {"awaken-coder", "high-wizard", "map-orientation", "wait-options", "push-project"}
+_KNOWN = {"awaken-coder", "high-wizard", "map-orientation", "wait-options-coding", "push-project"}
 
 
 def test_installs_the_full_command_set(tmp_path: Path) -> None:

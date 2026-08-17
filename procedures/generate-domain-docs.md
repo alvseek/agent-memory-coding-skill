@@ -109,7 +109,7 @@ Follow the [Present Doc For Review component]([path-to-agent-memory-coding-skill
 - **/map-orientation** — indexes the deep-dive as `domain-model` (`doc_type: domain`) and the map as `domain-context-map` (`doc_type: domain-context-map`), and supplies the documented-status that Step 1D discovery joins. This skill does **not** run the map — indexing is `/wrap-up` or an explicit `/map-orientation --rescan`.
 - **The two altitudes**: the **domain-context-map** is the *map altitude* (how bounded contexts relate); the **domain-model** ERD is the *deep-dive*. Both are content docs, separate from the orientation map (navigation), which indexes them.
 - **/generate-docs orchestrator** — composes this generator's `[M]` (context-map) path with the other atomic generators to synthesize the whole-system doc surface.
-- **Decision collection** — if Step 1B scope resolution is ambiguous, present the candidates by invoking the `/wait-options` command procedure (run the command; its format rules are not in context).
+- **Decision collection** — if Step 1B scope resolution is ambiguous, present the candidates by invoking the `/wait-options-coding` command procedure (run the command; its format rules are not in context).
 
 ---
 

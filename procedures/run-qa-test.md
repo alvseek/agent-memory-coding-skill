@@ -206,7 +206,7 @@ Rules that keep the record honest:
 
 ### Step 4: Present Findings
 
-Any failure becomes a **Critical** finding. Present by invoking the `/wait-options` command procedure — run the command; its format rules are not in context.
+Any failure becomes a **Critical** finding. Present by invoking the `/wait-options-coding` command procedure — run the command; its format rules are not in context.
 Preamble: *"Runtime verification findings:"*
 
 **STOP**. Wait for [USER-NAME]'s response.

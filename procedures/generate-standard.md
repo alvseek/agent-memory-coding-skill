@@ -65,7 +65,7 @@ Scan the codebase to discover existing conventions AND identify what's missing. 
 
 ### Step 4: Present WAIT Options
 
-Present the investigation findings to [USER-NAME] by invoking the `/wait-options` command procedure — run the command; its format rules are not in context.
+Present the investigation findings to [USER-NAME] by invoking the `/wait-options-coding` command procedure — run the command; its format rules are not in context.
 Preamble: "I've investigated the codebase. Here's what I found and what I recommend"
 
 Before the WAIT Options decisions, list **discovered conventions** (will be written into the standard) summarized per dimension. Then present **recommended additions** (gaps) as WAIT Options decisions, grouped by dimension.

@@ -17,7 +17,7 @@ If no arguments provided, ask: "What project do you want to create from scratch?
 
 This is a **Level 3** wizard protocol: it orchestrates SDLC phases, where each phase runs as a `/council-of-wizards` (Level 2), `/high-wizard` (Level 1), `/pixel-wizard` (Level 1v), or `/quick-wizard` (Level 0). The flow is: Vision → WAIT Options Round 1 (project decisions) → Phase Menu + Scope Gate → WAIT Options Round 2 (phase planning) → Exit Criteria → Dependencies → Execute → Complete.
 
-Level 3 is phase altitude, so that is what you collect decisions about: which SDLC phases apply and which are skipped, the protocol and role assigned to each, the exit criteria that gate them, dependencies and parallel opportunities, and the project-wide constraints that bind every phase — platform, stack direction, hard deadlines. Disclose phase-level shape: what each phase must produce before the next can start, and where the sequencing is genuinely hard rather than merely convenient. Feature decomposition is not yours — it belongs to `/council-of-wizards` — and neither is implementation, which belongs to `/high-wizard`, `/pixel-wizard`, or `/quick-wizard`; choosing a module layout or an algorithm here decides for a phase nobody has investigated yet. (`/wait-options` governs *how* you present a decision, never *which* decisions are yours — that is this section.)
+Level 3 is phase altitude, so that is what you collect decisions about: which SDLC phases apply and which are skipped, the protocol and role assigned to each, the exit criteria that gate them, dependencies and parallel opportunities, and the project-wide constraints that bind every phase — platform, stack direction, hard deadlines. Disclose phase-level shape: what each phase must produce before the next can start, and where the sequencing is genuinely hard rather than merely convenient. Feature decomposition is not yours — it belongs to `/council-of-wizards` — and neither is implementation, which belongs to `/high-wizard`, `/pixel-wizard`, or `/quick-wizard`; choosing a module layout or an algorithm here decides for a phase nobody has investigated yet. (`/wait-options-coding` governs *how* you present a decision, never *which* decisions are yours — that is this section.)
 
 A decision you push down does not disappear; it travels in the handoff. That handoff is what every transfer out of this procedure carries — whether you are launching a phase at Step 15 or de-escalating to `/council-of-wizards` or `/high-wizard` at Step 7, read and follow the [Subplan Handoff component]([path-to-agent-memory-coding-skill]/components/subplan-handoff.md) (**write side**) and pass that payload with it. **A path alone is not a handoff.**
 
@@ -53,13 +53,13 @@ Investigate to understand what [USER-NAME] wants to build. This happens BEFORE a
 4. **Tech stack considerations** — What languages, frameworks, infrastructure fit this project?
 5. **Constraints and risks** — Budget, timeline, technical limitations, team capabilities?
 
-Invoke the `/wait-options` command procedure to guide collecting project-level decisions — run the command; its format rules are not in context.
+Invoke the `/wait-options-coding` command procedure to guide collecting project-level decisions — run the command; its format rules are not in context.
 
 Be thorough — these are foundational decisions that shape every phase downstream.
 
 ### Step 6: Present Project WAIT Options (Round 1)
 
-Present the project decisions to [USER-NAME] by invoking the `/wait-options` command procedure.
+Present the project decisions to [USER-NAME] by invoking the `/wait-options-coding` command procedure.
 Preamble: "Based on my investigation, here are the project decisions I need before planning"
 
 STOP. Present to [USER-NAME] for review. Do NOT fill any tables or proceed until [USER-NAME] confirms the project decisions.
@@ -111,11 +111,11 @@ Before filling exit criteria and dependencies, investigate to collect decisions 
 4. **Role assignment** — Are the recommended roles appropriate for this project's context?
 5. **Conflicts and constraints** — Are there cross-phase concerns that need special handling?
 
-Invoke the `/wait-options` command procedure to guide collecting phase-level decisions — run the command; its format rules are not in context.
+Invoke the `/wait-options-coding` command procedure to guide collecting phase-level decisions — run the command; its format rules are not in context.
 
 ### Step 9: Present Phase WAIT Options (Round 2)
 
-Present the phase planning decisions to [USER-NAME] by invoking the `/wait-options` command procedure.
+Present the phase planning decisions to [USER-NAME] by invoking the `/wait-options-coding` command procedure.
 Preamble: "Here are the phase planning decisions I need before structuring the phases"
 
 STOP. Present to [USER-NAME] for review. Do NOT proceed until decisions are confirmed.
@@ -168,7 +168,7 @@ Do a self-review by thinking critically:
 - d. Are dependencies correct? Any missing parallel opportunities?
 - e. Is there any conflict between project decisions and the phase plan?
 
-**If issues are found**: Auto-fix consistency issues (wrong protocol assignments, dependency errors, incomplete exit criteria) directly in the plan file. For issues that require a NEW decision (missing phases, scope changes), STOP and present to [USER-NAME] by invoking the `/wait-options` command procedure before continuing.
+**If issues are found**: Auto-fix consistency issues (wrong protocol assignments, dependency errors, incomplete exit criteria) directly in the plan file. For issues that require a NEW decision (missing phases, scope changes), STOP and present to [USER-NAME] by invoking the `/wait-options-coding` command procedure before continuing.
 
 **Report**: Briefly list any auto-fixes made. If no issues found, proceed silently to Step 14.
 
