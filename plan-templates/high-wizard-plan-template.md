@@ -55,7 +55,7 @@
 ---
 
 ## **CONFIRMED DECISIONS**
-*Decisions made **by this plan** — both **asked-and-confirmed** by [USER-NAME] AND **written-through** (Zone A/B decisions made by the agent with reasoning, per /wait-options-coding). The reasons serve as the analysis record.*
+*Decisions made **by this plan** — both **asked-and-confirmed** by [USER-NAME] AND **written-through** (Zone A and B decisions made by the agent, recorded with their reasoning). The reasons serve as the analysis record.*
 *Decisions inherited from a parent belong in [INHERITED CONTEXT](#inherited-context) above, not here — keeping them separate is what shows which decisions this plan actually owns.*
 
 | # | Decision | Chosen | Reason |

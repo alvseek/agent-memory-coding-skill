@@ -59,7 +59,7 @@ Be thorough — these are foundational decisions that shape every phase downstre
 
 ### Step 6: Present Project WAIT Options (Round 1)
 
-Present the project decisions to [USER-NAME] by invoking the `/wait-options-coding` command procedure.
+Present the project decisions to [USER-NAME] by invoking the `/wait-options-coding` command procedure. Follow the [Planning Decision component]([path-to-agent-memory-coding-skill]/components/planning-decision.md) as you build it — it governs what earns a place, the frame that opens the first round, and the gate that closes each one.
 Preamble: "Based on my investigation, here are the project decisions I need before planning"
 
 STOP. Present to [USER-NAME] for review. Do NOT fill any tables or proceed until [USER-NAME] confirms the project decisions.

@@ -19,7 +19,7 @@ If no arguments provided, ask: "What feature or task should I create a Pixel Wiz
 
 This is a **Level 1v** wizard protocol: the visual variant of `/high-wizard`, sharing its rung, its plan template, and its decision discipline, plus three visual additions. It is a leaf — it never orchestrates sub-plans — and it may itself be launched as a sub-plan by `/council-of-wizards`, `/rite-of-creation`, or `/forge-of-covenant` when a deliverable is design-driven.
 
-Because the rung is shared, so is the decision scope: everything `/high-wizard` collects at Level 1 — modules and entrypoints, core logic, integration points, contracts consumed, constraints — and on top of it the visual questions. What is the fidelity target, pixel-match or categorical? Which source wins when the design reference and the written spec disagree? What captures the running result, and how many iteration rounds are acceptable before stopping? Disclose in implementation nouns plus the visual ones — component boundaries, style tokens, the capture command. Nothing gets pushed down; there is no lower rung. (`/wait-options-coding` governs *how* you present a decision, never *which* decisions are yours — that is this section.)
+Because the rung is shared, so is the decision scope: everything `/high-wizard` collects at Level 1, and on top of it the visual questions — Step 7 names all of them, the condition each runs under, and the order they are asked in. Disclose in implementation nouns plus the visual ones — component boundaries, style tokens, the capture command. Nothing gets pushed down; there is no lower rung. (`/wait-options-coding` governs *how* you present a decision, never *which* decisions are yours — Step 7 is where that is decided.)
 
 If a parent launched you, why this deliverable exists and how it is bounded were settled one level up and arrive in the handoff, which Step 6 reads in full. The **design reference itself** may travel that way too, which is why the Visual Design Gate below looks there before it fails.
 
@@ -97,12 +97,23 @@ Invoke the `/wait-options-coding` command procedure to guide collecting decision
    - **Mobile projects**: look for `SCREENSHOT_CMD`
    If not found, run `/setup-qa-visual-instrument` now before Step 7. The framework must be set up before implementation begins.
 
-### Step 7: Present WAIT Options
+### Step 7: Present Decisions — One Round per Category
 
-Present the WAIT Options form to [USER-NAME] by invoking the `/wait-options-coding` command procedure.
-Preamble: "I've investigated the codebase. Here are the decisions I need before planning"
+Decisions are not presented in one block. Each category from this procedure's opening gets its own round, in the order declared there, and every round is a gate: present, STOP, and wait for [USER-NAME] to clear it before building the next. The [Planning Decision component]([path-to-agent-memory-coding-skill]/components/planning-decision.md) governs what earns a place in a round and how a round is run — read and follow it before building Round 1.
 
-STOP. Present to [USER-NAME] for review. Do NOT write any plan sections until decisions are confirmed.
+Round 1 opens with the frame — what you take the task to be and the shape of the change you intend — because no plan section exists yet for [USER-NAME] to read.
+
+**Round 1 — Scope.** *Runs when the boundary of this work is not already settled.* What it covers and what it deliberately leaves out. Present by invoking the `/wait-options-coding` command procedure. **STOP.** Continue only on an answer, a "pass", or a "proceed".
+
+**Round 2 — Product flow.** *Runs when the change adds to or alters the flow the user actually experiences.* What happens differently and in what order, described in what the user does rather than what the code does. Build it from the confirmed scope, then present by invoking `/wait-options-coding`. **STOP.**
+
+**Round 3 — Visual target.** *Runs always at this altitude — it is why this protocol was chosen.* The fidelity target (pixel-match or categorical), which source wins when the design reference and the written spec disagree, what captures the running result, and how many iteration rounds are acceptable before stopping. Present by invoking `/wait-options-coding`. **STOP.**
+
+**Round 4 — Technical core.** *Runs when the mechanism is not already settled in conversation.* The algorithm, data shape or logic pattern this is built on, named concretely. Build it from what the earlier rounds confirmed, then present. **STOP.**
+
+**Round 5 — Integration points.** *Runs when existing code will call into this, or this will call into existing code.* Where the new work is reached from, the contracts it consumes, the existing code it leans on, and the constraints that could break it. Build it from the confirmed core, then present. **STOP.**
+
+Do NOT write any plan sections until every round that ran is confirmed.
 
 ### Step 8: Fill Objectives + Success Criteria
 

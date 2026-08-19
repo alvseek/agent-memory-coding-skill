@@ -1,6 +1,6 @@
 # High Wizard Protocol
 
-Execute smart planning with structural decision collection - forces "ask before assuming" by collecting ALL implementation decisions upfront with recommended defaults before writing any plan content.
+Execute smart planning with structural decision collection - forces "ask before assuming" by collecting implementation decisions in gated rounds, with recommended defaults, before writing any plan content or executing.
 
 ## Arguments
 
@@ -15,13 +15,11 @@ If no arguments provided, ask: "What feature or task should I create a High Wiza
 
 ## Procedure
 
-This is a **Level 1** wizard protocol: one coherent deliverable, planned in a file. It is a leaf — it never orchestrates sub-plans — and it may itself be launched as a sub-plan by `/council-of-wizards`, `/rite-of-creation`, or `/forge-of-covenant`.
+High Wizard is a **Level 1** wizard protocol: one coherent deliverable, planned in a file. It is a leaf — it never orchestrates sub-plans — and it may itself be launched as a sub-plan by `/council-of-wizards`, `/rite-of-creation`, or `/forge-of-covenant`.
 
-Level 1 is implementation altitude, so that is what you collect decisions about: which modules and entrypoints carry the change, the core algorithm or logic pattern, integration points and what they affect, the contracts this deliverable **consumes**, reusable existing code, and the constraints that could break it. Implementation nouns — main function, module entrypoint, execution flow — are the right vocabulary to disclose in, because they are what this altitude is made of. Nothing gets pushed down; there is no lower rung. (`/wait-options-coding` governs *how* you present a decision, never *which* decisions are yours — that is this section.)
+Level 1 is implementation altitude, so that is what you collect decisions about — Step 6 names the categories, the condition each one runs under, and the order they are asked in. Implementation nouns — main function, module entrypoint, execution flow — are the right vocabulary to disclose in, because they are what this altitude is made of. Nothing gets pushed down; there is no lower rung. (`/wait-options-coding` governs *how* you present a decision, never *which* decisions are yours — Step 6 is where that is decided.)
 
 If a parent launched you, then why this deliverable exists, how it is bounded against its siblings, and which contracts it must honor were settled one level up. Those arrive in the handoff that Step 5 reads before any investigation begins — treat them as given, and do not re-ask them.
-
-*IMPORTANT: This procedure structurally enforces UUID f3a8b2c1 (VERIFY FIRST) - the agent MUST collect and confirm decisions BEFORE writing any plan sections. Writing ahead on assumptions is prohibited.*
 
 *This procedure is split into 3 phases. Each phase ends with a STOP gate. Do NOT read ahead into later phases — complete and confirm the current phase before proceeding.*
 
@@ -53,14 +51,23 @@ Fill the [Project Info]([path-to-agent-memory-coding-skill]/plan-templates/high-
 
 **First, if launched as a sub-plan**: read and follow the [Subplan Handoff component]([path-to-agent-memory-coding-skill]/components/subplan-handoff.md) — **read side**. It tells you what you inherited, what you may not reopen, and where to find the payload if none was passed. Record it under `## INHERITED CONTEXT` before investigating anything.
 
-Then read and follow the [Investigate & Collect Decisions component]([path-to-agent-memory-coding-skill]/components/investigate-and-collect-decisions.md) — it runs the shared investigation checklist and collects decision items for the WAIT Options form. This is where the thinking happens — NOT in the plan document.
+Then read and follow the [Planning Investigation component]([path-to-agent-memory-coding-skill]/components/planning-investigation.md) — it runs the shared investigation checklist and produces the findings this plan's decisions are built from. This is where the thinking happens — NOT in the plan document.
 
-### Step 6: Present WAIT Options
+### Step 6: Present Decisions — One Round per Category
 
-Present the WAIT Options form to [USER-NAME] by invoking the `/wait-options-coding` command procedure.
-Preamble: "I've investigated the codebase. Here are the decisions I need before planning"
+Decisions are not presented in one block. Each category from this procedure's opening gets its own round, in the order declared there, and every round is a gate: present, STOP, and wait for [USER-NAME] to clear it before building the next. The [Planning Decision component]([path-to-agent-memory-coding-skill]/components/planning-decision.md) governs what earns a place in a round and how a round is run — read and follow it before building Round 1.
 
-STOP. Present to [USER-NAME] for review. Do NOT write any plan sections until decisions are confirmed.
+Round 1 opens with the frame — what you take the task to be and the shape of the change you intend — because no plan section exists yet for [USER-NAME] to read.
+
+**Round 1 — Scope.** *Runs when the boundary of this work is not already settled.* What it covers and what it deliberately leaves out. Present by invoking the `/wait-options-coding` command procedure. **STOP.** Continue only on an answer, a "pass", or a "proceed".
+
+**Round 2 — Product flow.** *Runs when the change adds to or alters the flow the user actually experiences.* What happens differently and in what order, described in what the user does rather than what the code does. Build it from the confirmed scope, then present by invoking `/wait-options-coding`. **STOP.**
+
+**Round 3 — Technical core.** *Runs when the mechanism is not already settled in conversation.* The algorithm, data shape or logic pattern this is built on, named concretely. Build it from what the earlier rounds confirmed, then present. **STOP.**
+
+**Round 4 — Integration points.** *Runs when existing code will call into this, or this will call into existing code.* Where the new work is reached from, the contracts it consumes, the existing code it leans on, and the constraints that could break it. Build it from the confirmed core, then present. **STOP.**
+
+Do NOT write any plan sections until every round that ran is confirmed.
 
 ### Step 7: Fill Objectives + Success Criteria
 

@@ -2,7 +2,7 @@
 
 The contract for what crosses the edge when one wizard hands work to another. **This is a component, not a standalone skill** — a wizard reads and follows the half that applies to it.
 
-*Write side consumed by `/council-of-wizards`, `/rite-of-creation`, `/forge-of-covenant` (launching a sub-plan, and de-escalating to a lower wizard). Read side consumed by `/high-wizard` and `/quick-wizard` via the Investigate & Collect Decisions component, and by `/pixel-wizard` directly.*
+*Write side consumed by `/council-of-wizards`, `/rite-of-creation`, `/forge-of-covenant` (launching a sub-plan, and de-escalating to a lower wizard). Read side consumed by `/high-wizard`, `/quick-wizard` and `/pixel-wizard`, each reading it in its own procedure before investigation begins.*
 
 Without this, a launch passes only a file path: the child investigates from zero and re-asks what the parent already settled, and its answer can contradict the parent's with nothing detecting it.
 
@@ -10,7 +10,7 @@ Without this, a launch passes only a file path: the child investigates from zero
 
 ## Write Side — the parent emits
 
-When launching a child (or de-escalating to a lower wizard), pass a handoff block alongside the plan-file path. Include only what bears on **this** child — a payload that restates the whole parent plan is noise, and noise gets skimmed.
+When launching a child (or de-escalating to a lower level wizard), pass a handoff block alongside the plan-file path. Include only what bears on **this** child — a payload that restates the whole parent plan is noise, and noise gets skimmed.
 
 1. **Assigned scope** — the requirement IDs, phase, or milestone this child owns, and the one-line statement of what it must deliver.
 2. **Constraining decisions** — the confirmed decisions that bind this child, quoted **verbatim with their reasons**. The reason is what stops the child re-litigating; a bare verdict invites one.

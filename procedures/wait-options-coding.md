@@ -1,6 +1,6 @@
 # WAIT Options — Coding Extension
 
-Extends the core `/wait-options` format with the vocabulary and variants that only apply when the decision is about code. Coding and repo procedures invoke **this** rather than `/wait-options` directly: it inherits the base format — zone taxonomy, context depth, options, confidence signals, reason paragraph, open questions, presentation style — and adds what implementation altitude needs on top.
+Extends the core `/wait-options` format with the vocabulary and variants that only apply when the decision is about code. Coding and repo procedures invoke **this** rather than `/wait-options` directly: it inherits the base format — context depth, options, confidence signals, reason paragraph, open questions, presentation style — and adds what implementation altitude needs on top.
 
 The division follows the core file's own rule. `/wait-options` owns the **shape** of a presented decision, and it is deliberately altitude-blind: it states that the technical core must be named at the altitude the decision lives, without knowing what nouns that altitude is made of. This file supplies those nouns for code, and nothing else. Anything here that stops being code-specific belongs upstream in the core.
 

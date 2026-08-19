@@ -17,7 +17,7 @@ If no arguments provided, ask: "What feature or task should I create a Quick Wiz
 
 This is a **Level 0** wizard protocol: the smallest unit of planned work. It is a leaf — it never orchestrates sub-plans — and it may itself be launched as a sub-plan by `/council-of-wizards`, `/rite-of-creation`, or `/forge-of-covenant`.
 
-Level 0 is the concrete change, so that is what you collect decisions about: which files and functions are touched, the approach taken, what gets reused, what could break. Implementation nouns — entrypoints, core logic, execution touchpoints — are the right vocabulary to disclose in, because they are what this altitude is made of. (`/wait-options-coding` governs *how* you present a decision, never *which* decisions are yours — that is this section.) Nothing gets pushed down; a decision that feels too large to settle here is not something to hand off, it is the scope gate in Step 2 telling you to escalate to `/high-wizard`.
+Level 0 is the concrete change, so that is what you collect decisions about — Step 3 names the categories, the condition each one runs under, and the order they are asked in; at this size most will not run at all. Implementation nouns — entrypoints, core logic, execution touchpoints — are the right vocabulary to disclose in, because they are what this altitude is made of. (`/wait-options-coding` governs *how* you present a decision, never *which* decisions are yours — Step 3 is where that is decided.) Nothing gets pushed down; a decision that feels too large to settle here is not something to hand off, it is the scope gate in Step 2 telling you to escalate to `/high-wizard`.
 
 *IMPORTANT: This procedure structurally enforces UUID f3a8b2c1 (VERIFY FIRST) - the agent MUST collect and confirm decisions BEFORE executing. Jumping directly into implementation is prohibited.*
 
@@ -25,7 +25,7 @@ Level 0 is the concrete change, so that is what you collect decisions about: whi
 
 **First, if launched as a sub-plan**: read and follow the [Subplan Handoff component]([path-to-agent-memory-coding-skill]/components/subplan-handoff.md) — **read side**. It tells you what you inherited, what you may not reopen, and where to find the payload if none was passed. Record it under `## Inherited Context` before investigating anything.
 
-Then read and follow the [Investigate & Collect Decisions component]([path-to-agent-memory-coding-skill]/components/investigate-and-collect-decisions.md) — it runs the shared investigation checklist and collects decision items for the WAIT Options form.
+Then read and follow the [Planning Investigation component]([path-to-agent-memory-coding-skill]/components/planning-investigation.md) — it runs the shared investigation checklist and produces the findings this plan's decisions are built from.
 
 ### Step 2: Scope Gate Assessment
 
@@ -45,12 +45,21 @@ After investigation, assess whether this task is suitable for Quick Wizard (dire
 
 **If suitable for Quick Wizard**: Continue to Step 3.
 
-### Step 3: Present WAIT Options
+### Step 3: Present Decisions — One Round per Category
 
-Present the WAIT Options form to [USER-NAME] by invoking the `/wait-options-coding` command procedure.
-Preamble: "I've investigated the codebase. Here are the decisions I need before proceeding"
+Decisions are not presented in one block. Each category from this procedure's opening gets its own round, in the order declared there, and every round is a gate: present, STOP, and wait for [USER-NAME] to clear it before building the next. The [Planning Decision component]([path-to-agent-memory-coding-skill]/components/planning-decision.md) governs what earns a place in a round and how a round is run — read and follow it before building Round 1.
 
-STOP. Present to [USER-NAME] for review. Do NOT proceed until decisions are confirmed.
+Round 1 opens with the frame — what you take the task to be and the shape of the change you intend — because no plan section exists yet for [USER-NAME] to read.
+
+**Round 1 — Scope.** *Runs when the boundary of this work is not already settled.* What it covers and what it deliberately leaves out. Present by invoking the `/wait-options-coding` command procedure. **STOP.** Continue only on an answer, a "pass", or a "proceed".
+
+**Round 2 — Product flow.** *Runs when the change adds to or alters the flow the user actually experiences.* What happens differently and in what order, described in what the user does rather than what the code does. Build it from the confirmed scope, then present by invoking `/wait-options-coding`. **STOP.**
+
+**Round 3 — Technical core.** *Runs when the mechanism is not already settled in conversation.* The algorithm, data shape or logic pattern this is built on, named concretely. Build it from what the earlier rounds confirmed, then present. **STOP.**
+
+**Round 4 — Integration points.** *Runs when existing code will call into this, or this will call into existing code.* Where the new work is reached from, the contracts it consumes, the existing code it leans on, and the constraints that could break it. Build it from the confirmed core, then present. **STOP.**
+
+Do NOT proceed until every round that ran is confirmed.
 
 ### Step 4: Create Execution Plan
 
@@ -144,7 +153,7 @@ Use this structure when writing the plan in plan mode (or presenting in conversa
 [1-2 sentence description of what we're doing and why]
 
 ## Confirmed Decisions
-*Decisions made **by this plan** — both asked-and-confirmed by [USER-NAME] AND written-through (Zone A/B decisions with reasoning) — see /wait-options-coding. Inherited decisions belong above, not here.*
+*Decisions made **by this plan** — both asked-and-confirmed by [USER-NAME] AND written-through (Zone A and B decisions, recorded with their reasoning). Inherited decisions belong above, not here.*
 
 | # | Decision | Chosen | Reason |
 |---|----------|--------|--------|
