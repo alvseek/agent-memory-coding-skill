@@ -41,7 +41,7 @@ For each in-scope repo, **innermost submodule first**:
 
 1. **Stage** per Step 2 (`all` → `git add -A`; `agent` → `git add <agent-work paths>`, never `-A`).
 2. Run `git diff --cached --stat` to confirm what's staged. **If nothing is staged AND the branch is not ahead of its remote** (`git status -sb` shows no `[ahead N]`), this repo is already done → skip it silently. Do **NOT** halt — continue to the next repo.
-3. Otherwise **commit** the staged changes (provided message, or auto-generate), then **`git push`**. **Message style — self-contained**: describe *what changed + why* in plain prose; never reference plan-internal or process artifacts — decision letters (`A1`, `OQ2`), ADR numbers (`ADR-10`), or plan step/phase numbers. See the *Commit Message — Self-Contained* git fundamental.
+3. Otherwise **commit** the staged changes (provided message, or auto-generate), then **`git push`**. **Message style — self-contained**: describe *what changed + why* in plain prose; never reference plan-internal or process artifacts — decision letters (`A1`, `OQ2`), ADR numbers (`ADR-10`), or plan step/phase numbers. See the *Durable Artifacts Don't Point At Plans* coding reasoning pattern, which covers code comments and test names too.
 4. After pushing a **submodule**, stage + commit its **updated pointer** in the superproject.
 5. Treat a **non-zero `git push` exit** as a failure for that repo — do not retry elaborately; carry it to Step 4.
 
