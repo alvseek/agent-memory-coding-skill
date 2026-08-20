@@ -47,17 +47,9 @@ After investigation, assess whether this task is suitable for Quick Wizard (dire
 
 ### Step 3: Present Decisions — One Round per Category
 
-Decisions are not presented in one block. Each category from this procedure's opening gets its own round, in the order declared there, and every round is a gate: present, STOP, and wait for [USER-NAME] to clear it before building the next. The [Planning Decision component]([path-to-agent-memory-coding-skill]/components/planning-decision.md) governs what earns a place in a round and how a round is run — read and follow it before building Round 1.
+Decisions are not presented in one block. Each category from this procedure's opening gets its own round, in the order declared there, and every round is a gate: present, STOP, and wait for [USER-NAME] to clear it before building the next. The [Planning Decision component]([path-to-agent-memory-coding-skill]/components/planning-decision.md) governs what earns a place in a round and how a round is run — read and follow it before building the first round.
 
-Round 1 opens with the frame — what you take the task to be and the shape of the change you intend — because no plan section exists yet for [USER-NAME] to read.
-
-**Round 1 — Scope.** *Runs when the boundary of this work is not already settled.* What it covers and what it deliberately leaves out. Present by invoking the `/wait-options-coding` command procedure. **STOP.** Continue only on an answer, a "pass", or a "proceed".
-
-**Round 2 — Product flow.** *Runs when the change adds to or alters the flow the user actually experiences.* What happens differently and in what order, described in what the user does rather than what the code does. Build it from the confirmed scope, then present by invoking `/wait-options-coding`. **STOP.**
-
-**Round 3 — Technical core.** *Runs when the mechanism is not already settled in conversation.* The algorithm, data shape or logic pattern this is built on, named concretely. Build it from what the earlier rounds confirmed, then present. **STOP.**
-
-**Round 4 — Integration points.** *Runs when existing code will call into this, or this will call into existing code.* Where the new work is reached from, the contracts it consumes, the existing code it leans on, and the constraints that could break it. Build it from the confirmed core, then present. **STOP.**
+Present the [planning rounds]([path-to-agent-memory-coding-skill]/components/planning-rounds.md).
 
 Do NOT proceed until every round that ran is confirmed.
 
