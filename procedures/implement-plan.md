@@ -12,5 +12,6 @@ Let's start implementing now. Follow the **Execution Protocol for AI** from the 
 4. **Execute steps in order** — implement one step at a time, sequentially
 5. **Log each step's completion** — after finishing a step, go back to the plan's implementation log and fill in what was done before moving to the next step
 6. **If blocked or unclear** — STOP and ask [USER-NAME] before proceeding, do not assume
+7. **If there's no blocker or a STOP mark, continue until it's finished** — no need to stop and confirm at each phase, unless the memory context is below 20% left
 
 Start with Step 1 of the plan now.
