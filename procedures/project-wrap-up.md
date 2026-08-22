@@ -1,8 +1,8 @@
 # Project Wrap Up Session
 
-End-of-session **full** orchestrator (coding/environment add-on): push the project's work → memory wrap-up → orientation map refresh → push memory → final summary with a push-completion gate. Composes the core memory-only /wrap-up with git + orientation-map steps.
+End-of-session **full** orchestrator (coding/environment add-on): push the project's work → update memory → refresh the orientation map → push everything those steps wrote → final summary with a push-completion gate. It borrows the core memory update and adds the project and orientation-map work around it.
 
-**Delta-aware**: the memory wrap-up (Step 2) re-scopes to the delta on re-run. `/project-wrap-up fresh` forces full-session re-eval.
+**Delta-aware**: the memory update (Step 2) re-scopes to the delta on re-run. `/project-wrap-up fresh` forces full-session re-eval.
 
 **Execution style**: silent. Run Steps 1-5 silently — tool calls (bash, edit, write) stay visible, but no prose narration of phases. Produce ONE summary block at Step 5 as the only user-facing output.
 
@@ -26,7 +26,7 @@ Push the agent's **project** work FIRST, so a merge request / PR can be opened i
 
 Tool calls visible (git commands); capture per-repo commit hashes + user-files-left counts for Step 5.
 
-### Step 2: Project Context Gate + Memory Wrap-Up (silent)
+### Step 2: Project Context Gate + Memory Update (silent)
 
 **First — the Project Context Gate** (the memory core is project-blind; the coding overlay owns project-context). Evaluate whether this session produced project-specific context worth persisting:
 - Project-specific conventions, setup, deployment, env details?
@@ -35,7 +35,9 @@ Tool calls visible (git commands); capture per-repo commit hashes + user-files-l
 
 **YES to any** → run `/update-project-context` for the material (it resolves central vs localized home itself). Run it **before** the memory wrap-up below, so the core `/update-memory` promotion pre-scan catches the write and records it in the episodic **Promotions** field. **NO to all** → skip silently.
 
-**Then — the memory wrap-up**: Execute the core /wrap-up **memory steps** (Save Memory via `/update-memory` + Extract Open Items), passing `fresh` through if present. Capture its memory-update results (mode, gate decisions, episodic entry, carry-forward count, promotions, emotional status) and the open-item lists as data for Step 5. Do NOT print `/wrap-up`'s own Memory Summary separately — it folds into Step 5.
+**Then — the memory update**: Execute **`/update-memory`**, passing `fresh` through if present. Capture its results (mode, gate decisions, episodic entry, carry-forward count, promotions, emotional status) as data for Step 5, together with the **`Tech Debts` + `Next Steps`** it hands up from the sub-episode just written (the return contract `/update-episodic` declares). Print nothing here — it all folds into Step 5.
+
+> **Why this borrows one step rather than running the core `/wrap-up` whole.** That procedure also *persists* the memory store immediately after updating it, which here would fire too early: Step 3 refreshes the orientation map and Step 4 has to capture those writes too. So take the memory update and its returned open items, and leave the persistence to Step 4, where one call covers both repos at once.
 
 ### Step 3: Refresh Orientation Map (silent)
 
@@ -45,13 +47,15 @@ If this session touched orientation docs (READMEs, architecture, flow diagrams, 
 
 Silent no-op if no map exists or no orientation docs touched. Capture refresh count / no-op reason for Step 5.
 
-### Step 4: Push Memory (silent) — MANDATORY
+### Step 4: Push Everything Steps 2–3 Wrote (silent) — MANDATORY
 
-Execute **`/push-memory <mode>`** for the **agent-memory store** **and** **`/push-project <mode>`** again to capture the **project memory files** Steps 2–3 just wrote (localized `.agents/**` + refreshed `docs/` orientation/context docs). Invoking `/project-wrap-up` IS the authorization to commit + push. This captures the episodic / emotional / reasoning / knowledge writes that the Step 1 project push ran too early to include. In the default `agent` mode both stage only this agent's own work (never a blanket `git add -A`), leaving other agents' in-flight memory and the user's project changes untouched; `all` mode pushes both full trees.
+Execute **`/push-all <mode>`** — one call covering the agent-memory store and the working project together. Invoking `/project-wrap-up` IS the authorization to commit + push. Its memory half captures the episodic / emotional / reasoning / knowledge writes that the Step 1 project push ran too early to include; its project half captures the project memory files Steps 2–3 just wrote (localized `.agents/**` plus refreshed `docs/` orientation and context docs). In the default `agent` mode both leaves stage only this agent's own work (never a blanket `git add -A`), leaving other agents' in-flight memory and the user's project changes untouched; `all` mode pushes both full trees.
+
+> **Why the project is pushed twice, and why that is not redundant.** Step 1 exists so a merge request can open without waiting for the memory update. Step 4 exists because Steps 2–3 write more files after that. Collapsing them into a single push at either end breaks the completion gate: push only at the start and the memory written afterwards is never saved, so the gate reports INCOMPLETE every run; push only at the end and the early merge request Step 1 exists for never happens.
 
 Tool calls visible (git commands); capture per-repo commit hashes + agent-work-pushed status for Step 5.
 
-**Then verify (drives the Step 5 completion gate)**: from the leaf pushers' `git status -sb [ahead N]` verification (Step 4 of `/push-project` + `/push-memory`) across Step 1 (project) + Step 4 (memory + project-memory), record per repo whether **every agent-work path is committed AND pushed** (branch not ahead of remote) + a count of user files left. **Excluded repos are exempt** (report as `skipped (excluded)`). Do NOT attempt elaborate recovery — if an *agent-work* push fails or any agent-work path remains, that is carried to Step 5, where the wrap-up fails loudly.
+**Then verify (drives the Step 5 completion gate)**: from the leaf pushers' `git status -sb [ahead N]` verification (Step 4 of `/push-project` + `/push-memory`, reached directly in Step 1 and through `/push-all` in Step 4) across both pushes, record per repo whether **every agent-work path is committed AND pushed** (branch not ahead of remote) + a count of user files left. **Excluded repos are exempt** (report as `skipped (excluded)`). Do NOT attempt elaborate recovery — if an *agent-work* push fails or any agent-work path remains, that is carried to Step 5, where the wrap-up fails loudly.
 
 ### Step 5: Final Summary (only visible output)
 

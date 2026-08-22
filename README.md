@@ -17,7 +17,7 @@ This repo holds every coding- and repository-oriented procedure that sits **on t
 - **Wizards**: `high-wizard`, `quick-wizard`, `council-of-wizards`, `rite-of-creation`, `forge-of-covenant`, `implement-plan`
 - **Doc-gen**: `generate-readme`, `generate-docs`, `generate-architecture-docs`, `generate-domain-docs`, `generate-flow-docs`, `discovery-contract`
 - **QA**: `analyze-code-quality`, `generate-standard`, `pixel-wizard`, `setup-qa-visual-instrument`, `setup-qa-instrument` (legacy monolith, being decomposed) — plus the QA instrument pipeline: `map-qa-instrument` (audit) → `build-qa-bench` (build the rig) → `build-qa-test` (build the tests) → `run-qa-test` (run them)
-- **Repo / integration**: `map-orientation`, `localize-context`, `update-project-context`, `load-project-context`, `pull-all`/`pull-project`, `push-all`/`push-project`/`push-agent-work`, `push-exclude-policy`
+- **Repo / integration**: `map-orientation`, `localize-context`, `update-project-context`, `load-project-context`, `pull-all`/`pull-project`, `push-all`/`push-project`
 - **Fleet**: `ask-agent`, `delegate-agent`, `setup-fleet` (+ `fleet-scripts/` and fleet templates) — agent-to-agent consult/delegate via Claude-Code session spawn/resume (a mechanism a chat agent can't use, so it's an overlay capability)
 
 > **`push-memory`/`pull-memory`** live in the memory **core** (moved 2026-08-07) — persisting the memory store is the memory server's own job; the overlay's `push-all`/`pull-all` compose `/push-project` (overlay) + the core's `/push-memory`.

@@ -16,7 +16,7 @@ Examples: `/push-project` (all, auto-msg) · `/push-project agent` · `/push-pro
 
 ## Procedure
 
-> **Push-exclude list (check first).** Honor the shared /push-exclude-policy — excluded repos/submodules are never committed or pushed and never counted against completion (`skipped (excluded)`).
+> **Push-exclude list (check first).** Read and follow the [Push Exclude Policy component]([path-to-agent-memory-coding-skill]/components/push-exclude-policy.md) — excluded repos/submodules are never committed or pushed and never counted against completion (`skipped (excluded)`).
 
 > **In-scope repos.** The working project repo and its **owned git submodules** (recurse). A superproject's `git status` shows a dirty submodule only as a one-line gitlink — it does NOT reveal uncommitted files *inside* the submodule, and `git add` on the gitlink records only the pointer. So you MUST enter each owned submodule and commit/push **inside it first**, then commit the updated pointer in its superproject. Always process submodules **before** their superproject.
 
