@@ -394,7 +394,6 @@ Every fixture carries, as a comment at the top:
 - **/build-qa-bench** — upstream sibling. Builds the rig these tests run on and owns the `qa/README.md` index. Phase 0 gates on its output: no working R/I/A/O loop, no tests.
 - **/run-qa-test** — downstream. Consumes everything built here: fixtures for Tactic B, runbook scenarios for Tactic A, checklists for a guided manual pass. A missing fixture comes back here via `--fixture`, never improvised there.
 - **/high-wizard · /quick-wizard · /pixel-wizard** — callers. Each delegates here as its **QA Handoff** step (HW 17 / QW 8 / pixel 19), automatically and without prompting, then records the checklist path or the auto-skip reason in the plan's `## QA HANDOFF` section.
-- **/setup-qa-instrument** — the legacy monolith whose runbook / playbook / checklist / fixture shapes now live here.
 
 ---
 

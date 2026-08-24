@@ -361,7 +361,6 @@ QA map rescanned: qa/qa-map.md
 - **/build-qa-bench** — the rig builder. Reads this map to know what to skip vs. generate; owns scripts · seeds · config **and** writes the `qa/README.md` index this skill verifies.
 - **/build-qa-test** — the test builder. Owns runbooks · playbook · checklists · fixtures. Bench before tests — a fixture has nothing to build against until the loop runs.
 - **/run-qa-test** — consumes the built instrument at runtime, resolving the loop from the index this skill checks. The map tells it which runbooks, scenarios, and fixtures exist before a run.
-- **/setup-qa-instrument** — the legacy monolith, superseded by the four skills above. It references these canonical definitions rather than restating them.
 - **/map-orientation** — the general-docs sibling. Same read-only, map-then-act philosophy; this one is QA-scoped.
 
 ---

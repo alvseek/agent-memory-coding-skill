@@ -218,7 +218,6 @@ Seeds are *sources*, not scripts: the dumps, snapshots, or generator inputs INJE
 - **/map-qa-instrument** — upstream. Canonical home for the loop / ontology / ownership / grading. Supplies the gap list and the index-integrity check; called with `--rescan` at the end.
 - **/build-qa-test** — downstream sibling. Owns everything this skill refuses: runbooks, playbook, checklists, fixtures, and the scenarios inside them. Bench first, then tests — a fixture has nothing to build against until the loop runs.
 - **/run-qa-test** — downstream. Build does a light self-smoke only; the repeatable runtime proof is `/run-qa-test`'s job, resolved from the index this skill writes.
-- **/setup-qa-instrument** — the legacy monolith this skill and its siblings replace.
 
 ---
 
