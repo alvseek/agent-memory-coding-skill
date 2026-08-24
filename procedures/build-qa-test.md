@@ -46,6 +46,7 @@ Read `qa/README.md`'s **R/I/A/O Loop** table, and the map's **index-integrity** 
 | Any row `DEAD` or `DIVERGED` | **STOP** — the index points at the wrong mechanism. `/build-qa-bench` repairs the link; building tests now would validate against a loop nobody chose. |
 
 > **Why this gate is hard.** A fixture's job is to produce the state a real stage would have left behind. Without a working RESET you cannot reach a known baseline to build against, and without OBSERVE you cannot prove the fixture landed. Tests built on an unbuilt bench are unverifiable by construction — they look like coverage and are not.
+
 Then jump to the matching mode block below — read only that block.
 
 ---
