@@ -182,7 +182,7 @@ The delegated procedure will:
 
 3. **Resume control** here after `/analyze-code-quality` completes. Proceed to Step 17 (Build QA Checklist).
 
-### Step 17: Build QA Checklist (Delegated to `/build-qa-test --checklist`)
+### Step 17: Build QA Checklist (Delegated to `/generate-qa-checklist`)
 
 After Quality Review is resolved, hand this plan off to QA by building its verification checklist. Static quality review (Step 16) answered *"is the code clean?"*; this step produces the artifact that will answer *"is it actually right?"* — **later, by a human, with the stack up.**
 
@@ -190,7 +190,7 @@ After Quality Review is resolved, hand this plan off to QA by building its verif
 
 1. **Collect scope**: Identify all files created or modified during implementation from this plan's Execution Log. That list, plus this plan itself, is the **caller-passed scope**.
 
-2. **Invoke `/build-qa-test --checklist`** with this plan as the scope input.
+2. **Invoke `/generate-qa-checklist`** with this plan as the scope input.
 
 The delegated procedure will:
 - **Check the QA instrument is set up** — a `qa/qa-map.md` from `/map-qa-instrument`, and a built bench from `/build-qa-bench`. If either is absent it **notifies loudly and auto-skips** rather than inventing a `qa/` folder this project never opted into.

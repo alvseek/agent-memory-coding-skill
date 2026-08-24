@@ -1,14 +1,14 @@
 # Build QA Test
 
-Build a project's QA **tests** — everything that runs on the bench. Goal-driven and map-aware: you name a flow, a shipped plan, or a single missing fixture, and this skill builds what's needed to verify it.
+Build a project's QA **tests** — everything that runs on the bench. Goal-driven and map-aware: you name a flow or a single missing fixture, and this skill builds what's needed to verify it.
 
-Scope is the **test layer**: `qa/runbooks/`, `qa/playbook.md`, `qa/checklists/`, `qa/fixtures/`, and the Act + Observe scenarios inside the runbooks and the playbook. The **rig** it all runs on (scripts · seeds · config + the `qa/README.md` R/I/A/O index) belongs to `/build-qa-bench`; actually running these belongs to `/run-qa-test`.
+Scope is the **evergreen test layer**: `qa/runbooks/`, `qa/playbook.md`, `qa/fixtures/`, and the Act + Observe scenarios inside the runbooks and the playbook. The per-feature checklist a shipped change earns belongs to `/generate-qa-checklist`; the **rig** it all runs on (scripts · seeds · config + the `qa/README.md` R/I/A/O index) belongs to `/build-qa-bench`; actually running these belongs to `/run-qa-test`.
 
 > **Canonical definitions live in `/map-qa-instrument`** — the R/I/A/O loop, the 7 artifact categories, the ownership split, and the `documented / tribal / missing` grading. The Tactic-B consumption rules live in `/run-qa-test`. This skill references *up* to both; it does not restate them.
 
 Pipeline: **`/map-qa-instrument` (audit) → `/build-qa-bench` (build the rig) → `/build-qa-test` (build the tests) → `/run-qa-test` (run them).**
 
-> **Built per-flow and per-feature, never up front.** A fixture only has meaning relative to a flow stage; a checklist only relative to a shipped change. There is no "scaffold all the tests" mode — that produces empty folders that lie about coverage.
+> **Built per-flow, never up front.** A fixture only has meaning relative to a flow stage, so there is no "scaffold all the tests" mode — that produces empty folders that lie about coverage.
 
 ## Arguments
 
@@ -17,11 +17,10 @@ Pipeline: **`/map-qa-instrument` (audit) → `/build-qa-bench` (build the rig) �
 | Invocation | Trigger | Builds |
 |---|---|---|
 | `/build-qa-test [flow]` | you're about to verify a flow or feature | fixtures + the Act/Observe scenario + the runbook or playbook that holds it |
-| `/build-qa-test --checklist [plan]` | a wizard plan just shipped | the per-feature checklist |
 | `/build-qa-test --fixture [stage]` | `/run-qa-test` hit a missing fixture mid-run | that one fixture |
 | `/build-qa-test` | — | read the map, show what the bench can run but has no tests for, and ask |
 
-Flow mode builds *before* a run; checklist mode builds *after* a feature lands. Same owner, different moment.
+Both modes build *before* a run — flow mode for a whole flow, fixture mode for the one stage a run tripped over.
 
 ---
 
@@ -33,7 +32,7 @@ Flow mode builds *before* a run; checklist mode builds *after* a feature lands. 
 
 Read `qa/qa-map.md` + its sub-maps. If absent → **STOP**: *"No QA map — run `/map-qa-instrument create` first."* This skill is map-driven; it never re-scans.
 
-Note what already exists in the test layer: `qa/fixtures/` entries, `qa/checklists/` (active and `completed/`), which runbooks exist, and whether `qa/playbook.md` does. Respect the project's real folder names — the map records any drift.
+Note what already exists in the test layer: `qa/fixtures/` entries, which runbooks exist, and whether `qa/playbook.md` does. Respect the project's real folder names — the map records any drift.
 
 ### Step 2: Gate on the bench
 
@@ -47,22 +46,6 @@ Read `qa/README.md`'s **R/I/A/O Loop** table, and the map's **index-integrity** 
 | Any row `DEAD` or `DIVERGED` | **STOP** — the index points at the wrong mechanism. `/build-qa-bench` repairs the link; building tests now would validate against a loop nobody chose. |
 
 > **Why this gate is hard.** A fixture's job is to produce the state a real stage would have left behind. Without a working RESET you cannot reach a known baseline to build against, and without OBSERVE you cannot prove the fixture landed. Tests built on an unbuilt bench are unverifiable by construction — they look like coverage and are not.
-
-**Checklist mode gates differently — instrument set up, or auto-skip.** `--checklist` is usually invoked by a wizard mid-sweep, where a blocking prompt would stall an automated flow. So it checks one thing — **is the QA instrument set up at all?** — meaning both a `qa/qa-map.md` from `/map-qa-instrument` **and** a built bench from `/build-qa-bench`.
-
-- **Both present** → proceed.
-- **Either absent** → **notify loudly and auto-skip.** Do not prompt, do not build:
-
-  ```
-  ⚠️ QA instrument not set up — checklist SKIPPED.
-     Missing: [no qa/qa-map.md | bench not built | both]
-     To enable: /map-qa-instrument create  →  /build-qa-bench
-  ```
-
-  Return the skip + reason to the caller (a wizard records it in its `## QA HANDOFF` section). Never invent a `qa/` folder for a project that hasn't opted into the ontology — a checklist appearing in a repo with no QA instrument is an artifact nobody agreed to own.
-
-> The bench requirement here is about **opt-in, not capability**. A checklist is human-runnable and would work fine without a scripted loop; the gate exists so "the project uses this QA system" is one unambiguous condition rather than a judgment call made differently each run.
-
 Then jump to the matching mode block below — read only that block.
 
 ---
@@ -140,7 +123,7 @@ Stub anything project-specific with a single `TODO:` rather than guessing a tabl
 
 ### F6: BUILD — the scenario (only if it earns its place)
 
-> **First ask whether this scenario should exist at all.** A runbook's scenario section is **empty by default**, and that is a healthy state, not a gap. Add one only when a durable, non-obvious invariant is worth re-running every time — typically something a real bug already taught you. Per-feature verification belongs in a **checklist**; a one-off proof belongs in a **Tactic-B run**. Pre-writing per-module scenarios for hypothetical failures produces text nobody trusts and everybody skips.
+> **First ask whether this scenario should exist at all.** A runbook's scenario section is **empty by default**, and that is a healthy state, not a gap. Add one only when a durable, non-obvious invariant is worth re-running every time — typically something a real bug already taught you. Per-feature verification belongs in a **checklist** (`/generate-qa-checklist`); a one-off proof belongs in a **Tactic-B run**. Pre-writing per-module scenarios for hypothetical failures produces text nobody trusts and everybody skips.
 >
 > If nothing qualifies, say so and move on. The module is still covered: `/run-qa-test` Tactic A runs the bench loop plus the runbook's daily-loop path regardless.
 
@@ -197,58 +180,6 @@ Re-run `/map-qa-instrument --rescan` so the map's grades reflect the newly-built
 - Teardown-clean confirmation.
 - Remaining gaps + the `--rescan` result.
 - Pointer to `/run-qa-test [flow]` to actually run it.
-
----
-
-## Checklist Mode (`--checklist [plan]` arg)
-
-*Builds a per-feature checklist from a shipped change. This is the wizards' **QA Handoff** step (HW 17 / QW 8 / pixel 19) — the last thing a sweep does before archiving the plan — or standalone.*
-
-> **The wizard does not verify; it hands off.** A sweep is a coding session with the QA stack almost certainly down, so it produces the verification *plan* and leaves the verification itself to `/run-qa-test` in a session where the stack is up. That makes this checklist the sweep's only QA output — if it's thin or restates the plan, the feature effectively ships unverified.
-
-### K1: Read the plan for SCOPE
-
-Read the plan (or the change set, if no plan). Extract only **what changed**:
-
-- the modules and apps touched, and which are *not* touched
-- the acceptance criteria and any contracts the plan pinned
-- what the plan claims is already covered by automated tests
-
-This is the **input**, not the authority. The plan tells you where to look; it does not tell you what to check.
-
-### K2: Derive RISK independently
-
-Now work out what the change could **break**. This is the half a plan cannot give you, and it is the reason the checklist exists.
-
-Draw on:
-- **Invariants** — state rules that must hold before and after. Write each as *a thing to disprove*, not a thing to confirm.
-- **Regression surface** — what else reads or writes the same state, and what the change could have silently altered for it.
-- **Boundaries and error paths** — empty, zero, already-in-that-state, concurrent, and the failure branch nobody exercised.
-- **Cross-module effects** — what downstream consumers assume about the data this change now produces differently.
-- **History** — prior checklists in `qa/checklists/completed/` and past defects in this area. Bugs cluster.
-
-> **Why this step is non-negotiable.** The author of a change cannot see the case they didn't think of — if they had, they'd have coded it. A checklist derived only from the plan tests that the developer did what they said, not that the system still works, so every item passes by construction. Two shapes, to make the difference concrete:
->
-> | | |
-> |---|---|
-> | Plan-restating | *"Confirm auto-checklab creates a pending lab request."* — restates the feature |
-> | Risk-derived | *"Verify `FishInDate` is not nulled by release or unhold."* — probes what the feature could have broken |
-
-### K3: Write the checklist
-
-Use the [Checklist template](#checklist-template) at `qa/checklists/{feature}.md`.
-
-- Lead with a **terminology / state-model block** if the change turns on states a tester must hold in their head.
-- Give a **single happy-path scenario first** that walks the whole change end to end, then per-area sections to isolate a failure.
-- Mark each item **automated** (naming the test) or **manual**, so nobody re-runs by hand what CI already proves, and nobody assumes the automated half covers the manual half.
-- Note which items are UI-bound — those are the ones an all-green automated run does **not** cover.
-- Leave `## Result` as the template's *"not yet run"* placeholder. `/run-qa-test` owns it.
-
-> **A coverage row must be scoped to what the test can actually *fail on*, not to what it asserts.** The two differ whenever a test reconstructs a production sequence by hand instead of calling it: the assertions pass, but a change to the real caller — a branch rewired, a step dropped — leaves the test green. Before writing a row, ask *"what edit to production code would break this feature and NOT break this test?"* Anything on that list belongs in the **Still manual** column. An em-dash there is a strong claim: it says an all-green run leaves nothing unchecked for this item.
-
-### K4: Report
-
-Feature, source plan, item count split automated vs manual, and the pointer to `/run-qa-test --checklist qa/checklists/{feature}.md`.
 
 ---
 
@@ -339,41 +270,6 @@ File: `qa/playbook.md`. Only for multi-module projects — a single-app project'
  Cover system invariants, not every variant.>
 ```
 
-### Checklist template
-
-File: `qa/checklists/{feature}.md` → archived to `completed/` on sign-off.
-
-```markdown
-# {Feature} — QA Checklist
-
-**Source**: <plan or change set this verifies>
-**Purpose**: <what a tester confirms by running this>
-**Apps under test**: <modules touched — and note what is deliberately NOT touched>
-
-## Terminology & state model (read first)
-<only if the change turns on states the tester must hold in their head>
-
-**Key invariants** (each is a thing to *disprove*):
-- <invariant>
-
-## Happy path — single end-to-end scenario (run this first)
-<numbered walk of the whole change; each step points at its detailed section below>
-
-## Automated coverage
-| Checklist item | Automated test | Still manual |
-|---|---|---|
-
-## Checks
-- [ ] <observable behavior + expected result>
-- [ ] <edge case / error path + expected result>
-
-## Result
-
-*Not yet run. `/run-qa-test --checklist` writes this section — see its Run record.*
-```
-
-> **`## Result` is created empty here and written only by `/run-qa-test`.** This skill builds the checklist; the runner records what happened to it. Keep the placeholder line in — an absent section reads as "this checklist has no result yet defined", while an explicit *"not yet run"* is a fact a reader can act on. One writer per section is what stops the record from drifting.
-
 ### Fixture header
 
 Every fixture carries, as a comment at the top:
@@ -392,20 +288,19 @@ Every fixture carries, as a comment at the top:
 
 - **/map-qa-instrument** — upstream. Canonical home for the loop / ontology / ownership / grading. Supplies the gap list; called with `--rescan` at the end.
 - **/build-qa-bench** — upstream sibling. Builds the rig these tests run on and owns the `qa/README.md` index. Phase 0 gates on its output: no working R/I/A/O loop, no tests.
-- **/run-qa-test** — downstream. Consumes everything built here: fixtures for Tactic B, runbook scenarios for Tactic A, checklists for a guided manual pass. A missing fixture comes back here via `--fixture`, never improvised there.
-- **/high-wizard · /quick-wizard · /pixel-wizard** — callers. Each delegates here as its **QA Handoff** step (HW 17 / QW 8 / pixel 19), automatically and without prompting, then records the checklist path or the auto-skip reason in the plan's `## QA HANDOFF` section.
+- **/run-qa-test** — downstream. Consumes everything built here: fixtures for Tactic B, runbook scenarios for Tactic A. A missing fixture comes back here via `--fixture`, never improvised there.
+- **/generate-qa-checklist** — sibling. Owns the per-feature checklist, which is where a shipped change gets verified; the wizards call it directly as their QA Handoff step, never this skill.
 
 ---
 
 ## Anti-Patterns
 
 1. **Fixturing the step under test.** The one thing that must be driven for real. A fixture standing in for it proves nothing and hides the bug you were looking for.
-2. **Restating the plan.** A checklist whose every item mirrors an acceptance criterion tests only that the developer did what they said. The items that earn their place are the ones probing what the change could have broken.
-3. **Scaffolding empty fixture or checklist folders.** An empty `qa/checklists/` reads as "we have checklists" to everyone who sees it. Build per-flow, per-feature, or build nothing.
-4. **Pre-writing runbook scenarios for hypothetical failures.** An empty scenario section is the right default. A speculative scenario rots, and a stale one is worse than none because someone will trust it. Write one when a real bug earns it.
-5. **Claiming a fixture works before running it.** F7 exists because an unrun fixture is a belief, not an asset.
-6. **Skipping the fidelity check on a hand-rolled seed.** A rung-3 fixture is a guess about a stage's output; unchecked, it silently validates impossible states.
-7. **Vague expectations.** "Works correctly" cannot fail, so it can never catch a regression. Write the exact delta.
-8. **Inventing module knowledge to fill a runbook.** A `TODO:` is honest; a plausible-sounding wrong command costs the next person an hour.
-9. **Building the rig here.** Scripts, seeds, and config are `/build-qa-bench`'s. If the loop is missing, stop and send the user there — don't quietly build half a bench.
-10. **Restating bench commands in a runbook.** Link the mechanism from the README index instead; a copied command drifts the moment the script changes.
+2. **Scaffolding empty fixture folders.** An empty `qa/fixtures/` reads as "we have fixtures" to everyone who sees it. Build per-flow, or build nothing.
+3. **Pre-writing runbook scenarios for hypothetical failures.** An empty scenario section is the right default. A speculative scenario rots, and a stale one is worse than none because someone will trust it. Write one when a real bug earns it.
+4. **Claiming a fixture works before running it.** F7 exists because an unrun fixture is a belief, not an asset.
+5. **Skipping the fidelity check on a hand-rolled seed.** A rung-3 fixture is a guess about a stage's output; unchecked, it silently validates impossible states.
+6. **Vague expectations.** "Works correctly" cannot fail, so it can never catch a regression. Write the exact delta.
+7. **Inventing module knowledge to fill a runbook.** A `TODO:` is honest; a plausible-sounding wrong command costs the next person an hour.
+8. **Building the rig here.** Scripts, seeds, and config are `/build-qa-bench`'s. If the loop is missing, stop and send the user there — don't quietly build half a bench.
+9. **Restating bench commands in a runbook.** Link the mechanism from the README index instead; a copied command drifts the moment the script changes.

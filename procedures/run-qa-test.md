@@ -150,7 +150,7 @@ Use this to verify one specific feature/flow (e.g. *"auto fish-in quarantine"*).
 
 ### Step 3C: Guided Checklist Pass
 
-Read the checklist at the given path. If it doesn't exist, offer `/build-qa-test --checklist [plan]` and stop.
+Read the checklist at the given path. If it doesn't exist, offer `/generate-qa-checklist [plan]` and stop.
 
 1. **Bring the stack up** per the checklist's Preconditions (its runbook / the playbook).
 2. **Run the automated rows first** — the checklist's Automated coverage table names them. Report pass/fail per row; these need no human.
@@ -247,8 +247,9 @@ Apply approved fixes in one batch. Re-run the loop (Step 3A, 3B, or 3C, whicheve
 
 - **/map-qa-instrument** — canonical home for the loop, ontology, ownership, and grading. Its index-integrity check is what guarantees the table this skill reads still resolves.
 - **/build-qa-bench** — upstream. Builds the loop engine and writes the `qa/README.md` R/I/A/O table Step 3A resolves from.
-- **/build-qa-test** — upstream. Builds what this skill *runs*: fixtures (Tactic B), runbook and playbook scenarios (Tactic A), checklists (Tactic C). A missing fixture, runbook, or checklist is a hand-off to it, never an improvisation here.
-- **/high-wizard · /quick-wizard · /pixel-wizard** — **not** callers. Each stops at its **QA Handoff** step, delegating to `/build-qa-test --checklist` and leaving the plan explicitly *not runtime-verified*. Running that checklist is a separate, later invocation of this skill — which is why a wizard's completion report names the exact `/run-qa-test --checklist` command to run.
+- **/build-qa-test** — upstream. Builds what Tactics A and B *run*: fixtures, and the runbook and playbook scenarios. A missing fixture or runbook is a hand-off to it, never an improvisation here.
+- **/generate-qa-checklist** — upstream. Builds the per-feature checklist Tactic C walks. A missing checklist is a hand-off to it.
+- **/high-wizard · /quick-wizard · /pixel-wizard** — **not** callers. Each stops at its **QA Handoff** step, delegating to `/generate-qa-checklist` and leaving the plan explicitly *not runtime-verified*. Running that checklist is a separate, later invocation of this skill — which is why a wizard's completion report names the exact `/run-qa-test --checklist` command to run.
 - **archive-plan component** — used by Tactic C to move a signed-off checklist into `qa/checklists/completed/`.
 
 ---

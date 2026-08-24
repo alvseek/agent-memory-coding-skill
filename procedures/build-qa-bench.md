@@ -2,7 +2,7 @@
 
 Build a project's QA **bench** — the rig the tests run on — map-driven and honest. Reads the audit from `/map-qa-instrument`, then fills the gaps by progressively writing `qa/README.md` (the R/I/A/O spine) across a 4-phase lifecycle: **DEFINE → BUILD → TEST → DOCUMENT**.
 
-Scope is the **R/I/A/O loop engine only** — scripts · seeds · config, plus the `qa/README.md` index itself. A test bench resets to a known state, loads a specimen, drives it, and reads the output; that is exactly RESET → INJECT → ACT → OBSERVE. The **test layer** (runbooks · playbook · checklists · fixtures) belongs to `/build-qa-test`; the repeatable runtime proof belongs to `/run-qa-test`.
+Scope is the **R/I/A/O loop engine only** — scripts · seeds · config, plus the `qa/README.md` index itself. A test bench resets to a known state, loads a specimen, drives it, and reads the output; that is exactly RESET → INJECT → ACT → OBSERVE. The **test layer** (runbooks · playbook · fixtures) belongs to `/build-qa-test`, the per-feature checklist to `/generate-qa-checklist`; the repeatable runtime proof belongs to `/run-qa-test`.
 
 > **Canonical definitions live in `/map-qa-instrument`** — the R/I/A/O loop, the 7 artifact categories, the ownership split, and the `documented / tribal / missing` grading. This skill references *up* to those; it does not restate them.
 
@@ -20,7 +20,7 @@ Pipeline: **`/map-qa-instrument` (audit) → `/build-qa-bench` (build the rig) �
 
 If no arguments provided, load the map and ask which gap to build.
 
-> Test-layer targets (`runbooks`, `playbook`, `checklists`, `fixtures`) are **not** valid here — they belong to `/build-qa-test`. If one is passed, say so and hand off rather than building it.
+> Test-layer targets (`runbooks`, `playbook`, `fixtures`) are **not** valid here — they belong to `/build-qa-test`, and `checklists` to `/generate-qa-checklist`. If one is passed, say so and hand off rather than building it.
 
 ---
 
@@ -86,7 +86,7 @@ Fill **nothing else** in the README yet — you can't honestly document a loop t
 
 ### Step 5: Build the missing loop mechanisms
 
-**Scope: the R/I/A/O loop engine only** — the reset / inject / act / observe mechanisms (`scripts` + `seeds` + `config`). Build does **NOT** touch runbooks, the playbook, checklists, or fixtures. Those are `/build-qa-test`'s: it builds the bench, not the tests run on it.
+**Scope: the R/I/A/O loop engine only** — the reset / inject / act / observe mechanisms (`scripts` + `seeds` + `config`). Build does **NOT** touch runbooks, the playbook, fixtures, or checklists. Those belong to `/build-qa-test` and `/generate-qa-checklist`: this skill builds the bench, not the tests run on it.
 
 The default posture is **build**. Work each phase by its Status:
 
@@ -216,7 +216,8 @@ Seeds are *sources*, not scripts: the dumps, snapshots, or generator inputs INJE
 ## Integration With Other Procedures
 
 - **/map-qa-instrument** — upstream. Canonical home for the loop / ontology / ownership / grading. Supplies the gap list and the index-integrity check; called with `--rescan` at the end.
-- **/build-qa-test** — downstream sibling. Owns everything this skill refuses: runbooks, playbook, checklists, fixtures, and the scenarios inside them. Bench first, then tests — a fixture has nothing to build against until the loop runs.
+- **/build-qa-test** — downstream sibling. Owns everything this skill refuses: runbooks, playbook, fixtures, and the scenarios inside them. Bench first, then tests — a fixture has nothing to build against until the loop runs.
+- **/generate-qa-checklist** — downstream sibling. Owns the per-feature checklist; its gate reads this skill's output as the project's opt-in signal.
 - **/run-qa-test** — downstream. Build does a light self-smoke only; the repeatable runtime proof is `/run-qa-test`'s job, resolved from the index this skill writes.
 
 ---
@@ -226,7 +227,7 @@ Seeds are *sources*, not scripts: the dumps, snapshots, or generator inputs INJE
 1. **Fictionalizing a green loop.** A Status is `documented` only after Phase 3 actually ran it. Unbuilt or untested phases say so.
 2. **Building without a map.** Build is map-driven — no `qa/qa-map.md` → stop and run `/map-qa-instrument create`. Never re-scan here.
 3. **Documenting before building.** Phase 1 fills only the R/I/A/O intent; the rest of the README waits for Phase 4, so it describes reality, not intention.
-4. **Building test-layer content.** Runbooks, playbook, checklists, and fixtures are `/build-qa-test`'s. If the map shows those gaps, report them and hand off — don't quietly author half a test layer.
+4. **Building test-layer content.** Runbooks, playbook and fixtures are `/build-qa-test`'s, checklists `/generate-qa-checklist`'s. If the map shows those gaps, report them and hand off — don't quietly author half a test layer.
 5. **Rewriting an adopted script.** A `tribal` mechanism is promoted by *linking* it in the index, not by moving, renaming, or restyling it. Touching it turns a one-line fix into a regression risk.
 6. **Building a second script for a diverged index.** A `DIVERGED` row means the index points at the wrong file, not that the mechanism is missing. Repoint the link.
 7. **Clobbering a hand-written README.** If `qa/README.md` exists, reconcile — add missing sections, preserve good content.

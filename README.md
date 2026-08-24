@@ -16,7 +16,7 @@ This repo holds every coding- and repository-oriented procedure that sits **on t
 - **Lifecycle**: `project-wrap-up.md` (composes the core `/wrap-up`, then push + map-orientation)
 - **Wizards**: `high-wizard`, `quick-wizard`, `council-of-wizards`, `rite-of-creation`, `forge-of-covenant`, `implement-plan`
 - **Doc-gen**: `generate-readme`, `generate-docs`, `generate-architecture-docs`, `generate-domain-docs`, `generate-flow-docs`, `discovery-contract`
-- **QA**: `analyze-code-quality`, `generate-standard`, `pixel-wizard`, `setup-qa-visual-instrument` — plus the QA instrument pipeline: `map-qa-instrument` (audit) → `build-qa-bench` (build the rig) → `build-qa-test` (build the tests) → `run-qa-test` (run them)
+- **QA**: `analyze-code-quality`, `generate-standard`, `pixel-wizard`, `setup-qa-visual-instrument` — plus the QA instrument pipeline: `map-qa-instrument` (audit) → `build-qa-bench` (build the rig) → `build-qa-test` (build the evergreen tests) → `run-qa-test` (run them), with `generate-qa-checklist` producing the per-feature checklist a wizard hands off at its QA Handoff step
 - **Repo / integration**: `map-orientation`, `localize-context`, `update-project-context`, `load-project-context`, `pull-all`/`pull-project`, `push-all`/`push-project`
 - **Fleet**: `ask-agent`, `delegate-agent`, `setup-fleet` (+ `fleet-scripts/` and fleet templates) — agent-to-agent consult/delegate via Claude-Code session spawn/resume (a mechanism a chat agent can't use, so it's an overlay capability)
 
