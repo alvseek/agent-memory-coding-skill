@@ -23,7 +23,7 @@ Level 0 is the concrete change, so that is what you collect decisions about — 
 
 ### Step 1: Investigate and Collect Decisions
 
-**First, if launched as a sub-plan**: read and follow the [Subplan Handoff component]([path-to-agent-memory-coding-skill]/components/subplan-handoff.md) — **read side**. It tells you what you inherited, what you may not reopen, and where to find the payload if none was passed. Record it under `## Inherited Context` before investigating anything.
+**First, if launched as a sub-plan**: read and follow the [Subplan Handoff component]([path-to-agent-memory-coding-skill]/components/subplan-handoff-read.md). It tells you what you inherited, what you may not reopen, and where to find the payload if none was passed. Record it under `## Inherited Context` before investigating anything.
 
 Then read and follow the [Planning Investigation component]([path-to-agent-memory-coding-skill]/components/planning-investigation.md) — it runs the shared investigation checklist and produces the findings this plan's decisions are built from.
 

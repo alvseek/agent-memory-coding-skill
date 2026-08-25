@@ -13,17 +13,17 @@ If no arguments provided, ask: "What project do you want to plan across multiple
 
 ---
 
-## Procedure
+## Procedure Rules
 
 This is a **Level 4** wizard protocol, the highest: it orchestrates milestones, where each milestone runs as a `/rite-of-creation` (Level 3), `/council-of-wizards` (Level 2), `/high-wizard` (Level 1), `/pixel-wizard` (Level 1v), or `/quick-wizard` (Level 0). The flow is: Explore (7Q) → Decide (WAIT Options Round 1) → Plan (Roadmap + WAIT Options Round 2) → Detail (Milestones + WAIT Options Round 3) → Review → Execute.
 
 Level 4 is milestone altitude, so that is what you collect decisions about: the project vision and what "done" means for the whole of it, where each release boundary falls and what ships inside it, what is deliberately deferred and to which milestone, the principles and non-negotiables that bind every one of them, and the known debt along with where it gets paid. Disclose milestone-level shape: which services or components a release spans, and what must exist before the next milestone can begin. Everything below that belongs to someone else — phase structure to `/rite-of-creation`, feature decomposition to `/council-of-wizards`, implementation to `/high-wizard`, `/pixel-wizard`, or `/quick-wizard` — because at this altitude a stack or module choice is a guess about work three levels down. (`/wait-options-coding` governs *how* you present a decision, never *which* decisions are yours — that is this section.)
 
-A decision you push down does not disappear; it travels in the handoff, and the **Deferral & Debt Tracker** is the milestone-scoped form of the same discipline. That handoff is what every transfer out of this procedure carries — whether you are launching a milestone at Step 16 or de-escalating to `/rite-of-creation` at Step 10, read and follow the [Subplan Handoff component]([path-to-agent-memory-coding-skill]/components/subplan-handoff.md) (**write side**) and pass that payload with it. **A path alone is not a handoff.**
+A decision you push down does not disappear; it travels in the handoff, and the **Deferral & Debt Tracker** is the milestone-scoped form of the same discipline. That handoff is what every transfer out of this procedure carries — whether you are launching a milestone at Step 16 or de-escalating to `/rite-of-creation` at Step 10, read and follow the [Subplan Handoff component]([path-to-agent-memory-coding-skill]/components/subplan-handoff-write.md) and pass that payload with it. **A path alone is not a handoff.**
 
 ---
 
-### Phase 1: EXPLORE
+## Phase 1: EXPLORE
 
 *Open-ended 7Q discussion to build shared understanding of the project before any decisions are collected.*
 
@@ -100,11 +100,19 @@ This is the **exploration phase** — genuinely open-ended discussion, NOT struc
 
 This understanding informs the WAIT Options in Step 6.
 
+### ⛔ END OF PHASE 1
+
+Before preparing any decision, confirm all seven questions were genuinely discussed — a project-level decision built on a half-explored question cascades into every milestone beneath it.
+
+**Phase 2 requires the 7Q exploration to be complete. It opens by presenting Round 1 to [USER-NAME], so no separate confirmation is collected here.**
+
 ---
 
-### Phase 2: DECIDE
+## Phase 2: DECIDE
 
 *Convert exploration insights into concrete project-level decisions using WAIT Options Round 1.*
+
+*⛔ Prerequisite: Phase 1 (7Q Exploration) MUST be complete before starting this phase.*
 
 ### Step 6: Prepare + Present Project WAIT Options (Round 1)
 
@@ -147,11 +155,19 @@ After [USER-NAME] confirms the WAIT Options Round 1, fill the plan sections that
 
 8. **Fill [How Do We Ship This?]([path-to-agent-memory-coding-skill]/plan-templates/forge-of-covenant-plan-template.md#how-do-we-ship-this)** — Release Strategy, First Usable Version, Milestone Vision from the Q7 exploration.
 
+### ⛔ END OF PHASE 2
+
+The Round 1 decisions must be confirmed and the 7Q sections filled from them before the roadmap is built — the roadmap is a consequence of those decisions, never an independent draft.
+
+**Phase 3 requires [USER-NAME]'s confirmed Round 1 decisions. It presents the foundation together with the roadmap at Step 9, so no separate confirmation is collected here.**
+
 ---
 
-### Phase 3: PLAN
+## Phase 3: PLAN
 
 *Build the milestone roadmap from confirmed decisions and present the full project foundation for alignment.*
+
+*⛔ Prerequisite: Phase 2 (Round 1 project decisions) MUST be confirmed by [USER-NAME] before starting this phase.*
 
 ### Step 8: Fill Milestone Roadmap
 
@@ -207,11 +223,19 @@ Fill the assessment and decision.
 3. Launch `/rite-of-creation` with the project context — passing the handoff payload so the vision, decisions, and principles gathered above carry forward
 4. STOP this procedure
 
+### ⛔ END OF PHASE 3
+
+Milestone detail costs real exploration time, so nothing below this line runs until the roadmap is agreed and the project has earned Covenant altitude.
+
+**Phase 4 requires the Milestone Roadmap confirmed by [USER-NAME] at Step 9 and a passing scope gate at Step 10. If that gate failed, this procedure has already de-escalated and ended.**
+
 ---
 
-### Phase 4: DETAIL
+## Phase 4: DETAIL
 
 *Explore each milestone in depth and collect milestone-level decisions using WAIT Options Round 3.*
+
+*⛔ Prerequisite: Phase 3 (Milestone Roadmap + scope gate) MUST be confirmed by [USER-NAME] before starting this phase.*
 
 ### Step 11: Milestone Detail Exploration
 
@@ -250,15 +274,21 @@ After [USER-NAME] confirms WAIT Options Round 3:
 
 6. **Present** the filled tracking sections (milestone decisions, deferral tracker, updated risks, dependency graph, execution log) to [USER-NAME].
 
-STOP. Present to [USER-NAME] for review. Do NOT proceed until confirmed.
-
 **CRITICAL**: If any NEW decision is discovered during this step that was not covered in Step 12, STOP immediately. Present the new decision to [USER-NAME] with the same format (options + confidence + reason) before continuing. Do NOT write ahead on assumptions.
+
+### ⛔ END OF PHASE 4
+
+STOP. Present the filled tracking sections to [USER-NAME] and wait. Do NOT self-review a plan whose milestone decisions are still unconfirmed.
+
+**Phase 5 requires [USER-NAME]'s explicit confirmation of the Step 13 tracking sections. Do NOT proceed until confirmed.**
 
 ---
 
-### Phase 5: REVIEW
+## Phase 5: REVIEW
 
 *Self-review the complete plan for consistency, then present for final approval.*
+
+*⛔ Prerequisite: Phase 4 (milestone tracking sections) MUST be confirmed by [USER-NAME] before starting this phase.*
 
 ### Step 14: Self-Review + Auto-Fix
 
@@ -279,13 +309,21 @@ Do a self-review by thinking critically:
 
 ### Step 15: Final Review
 
-Read and follow the [Plan Final Review component]([path-to-agent-memory-coding-skill]/components/plan-final-review.md). STOP. Wait for instruction.
+Read and follow the [Plan Final Review component]([path-to-agent-memory-coding-skill]/components/plan-final-review.md).
+
+### ⛔ END OF PHASE 5
+
+STOP. Wait for [USER-NAME]'s instruction to begin executing milestones.
+
+**Phase 6 requires [USER-NAME]'s explicit instruction to start. Do NOT launch a milestone until instructed.**
 
 ---
 
-### Phase 6: EXECUTE
+## Phase 6: EXECUTE
 
 *Execute milestones following the dependency graph, with Covenant Reviews between each.*
+
+*⛔ Prerequisite: Phase 5 (Final Review) MUST be confirmed by [USER-NAME] before starting this phase.*
 
 ### Step 16: Execute Milestones
 
@@ -339,5 +377,9 @@ After all milestones are DONE and all Covenant Reviews completed:
 4. Present completion summary to [USER-NAME]
 
 After [USER-NAME] confirms project is complete, follow the [Archive Plan component]([path-to-agent-memory-coding-skill]/components/archive-plan.md) — move the entire covenant folder `[covenant-folder]`.
+
+### ⛔ END OF PHASE 6
+
+Protocol complete.
 
 ---
