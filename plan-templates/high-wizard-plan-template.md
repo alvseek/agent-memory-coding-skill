@@ -290,6 +290,7 @@ I have to use this document as my **ONLY** source of truth to execute and track 
 
 - **Scope**: [Modules touched — mapped from Execution Log scope]
 - **QA instrument**: [Set up (map + bench) / NOT SET UP — auto-skipped]
+- **Integration coverage**: [Filled at Step 14 from `/qa-status`. Either: "in scope — bench built, stack up; phases N, M carry integration tests" or "NONE — [which check failed], confirmed with [USER-NAME] before implementation"]
 - **Checklist**: [`qa/checklists/{feature}.md`, or "none — skipped, reason"]
 - **Coverage split**: [N automated (named tests) / N manual — of which N are UI-bound]
 - **Runtime verification**: **NOT DONE.** Next action: [`/run-qa-test --checklist qa/checklists/{feature}.md` once the stack is up | set up the instrument first: `/map-qa-instrument create` → `/build-qa-bench`]

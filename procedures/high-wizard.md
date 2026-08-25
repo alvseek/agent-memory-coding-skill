@@ -140,9 +140,18 @@ Fill the [Implementation Phases]([path-to-agent-memory-coding-skill]/plan-templa
 
 Read and follow the [Plan Self-Review + Auto-Fix component]([path-to-agent-memory-coding-skill]/components/plan-self-review.md). If no issues found, proceed silently to Step 14.
 
-### Step 14: Final Review
+### Step 14: Final Review + Integration Test Gate
 
 Read and follow the [Plan Final Review component]([path-to-agent-memory-coding-skill]/components/plan-final-review.md).
+
+Then settle, before any code is written, whether this plan's phases carry integration tests. Call `/qa-status` and read its bench and stack lines.
+
+- **Bench built and stack up** → every phase that crosses a real boundary the unit test had to double gets an `/integration-test` run during Step 15.
+- **Either missing** → tell [USER-NAME] which check failed and what would fix it, and confirm that continuing means this plan ships with no integration coverage.
+
+Either way, **write the answer into the plan's `## QA HANDOFF` section** under `Integration coverage`. An archived plan showing absent coverage with no reason attached is indistinguishable from one where nobody thought to look.
+
+> Whether a phase *needs* an integration test comes from the change — does it cross a boundary the unit test had to double? Whether the stack is up decides only whether that test can run now. Do not let an environment's state silently redefine what the change requires.
 
 ### ⛔ END OF PHASE 2
 
@@ -161,6 +170,8 @@ STOP. Wait for [USER-NAME]'s instruction to proceed to implementation.
 ### Step 15: Start Implementation
 
 After [USER-NAME] instructs to start implementing, start implementing following the **Execution Protocol for AI** from the plan file.
+
+Each phase closes on its own tests, per the plan's Definition of Done. Unit tests are written here, as they always have been. Where Step 14's gate came back ready and the phase crosses a real boundary, invoke `/integration-test [boundary]` for that phase as well — it builds the fixtures, writes the test, and runs it, all of which the stack being up makes possible.
 
 ### Step 16: Quality Review (Delegated to `/analyze-code-quality`)
 

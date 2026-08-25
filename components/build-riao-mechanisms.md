@@ -4,7 +4,7 @@ The per-phase scaffold recipes for `/build-qa-bench` **Step 5**. Run a recipe wh
 
 ## Shared discipline (every recipe)
 
-- **Loop engine only** — you're building `scripts` / `seeds` / `config`. Runbooks, the playbook, checklists, and fixtures belong to `/build-qa-test`.
+- **Loop engine only** — you're building `scripts` / `seeds` / `config`. Runbooks and the playbook come later in the same skill, once the loop runs; checklists belong to `/generate-qa-checklist` and fixtures to `/integration-test`.
 - **One mechanism per phase**, then **link it** in the `qa/README.md` R/I/A/O table's Mechanism cell — that link is how `/run-qa-test` resolves the phase, and it is the *only* wiring needed. Don't add an in-script category header; that contract is retired.
 - **Build in loop order** — RESET → INJECT → ACT → OBSERVE — because each phase's output is the next phase's precondition.
 - **Stub, don't guess** — where a project specific is unknown, leave one `TODO:` line rather than invent it.

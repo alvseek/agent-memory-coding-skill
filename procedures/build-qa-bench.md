@@ -2,11 +2,11 @@
 
 Build a project's QA **bench** — the rig the tests run on — map-driven and honest. Reads the audit from `/map-qa-instrument`, then fills the gaps by progressively writing `qa/README.md` (the R/I/A/O spine) across a 4-phase lifecycle: **DEFINE → BUILD → TEST → DOCUMENT**.
 
-Scope is the **R/I/A/O loop engine only** — scripts · seeds · config, plus the `qa/README.md` index itself. A test bench resets to a known state, loads a specimen, drives it, and reads the output; that is exactly RESET → INJECT → ACT → OBSERVE. The **test layer** (runbooks · playbook · fixtures) belongs to `/build-qa-test`, the per-feature checklist to `/generate-qa-checklist`; the repeatable runtime proof belongs to `/run-qa-test`.
+Scope is the **rig** — the R/I/A/O loop engine (scripts · seeds · config), the `qa/README.md` index, and the documents that describe how to operate it: the per-module **runbooks** and the cross-module **playbook**. A test bench resets to a known state, loads a specimen, drives it, and reads the output; that is exactly RESET → INJECT → ACT → OBSERVE, and a runbook is how a human walks that loop for one module. What runs *on* the rig belongs elsewhere: fixtures and integration tests to `/integration-test`, the per-feature checklist to `/generate-qa-checklist`, the repeatable runtime proof to `/run-qa-test`.
 
 > **Canonical definitions live in `/map-qa-instrument`** — the R/I/A/O loop, the 7 artifact categories, the ownership split, and the `documented / tribal / missing` grading. This skill references *up* to those; it does not restate them.
 
-Pipeline: **`/map-qa-instrument` (audit) → `/build-qa-bench` (build the rig) → `/build-qa-test` (build the tests) → `/run-qa-test` (run them).**
+Pipeline: **`/map-qa-instrument` (audit) → `/build-qa-bench` (build the rig) → `/integration-test` (build and run the tests) → `/run-qa-test` (system-level runtime proof).**
 
 > **The `qa/README.md` R/I/A/O table is the single index, and this skill is its only writer.** `/run-qa-test` resolves the loop from it — which script is RESET / INJECT / ACT / OBSERVE — by the table's Mechanism **links**. Producing that table, and the mechanisms it points to, is this skill's core output. There is no in-script header contract; that model is retired.
 
@@ -15,12 +15,12 @@ Pipeline: **`/map-qa-instrument` (audit) → `/build-qa-bench` (build the rig) �
 `$ARGUMENTS`
 
 - `/build-qa-bench` → **Default (incremental)**. Read the map, show the rig gap list (`tribal` + `missing`), pick one to build. One gap per run keeps it reviewable.
-- `/build-qa-bench [phase|category]` → Target one directly: `reset`, `inject`, `act`, `observe`, `scripts`, `seeds`, `config`.
+- `/build-qa-bench [phase|category]` → Target one directly: `reset`, `inject`, `act`, `observe`, `scripts`, `seeds`, `config`, `runbooks`, `playbook`.
 - `/build-qa-bench all` → Sweep every rig gap the map found in one run.
 
 If no arguments provided, load the map and ask which gap to build.
 
-> Test-layer targets (`runbooks`, `playbook`, `fixtures`) are **not** valid here — they belong to `/build-qa-test`, and `checklists` to `/generate-qa-checklist`. If one is passed, say so and hand off rather than building it.
+> `fixtures` is **not** a valid target here — fixtures exist to reach one test's precondition, so they belong to `/integration-test`; `checklists` belong to `/generate-qa-checklist`. If one is passed, say so and hand off rather than building it.
 
 ---
 
@@ -86,7 +86,7 @@ Fill **nothing else** in the README yet — you can't honestly document a loop t
 
 ### Step 5: Build the missing loop mechanisms
 
-**Scope: the R/I/A/O loop engine only** — the reset / inject / act / observe mechanisms (`scripts` + `seeds` + `config`). Build does **NOT** touch runbooks, the playbook, fixtures, or checklists. Those belong to `/build-qa-test` and `/generate-qa-checklist`: this skill builds the bench, not the tests run on it.
+**Scope: the R/I/A/O loop engine only** — the reset / inject / act / observe mechanisms (`scripts` + `seeds` + `config`). This phase does **NOT** touch fixtures or checklists — those belong to `/integration-test` and `/generate-qa-checklist` — nor the runbooks and playbook, which this skill writes later in Phase 4, once the loop they document actually runs.
 
 The default posture is **build**. Work each phase by its Status:
 
@@ -134,24 +134,35 @@ Fill [## Where Everything Lives]([path-to-agent-memory-coding-skill]/templates/q
 
 Fill [## Config Switching]([path-to-agent-memory-coding-skill]/templates/qa-readme-template.md#config-switching) — the project's exact local ↔ deploy swap. Invariant: committed config = deploy target; local overrides never committed.
 
-### Step 10: Fill Known Gaps / Debts
+### Step 10: Write the runbooks and the playbook
 
-Fill [## Known Gaps / Debts]([path-to-agent-memory-coding-skill]/templates/qa-readme-template.md#known-gaps--debts) from the map's still-open rows — both the rig gaps this run didn't build **and** the test-layer gaps that are `/build-qa-test`'s, marked as such so the reader knows where each goes. Be honest: this is what's not yet trustworthy.
+A runbook is how a human operates one module's loop; the playbook is how the modules are operated together. Both link the mechanisms Phase 2 built rather than restating their commands, which is why they are written here and not before the loop runs.
 
-### Step 11: Clean up + refresh the map
+**Per touched module**, create or refresh `qa/runbooks/{module}.md` from the [Runbook template](#runbook-template). Fill what this run actually taught you and leave a single `TODO:` per section rather than inventing module knowledge you do not have — a half-filled honest runbook beats a fully-filled speculative one. Its Reset and Inject sections **link** the README's mechanisms; they never copy the commands, which would drift the moment a script changes.
+
+**If the project spans modules**, create or refresh `qa/playbook.md` from the [Playbook template](#playbook-template) — the connection map, the full-system boot order, and the full-system smoke.
+
+Leave the `Act` / `Observe` scenario sections **empty**. They are part of the shape and `/run-qa-test` Tactic A resolves them by name when they exist, but nothing in this pipeline fills them yet; that owner is deferred. An empty scenario section is the documented default.
+
+### Step 11: Fill Known Gaps / Debts
+
+Fill [## Known Gaps / Debts]([path-to-agent-memory-coding-skill]/templates/qa-readme-template.md#known-gaps--debts) from the map's still-open rows — both the rig gaps this run didn't build **and** the test-layer gaps that belong to `/integration-test` and `/generate-qa-checklist`, marked as such so the reader knows where each goes. Be honest: this is what's not yet trustworthy.
+
+### Step 12: Clean up + refresh the map
 
 1. Delete every `<!-- tip -->` and the HOW-TO block from `qa/README.md`.
 2. Re-run `/map-qa-instrument --rescan` so the map's grades — and its index-integrity check — reflect the newly-built reality. The loop closes: **map → build → map.**
 
-### Step 12: Completion report
+### Step 13: Completion report
 
 Present a brief report to [USER-NAME]:
 - Rig gaps built this run + links repaired + what stayed `documented` (confirmed).
 - R/I/A/O loop status after the self-smoke, flagging any phase that is manual rather than scripted.
 - README sections filled.
-- Remaining rig gaps (deferred) and remaining test-layer gaps (→ `/build-qa-test`).
+- Runbooks written or refreshed this run, and whether the playbook was touched.
+- Remaining rig gaps (deferred) and remaining test-layer gaps (→ `/integration-test`, `/generate-qa-checklist`).
 - The `--rescan` result, including index integrity.
-- Pointer to `/build-qa-test` for the tests, then `/run-qa-test` for the full runtime proof.
+- Pointer to `/integration-test` for the tests, then `/run-qa-test` for the full runtime proof.
 
 ---
 
@@ -213,10 +224,88 @@ Seeds are *sources*, not scripts: the dumps, snapshots, or generator inputs INJE
 
 ---
 
+### Runbook template
+
+File: `qa/runbooks/{module}.md`. An operational how-to — **not** a 7Q README.
+
+```markdown
+# {Module} — QA Runbook
+
+> Tells the whole story of QA-ing this module. Read top-to-bottom first time; jump-to-section later.
+
+## Goal
+<single sentence: what this runbook helps you accomplish>
+
+## Preconditions
+<what must be running first; link the bench's ACT mechanism from qa/README.md>
+<link required config from qa/config/REQUIRED.md>
+
+## Reset → Clean State
+<link the bench's RESET mechanism; add module-specific extras only>
+
+## Inject → Realistic Data
+<link the bench's INJECT mechanism; note the seed strategy>
+
+## Daily Loop / Quick Start
+<the copy-pasteable path to bring THIS module up and actually use it — link the bench's ACT
+ mechanism, then the module-specific launch. This is the runbook's real Act: it is what
+ /run-qa-test Tactic A follows, and for most modules it is the whole of the invariant path.>
+
+## Act → Exercise the System
+<OPTIONAL — empty is the right default. Add a scenario ONLY when a real bug taught you a durable
+ invariant worth re-running every time. Do NOT pre-write scenarios for hypothetical bugs: they
+ rot, and a stale scenario is worse than none. Per-feature verification goes in a checklist.>
+
+## Observe → Confirm Result
+<OPTIONAL — the pass/fail expectations for the scenarios above, if there are any. Omit the whole
+ section when the Act section is empty.>
+
+## Config Switching
+<files/lines to edit when going local ↔ deployed. Committed config = deploy target.>
+
+## Troubleshooting
+<symptoms → causes → fixes>
+
+## Known Gotchas
+<things that broke before, with workarounds>
+```
+
+> The `## Act → Exercise the System` and `## Observe → Confirm Result` headings are the contract `/run-qa-test` Tactic A resolves *when scenarios exist*. Keep them exact — but leaving them empty is a legitimate, common, and often correct state. Tactic A falls back to the Daily Loop path and reports "no module scenarios (by design)".
+
+### Playbook template
+
+File: `qa/playbook.md`. Only for multi-module projects — a single-app project's one runbook carries the whole story.
+
+```markdown
+# {Project} — QA Playbook
+
+> The cross-module strategy layer: connection map + boot order + full-system smoke + end-to-end
+> scenarios that span modules. References the per-module runbooks in qa/runbooks/.
+
+## Connection Map
+
+| From | To | Protocol | Port | Auth | Notes |
+|---|---|---|---|---|---|
+
+## Full-System Boot Order
+1. <e.g. DB first — see qa/runbooks/{db}.md>
+2. <e.g. BE next — see qa/runbooks/{be}.md>
+
+## Full-System Smoke
+<commands or steps to verify the whole connected stack at once>
+
+## End-to-End Scenarios
+<numbered cross-module scenarios. Each step names the module + links its runbook.
+ Cover system invariants, not every variant.>
+```
+
+---
+
 ## Integration With Other Procedures
 
 - **/map-qa-instrument** — upstream. Canonical home for the loop / ontology / ownership / grading. Supplies the gap list and the index-integrity check; called with `--rescan` at the end.
-- **/build-qa-test** — downstream sibling. Owns everything this skill refuses: runbooks, playbook, fixtures, and the scenarios inside them. Bench first, then tests — a fixture has nothing to build against until the loop runs.
+- **/integration-test** — downstream sibling. Owns fixtures and the integration tests that consume them. Bench first, then tests — a fixture has nothing to build against until the loop runs.
+- **/qa-status** — downstream reader. Grades the bench this skill builds, and runs its OBSERVE mechanism as a liveness probe.
 - **/generate-qa-checklist** — downstream sibling. Owns the per-feature checklist; its gate reads this skill's output as the project's opt-in signal.
 - **/run-qa-test** — downstream. Build does a light self-smoke only; the repeatable runtime proof is `/run-qa-test`'s job, resolved from the index this skill writes.
 
@@ -227,7 +316,8 @@ Seeds are *sources*, not scripts: the dumps, snapshots, or generator inputs INJE
 1. **Fictionalizing a green loop.** A Status is `documented` only after Phase 3 actually ran it. Unbuilt or untested phases say so.
 2. **Building without a map.** Build is map-driven — no `qa/qa-map.md` → stop and run `/map-qa-instrument create`. Never re-scan here.
 3. **Documenting before building.** Phase 1 fills only the R/I/A/O intent; the rest of the README waits for Phase 4, so it describes reality, not intention.
-4. **Building test-layer content.** Runbooks, playbook and fixtures are `/build-qa-test`'s, checklists `/generate-qa-checklist`'s. If the map shows those gaps, report them and hand off — don't quietly author half a test layer.
-5. **Rewriting an adopted script.** A `tribal` mechanism is promoted by *linking* it in the index, not by moving, renaming, or restyling it. Touching it turns a one-line fix into a regression risk.
-6. **Building a second script for a diverged index.** A `DIVERGED` row means the index points at the wrong file, not that the mechanism is missing. Repoint the link.
-7. **Clobbering a hand-written README.** If `qa/README.md` exists, reconcile — add missing sections, preserve good content.
+4. **Building test-layer content.** Fixtures and integration tests are `/integration-test`'s, checklists `/generate-qa-checklist`'s. If the map shows those gaps, report them and hand off — don't quietly author half a test layer.
+5. **Writing a scenario into a runbook.** The `Act` / `Observe` headings are part of the runbook shape, but nothing in this pipeline fills them yet — that owner is deferred. Leave them empty; an empty scenario section is the documented default, not a gap to close here.
+6. **Rewriting an adopted script.** A `tribal` mechanism is promoted by *linking* it in the index, not by moving, renaming, or restyling it. Touching it turns a one-line fix into a regression risk.
+7. **Building a second script for a diverged index.** A `DIVERGED` row means the index points at the wrong file, not that the mechanism is missing. Repoint the link.
+8. **Clobbering a hand-written README.** If `qa/README.md` exists, reconcile — add missing sections, preserve good content.

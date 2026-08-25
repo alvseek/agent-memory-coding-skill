@@ -2,7 +2,7 @@
 
 Build the per-feature verification checklist for a change that just shipped — the artifact that answers *"is it actually right?"*, later, by a human, with the stack up.
 
-This is the wizards' **QA Handoff** step (HW 17 / QW 8 / pixel 19), the last thing a sweep does before archiving its plan, and it runs standalone against any change set just as well. Its scope is one artifact: `qa/checklists/{feature}.md`. The rest of the test layer — runbooks, the playbook, fixtures, and the Act/Observe scenarios inside them — belongs to `/build-qa-test`; the rig they all run on belongs to `/build-qa-bench`; walking the checklist and recording what happened belongs to `/run-qa-test`.
+This is the wizards' **QA Handoff** step (HW 17 / QW 8 / pixel 19), the last thing a sweep does before archiving its plan, and it runs standalone against any change set just as well. Its scope is one artifact: `qa/checklists/{feature}.md`. Fixtures and the integration tests that consume them belong to `/integration-test`; the rig, the runbooks and the playbook belong to `/build-qa-bench`; walking the checklist and recording what happened belongs to `/run-qa-test`.
 
 > **Canonical definitions live in `/map-qa-instrument`** — the R/I/A/O loop, the 7 artifact categories, the ownership split, and the `documented / tribal / missing` grading. This skill references *up* to it; it does not restate them.
 
@@ -128,7 +128,7 @@ File: `qa/checklists/{feature}.md` → archived to `completed/` on sign-off.
 ## Integration With Other Procedures
 
 - **/map-qa-instrument** — upstream. Canonical home for the loop, the artifact ontology, the ownership split and the grading; its map's **Checklists** row names this skill as the owner.
-- **/build-qa-test** — sibling. Owns the rest of the test layer: runbooks, the playbook, fixtures, and the scenarios inside them. The two never overlap — a checklist is per-feature and ephemeral, everything there is per-flow and evergreen.
+- **/integration-test** — sibling. Owns fixtures and the integration tests that consume them; those tests are what this checklist's Automated column cites. The two never overlap — a checklist is per-feature and ephemeral, an integration test is per-boundary and evergreen.
 - **/build-qa-bench** — upstream. Builds the rig whose existence this skill's gate reads as the project's opt-in signal.
 - **/run-qa-test** — downstream. Walks the finished checklist (`--checklist`), writes its `## Result`, and offers the archive on sign-off. This skill never writes that section.
 - **/high-wizard · /quick-wizard · /pixel-wizard** — callers. Each delegates here as its **QA Handoff** step (HW 17 / QW 8 / pixel 19), automatically and without prompting, then records the checklist path or the auto-skip reason in the plan's `## QA HANDOFF` section.
@@ -142,4 +142,4 @@ File: `qa/checklists/{feature}.md` → archived to `completed/` on sign-off.
 3. **Scaffolding an empty `qa/checklists/`.** An empty folder reads as "we have checklists" to everyone who sees it. Build per-feature or build nothing.
 4. **Vague expectations.** *"Works correctly"* cannot fail, so it can never catch a regression. Write the exact observable delta.
 5. **Writing `## Result`.** That section belongs to `/run-qa-test` alone. Leave the template's *"not yet run"* placeholder exactly as it stands — two writers on one section is how a record starts lying.
-6. **Building anything else.** Fixtures, runbooks, scenarios and the playbook are `/build-qa-test`'s. If the feature needs one, name it and point there rather than quietly building half a test layer.
+6. **Building anything else.** Fixtures and integration tests are `/integration-test`'s; runbooks and the playbook are `/build-qa-bench`'s. If the feature needs one, name it and point there rather than quietly building half a test layer.

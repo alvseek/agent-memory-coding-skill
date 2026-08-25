@@ -7,7 +7,7 @@ Run runtime verification on the qa/ bench — execute the R/I/A/O loop to verify
 
 > **Canonical definitions live in `/map-qa-instrument`** — the R/I/A/O loop, the 7 artifact categories, the ownership split, and the grading. This skill references *up* to those; it does not restate them.
 
-Pipeline: **`/map-qa-instrument` (audit) → `/build-qa-bench` (build the rig) → `/build-qa-test` (build the tests) → `/run-qa-test` (run them).**
+Pipeline: **`/map-qa-instrument` (audit) → `/build-qa-bench` (build the rig) → `/integration-test` (build and run the tests) → `/run-qa-test` (system-level runtime proof).**
 
 > **This skill runs; it does not build.** Every missing asset is a hand-off, never an improvisation. That line is what keeps a run's result meaningful.
 
@@ -48,7 +48,7 @@ Read `qa/README.md`'s **R/I/A/O Loop** table — that table is the index this pr
 - **If missing**: STOP. Present to [USER-NAME]:
   ```
   No qa/ bench (R/I/A/O index) detected for this project.
-  A) Build it: /map-qa-instrument create, then /build-qa-bench, then /build-qa-test (recommended)
+  A) Build it: /map-qa-instrument create, then /build-qa-bench (recommended)
   B) Skip the QA test run (log decision)
   ```
   - If A: run the map → bench → test pipeline, then return here.
@@ -76,7 +76,7 @@ Surface any files that don't map to a runbook — flag as *"no runbook coverage"
 
 ```
 Module {name} has no qa/runbooks/{name}.md — Tactic A can't resolve its scenarios.
-A) Build it now: /build-qa-test {module}  (recommended)
+A) Build it now: /build-qa-bench runbooks  (recommended)
 B) Run the bench loop only for this module (RESET/INJECT/ACT/OBSERVE, no module scenarios) — partial coverage
 C) Skip this module (log it)
 ```
@@ -134,7 +134,7 @@ Use this to verify one specific feature/flow (e.g. *"auto fish-in quarantine"*).
 
    Before using a fixture, read its header: a fixture marked `fidelity-checked: PENDING` at rung 2 or 3 has never been proven against the real stage — say so, and treat any assertion downstream of it as provisional.
 
-   **If a needed fixture doesn't exist, stop and hand off to `/build-qa-test --fixture [stage]`.** Fixtures are the test layer's to build. Never improvise one mid-run: an ad-hoc fixture is unreviewed, unversioned, and its fidelity unproven, so every later run inherits a shortcut nobody signed off on.
+   **If a needed fixture doesn't exist, stop and hand off to `/integration-test [boundary]`.** Fixtures are built alongside the test that consumes them, never alone. Never improvise one mid-run: an ad-hoc fixture is unreviewed, unversioned, and its fidelity unproven, so every later run inherits a shortcut nobody signed off on.
 
 5. **Exercise the step under test for real** — drive its *actual* entry point: the HTTP endpoint the UI/mobile calls, the scheduler endpoint, the real service method at the true boundary. Not an internal shortcut that bypasses the wiring.
 
@@ -142,7 +142,7 @@ Use this to verify one specific feature/flow (e.g. *"auto fish-in quarantine"*).
 
 7. **TEARDOWN (finally)** — restore snapshots / delete created rows / reset touched entities, so the run leaves **zero residue** and is re-runnable. This runs even if an assertion failed.
 
-8. **Fidelity check (periodic, not every run)** — occasionally run the REAL upstream stage (not its fixture) and assert its output matches what `fixture(stage)` produced. If they diverge, the fixture has drifted and is lying — hand it back to `/build-qa-test` before trusting further Tactic-B runs off it.
+8. **Fidelity check (periodic, not every run)** — occasionally run the REAL upstream stage (not its fixture) and assert its output matches what `fixture(stage)` produced. If they diverge, the fixture has drifted and is lying — hand it back to `/integration-test` before trusting further Tactic-B runs off it.
 
 **Applicability & escape hatches.** The DB/HTTP mechanics above (SQL delta, cached token, endpoint) are *one common shape* — read them as examples, not the only form. Two assumptions ride under Tactic B; when either fails, adapt rather than force it:
 - **State must be resettable** for RESET + TEARDOWN to hold. If the step has *irreversible* side effects (a real email/SMS, a payment, a non-idempotent external call) you cannot `finally { undo }` — route it through a **sandbox / test double / idempotency key**, or fall to Tactic A and assert the *intent* (the outbound call was issued) rather than the irreversible effect. For **non-persistent** systems (stateless, streaming, pure compute) "snapshot the rows" has no meaning — OBSERVE via the system's real output channel (emitted event, return value, log/trace) and TEARDOWN is a no-op.
@@ -247,7 +247,9 @@ Apply approved fixes in one batch. Re-run the loop (Step 3A, 3B, or 3C, whicheve
 
 - **/map-qa-instrument** — canonical home for the loop, ontology, ownership, and grading. Its index-integrity check is what guarantees the table this skill reads still resolves.
 - **/build-qa-bench** — upstream. Builds the loop engine and writes the `qa/README.md` R/I/A/O table Step 3A resolves from.
-- **/build-qa-test** — upstream. Builds what Tactics A and B *run*: fixtures, and the runbook and playbook scenarios. A missing fixture or runbook is a hand-off to it, never an improvisation here.
+- **/integration-test** — upstream. Builds and proves the fixtures Tactic B chains. A missing fixture is a hand-off to it, never an improvisation here.
+- **/build-qa-bench** — upstream. Owns the rig, the R/I/A/O index this skill resolves the loop from, and the runbooks and playbook Tactic A reads. A missing runbook is a hand-off to it.
+- **/qa-status** — sibling. Reports the debt this skill exists to clear: fixtures still unproven, checklists still unwalked.
 - **/generate-qa-checklist** — upstream. Builds the per-feature checklist Tactic C walks. A missing checklist is a hand-off to it.
 - **/high-wizard · /quick-wizard · /pixel-wizard** — **not** callers. Each stops at its **QA Handoff** step, delegating to `/generate-qa-checklist` and leaving the plan explicitly *not runtime-verified*. Running that checklist is a separate, later invocation of this skill — which is why a wizard's completion report names the exact `/run-qa-test --checklist` command to run.
 - **archive-plan component** — used by Tactic C to move a signed-off checklist into `qa/checklists/completed/`.
@@ -256,7 +258,7 @@ Apply approved fixes in one batch. Re-run the loop (Step 3A, 3B, or 3C, whicheve
 
 ## Anti-Patterns
 
-1. **Building anything mid-run.** A fixture, scenario, or runbook invented under run pressure is unreviewed, and it silently becomes the contract everyone runs against afterwards. Hand off to `/build-qa-test`.
+1. **Building anything mid-run.** A fixture, scenario, or runbook invented under run pressure is unreviewed, and it silently becomes the contract everyone runs against afterwards. Hand off — fixtures to `/integration-test`, runbooks to `/build-qa-bench`.
 2. **Fixturing the step under test.** A shortcut standing in for the behavior you're validating proves nothing (Tactic B, rule 2).
 3. **Reporting a partial run as clean.** If phases didn't resolve or modules were skipped, the headline is "passed, partial" plus the gaps — not "passed".
 4. **Leaving residue.** No teardown means the next run starts dirty and its result is meaningless. Wrap in try/finally.

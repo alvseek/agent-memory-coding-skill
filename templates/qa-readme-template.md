@@ -31,9 +31,9 @@ doc_type: qa-riao-readme
                 Known Gaps), THEN re-run /map-qa-instrument --rescan so the map reflects
                 reality. The loop closes: map -> build -> map.
 
-  SCOPE: this doc and the rig (scripts/seeds/config) are /build-qa-bench's. Runbooks,
-  the playbook, checklists, and fixtures are /build-qa-test's — link them here, don't
-  author them here.
+  SCOPE: this doc, the rig (scripts/seeds/config), the runbooks and the playbook are
+  /build-qa-bench's. Checklists are /generate-qa-checklist's and fixtures are
+  /integration-test's — link them here, don't author them here.
 
   As you fill: delete every <!-- tip --> and this HOW-TO block. Keep it honest.
 ============================================================ -->
@@ -94,14 +94,14 @@ Every QA cycle here is one turn of **RESET → INJECT → ACT → OBSERVE**:
 ## Where Everything Lives
 
 <!-- tip: The front-door map. DROP any row this project doesn't have — never link a file that
-     isn't there. Add rows as /build-qa-test creates runbooks, checklists, and fixtures. -->
+     isn't there. Add rows as runbooks, checklists, and fixtures get created. -->
 
 | Layer | What | Where | Built by |
 |---|---|---|---|
-| Per-module "how to run" | Runbooks | [runbooks/](runbooks/) | /build-qa-test |
-| Cross-module orchestration + E2E | Playbook | [playbook.md](playbook.md) | /build-qa-test |
-| Per-feature verification | Checklists | [checklists/](checklists/) | /build-qa-test |
-| Per-stage test preconditions | Fixtures | [fixtures/](fixtures/) | /build-qa-test |
+| Per-module "how to run" | Runbooks | [runbooks/](runbooks/) | /build-qa-bench |
+| Cross-module orchestration + E2E | Playbook | [playbook.md](playbook.md) | /build-qa-bench |
+| Per-feature verification | Checklists | [checklists/](checklists/) | /generate-qa-checklist |
+| Per-stage test preconditions | Fixtures | [fixtures/](fixtures/) | /integration-test |
 | R/I/A/O scripts | Scripts | [scripts/](scripts/) | /build-qa-bench |
 | Required config + templates | Config | [config/](config/) | /build-qa-bench |
 | Test-data sources | Seeds | [seeds/](seeds/) | /build-qa-bench |
@@ -124,7 +124,7 @@ localhost and never commit the edit. Link the config inventory / REQUIRED.md.]
 <!-- tip: Pull the tribal + missing rows straight from qa/qa-map.md, and mark which builder owns
      each. Be honest — this is what's NOT yet trustworthy in the instrument. -->
 
-- [e.g. Fixtures are tribal — inline in the test suite, not extracted to fixtures/. → /build-qa-test]
+- [e.g. Fixtures are tribal — inline in the test suite, not extracted to fixtures/. → /integration-test]
 - [e.g. No REQUIRED.md config inventory yet. → /build-qa-bench]
 
 ---
@@ -134,5 +134,5 @@ localhost and never commit the edit. Link the config inventory / REQUIRED.md.]
 - Run **one module** → its [runbook](runbooks/).
 - Verify the **whole connected system** → the [playbook](playbook.md).
 - See **what exists + how mature** → [qa-map.md](qa-map.md).
-- **Build** a missing piece → `/build-qa-bench` (rig) or `/build-qa-test` (tests).
+- **Build** a missing piece → `/build-qa-bench` (rig, runbooks, playbook) or `/integration-test` (fixtures + tests).
 - **Run** the verification → `/run-qa-test`.
