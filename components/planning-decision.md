@@ -30,13 +30,17 @@ He is about to decide before the plan exists. At every altitude the objectives, 
 
 Open with what you take the task to be, the shape of the change you intend, and where the decisions below fork it. A few sentences, in conversation only: nothing is written to the plan file at this point, so a frame he corrects costs a rewritten paragraph rather than a rewritten plan. Without it he is answering questions about something he has not been shown.
 
+The frame is not conditional on there being anything to ask. When the work was settled in conversation and every round skips, the frame is what you present — what you now intend to do, and the decisions you are treating as given — and you ask him to **continue**, not to choose. That is a gate like any round: STOP until he clears it. A wizard that asks nothing must still say what it is about to do, and say it before it writes the plan rather than after.
+
 ## Rounds
 
 Decisions are presented one category at a time, in the order your procedure declares them — that order is its business, not this file's. A round is a **gate**, not a heading: build the block for that one category, present it, and STOP until [USER-NAME] clears it — an answer, a "pass", or a "proceed". Only then build the next.
 
-Four rules govern the sequence.
+Five rules govern the sequence.
 
 **Skip out loud.** A category whose condition does not hold produces no round. Say in one line that it was skipped and why, then move on. Silence reads as an omission, and on a small task most categories will not fire.
+
+**Settled is not a round.** A category whose answer was already settled in conversation produces no round either, however squarely it falls inside your altitude. Restate what was settled in one line as you skip it, so he can see you took the same thing from the discussion that he did, and write it into Confirmed Decisions with its reasoning — that is Zone A, reached by conversation rather than by investigation. Re-presenting a settled matter as options invites him to re-decide what he already decided, and teaches him that answering you does not stick. Zone E is the exception: reversal cost triggers it, not uncertainty, so a risky or irreversible action is still presented unless he settled that exact action in those terms — "we discussed it" is not the same as "he agreed to delete it".
 
 **Build after, never before.** Each round is built once the previous one is answered. That is the whole point of the gate: a narrowed scope deletes questions further down, and a chosen mechanism changes what the integration round can even ask. A full set drafted in advance and released one heading at a time has wasted every gate.
 

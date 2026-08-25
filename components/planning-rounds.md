@@ -6,7 +6,7 @@ The rounds every implementation wizard presents, in order — the frame, scope, 
 
 ---
 
-The first round opens with the frame — what you take the task to be and the shape of the change you intend — because no plan section exists yet for [USER-NAME] to read.
+The frame comes before any of these — what you take the task to be and the shape of the change you intend — because no plan section exists yet for [USER-NAME] to read. It is presented whether or not a single round below runs.
 
 **Scope round.** *Runs when the boundary of this work is not already settled.* What it covers and what it deliberately leaves out. Present by invoking the `/wait-options-coding` command procedure. **STOP.** Continue only on an answer, a "pass", or a "proceed".
 
