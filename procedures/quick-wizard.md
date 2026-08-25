@@ -62,13 +62,26 @@ Write the execution plan using the [Quick Wizard Plan Content Template](#quick-w
 - Confirmed decisions table
 - Numbered execution steps with clear actions
 
+As you write the steps, mark any step that will cross a **real dependency the unit test would have to double** — a database, an HTTP service, a queue, the filesystem. One word is enough: `(crosses: DB)`. Most Quick Wizard changes cross nothing; that is the expected answer, and noticing it costs a glance rather than a decision.
+
 ### Step 5: Get Approval
 
 Present the plan for [USER-NAME]'s approval. STOP. Do NOT execute until [USER-NAME] confirms.
 
+**If any step was marked as crossing a boundary**, settle its coverage in the same breath as approval — call `/qa-status` and read its bench and stack lines.
+
+- **Bench built and stack up** → those steps get an `/integration-test` run during Step 6.
+- **Either missing** → say which check failed, and confirm that continuing means this change ships with no integration coverage.
+
+Record the answer in the plan's `## QA Handoff` section under `Integration coverage`.
+
+**If no step crosses a boundary, skip this entirely and say nothing.** A gate that fires on every trivial change is one people learn to wave through, and at this altitude most changes cross nothing.
+
 ### Step 6: Execute
 
 Execute the steps from the plan in order. After each step, briefly report what was done before moving to the next.
+
+Each step closes on its own tests: unit tests wherever the step has testable logic, and — where Step 5's gate came back ready and the step was marked as crossing a boundary — an `/integration-test [boundary]` run, which builds the fixtures, writes the test, and runs it.
 
 **CRITICAL**: If any NEW decision is discovered during execution that was not covered in Step 3, STOP immediately. Present the new decision to [USER-NAME] with the same format (options + confidence + reason) before continuing. Do NOT execute ahead on assumptions.
 
@@ -117,6 +130,7 @@ After all steps are executed and both Quality Review (Step 7) + QA Handoff (Step
 - What was done
 - Quality Review status (clean / N findings fixed)
 - **QA Handoff**: `qa/checklists/{feature}.md` built, or skipped + reason
+- **Integration coverage**: in scope and run, N/A because nothing crossed a boundary, or none + which check failed
 - ⚠️ **State plainly: "Not runtime-verified."** Then the exact next action — *"run `/run-qa-test --checklist qa/checklists/{feature}.md` when the stack is up"*, or the instrument-setup commands if the step auto-skipped.
 - Any issues encountered
 - Any tech debts or follow-up items
@@ -153,6 +167,7 @@ Use this structure when writing the plan in plan mode (or presenting in conversa
 
 ## Success Criteria
 - [ ] [How we know it's done]
+- [ ] Unit tests written and passing for every step with testable logic (or the step says why it has none)
 - [ ] Static quality review completed (Step 7 — delegated to `/analyze-code-quality`)
 - [ ] QA Handoff completed (Step 8 — checklist built, or auto-skipped with reason recorded)
 
@@ -174,6 +189,7 @@ Use this structure when writing the plan in plan mode (or presenting in conversa
 
 - **Scope**: [Modules touched]
 - **QA instrument**: [Set up (map + bench) / NOT SET UP — auto-skipped]
+- **Integration coverage**: [N/A — no step crosses a real boundary | in scope — steps N, M | NONE — [which check failed], confirmed before execution]
 - **Checklist**: [`qa/checklists/{feature}.md`, or "none — skipped, reason"]
 - **Coverage split**: [N automated (named tests) / N manual — of which N are UI-bound]
 - **Runtime verification**: **NOT DONE.** Next action: [`/run-qa-test --checklist qa/checklists/{feature}.md` once the stack is up | set up the instrument first: `/map-qa-instrument create` → `/build-qa-bench`]
