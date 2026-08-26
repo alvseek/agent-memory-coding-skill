@@ -23,7 +23,7 @@ Level 0 is the concrete change, so that is what you collect decisions about — 
 
 ### Step 1: Investigate and Collect Decisions
 
-**First, if launched as a sub-plan**: read and follow the [Subplan Handoff component]([path-to-agent-memory-coding-skill]/components/subplan-handoff-read.md). It tells you what you inherited, what you may not reopen, and where to find the payload if none was passed. Record it under `## Inherited Context` before investigating anything.
+**First, if anything was settled before you started** — whether launched as a sub-plan or handed a design already agreed in conversation: read and follow the [Inherited Context component]([path-to-agent-memory-coding-skill]/components/subplan-handoff-read.md). It tells you what you inherited, what you may not reopen, and where to find it when no payload was passed. Record it before investigating anything.
 
 Then read and follow the [Planning Investigation component]([path-to-agent-memory-coding-skill]/components/planning-investigation.md) — it runs the shared investigation checklist and produces the findings this plan's decisions are built from.
 
@@ -147,13 +147,20 @@ Use this structure when writing the plan in plan mode (or presenting in conversa
 # Quick Wizard Plan: [Theme]
 
 ## Inherited Context
-*Filled at investigation step 0 when launched as a sub-plan — from the parent's handoff (or the parent `core-plan.md`). Write "None — standalone plan" if there is no parent.*
+*Filled at investigation step 0 with whatever was settled before this plan existed — recorded separately by source, never merged. Write "None" under a part that does not apply.*
 *Not yours to reopen. If an inherited decision looks wrong, STOP and surface it — do not silently re-decide it below.*
 
-- **Parent plan**: [path, or "None — standalone plan"]
+**From the parent plan**
+- **Parent plan**: [path, or "None — not a sub-plan"]
 - **Assigned scope**: [what this plan owns]
 - **Inherited decisions**: [decision → chosen → parent's reason; mark each Settled or My call]
-- **Contracts / pushed-down items**: [paths + produce/consume, and any decisions left to this plan — or "None"]
+- **Contracts / pushed-down items**: [paths + produce/consume, and decisions left to this plan — or "None"]
+
+**From pre-planning discussion**
+- **Discussion**: ["Pre-planning discussion, YYYY-MM-DD", or "None"]
+- **Agreed scope**: [what the discussion established]
+- **Settled decisions**: [decision → chosen → his reason; mark each Settled or My call]
+- **Considered and rejected**: [option → why it lost — or "None"]
 
 ## Objective
 [1-2 sentence description of what we're doing and why]

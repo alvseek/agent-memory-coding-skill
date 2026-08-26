@@ -12,10 +12,11 @@
 ---
 
 ## **INHERITED CONTEXT**
-*Filled at investigation step 0 when this plan was launched as a sub-plan — from the parent's handoff payload (or the parent `core-plan.md` beside this file). Write "None — standalone plan" if there is no parent.*
+*Filled at investigation step 0 with whatever was settled before this plan existed. The two sources are recorded separately and never merged — write "None" under a part that does not apply.*
 *These decisions are **not yours to reopen**. If one looks wrong, STOP and surface it to [USER-NAME] — do not silently re-decide it here or in Confirmed Decisions below.*
 
-- **Parent plan**: [path to parent `core-plan.md`, or "None — standalone plan"]
+### From the Parent Plan
+- **Parent plan**: [path to parent `core-plan.md`, or "None — not a sub-plan"]
 - **Assigned scope**: [requirement IDs / phase / milestone this plan owns, and what it must deliver]
 
 | # | Inherited decision | Chosen | Parent's reason | Status |
@@ -24,6 +25,17 @@
 
 - **Integration contracts**: [`contracts/*.yaml` paths this plan must honor, and whether it produces or consumes each — or "None"]
 - **Pushed-down open items**: [decisions the parent deliberately left to this plan — or "None"]
+
+### From Pre-Planning Discussion
+- **Discussion**: ["Pre-planning discussion with [USER-NAME], YYYY-MM-DD", or "None — no pre-planning discussion"]
+- **Agreed scope**: [what the discussion established this work covers]
+
+| # | Settled decision | Chosen | His reason | Status |
+|---|------------------|--------|------------|--------|
+| 1 | [Decision topic] | [Chosen option] | [Reason, verbatim from the discussion] | Settled / My call |
+
+- **Considered and rejected**: [option → why it lost — or "None"]
+- **Left open**: [decisions the discussion deliberately did not make — or "None"]
 
 ---
 
@@ -56,7 +68,7 @@
 
 ## **CONFIRMED DECISIONS**
 *Decisions made **by this plan** — both **asked-and-confirmed** by [USER-NAME] AND **written-through** (Zone A and B decisions made by the agent, recorded with their reasoning). The reasons serve as the analysis record.*
-*Decisions inherited from a parent belong in [INHERITED CONTEXT](#inherited-context) above, not here — keeping them separate is what shows which decisions this plan actually owns.*
+*Decisions settled before this plan existed — by a parent, or in a pre-planning discussion — belong in [INHERITED CONTEXT](#inherited-context) above, not here. Keeping them separate is what shows which decisions this plan actually owns.*
 
 | # | Decision | Chosen | Reason |
 |---|----------|--------|--------|

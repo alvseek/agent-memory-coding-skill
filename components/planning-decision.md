@@ -38,12 +38,30 @@ Decisions are presented one category at a time, in the order your procedure decl
 
 Five rules govern the sequence.
 
-**Skip out loud.** A category whose condition does not hold produces no round. Say in one line that it was skipped and why, then move on. Silence reads as an omission, and on a small task most categories will not fire.
+**Skip out loud.** A category whose condition does not hold produces no round.
 
-**Settled is not a round.** A category whose answer was already settled in conversation produces no round either, however squarely it falls inside your altitude. Restate what was settled in one line as you skip it, so he can see you took the same thing from the discussion that he did, and write it into Confirmed Decisions with its reasoning — that is Zone A, reached by conversation rather than by investigation. Re-presenting a settled matter as options invites him to re-decide what he already decided, and teaches him that answering you does not stick. Zone E is the exception: reversal cost triggers it, not uncertainty, so a risky or irreversible action is still presented unless he settled that exact action in those terms — "we discussed it" is not the same as "he agreed to delete it".
+- **Say it in one line.** Name the category and why it did not fire, then move on.
+- **Silence reads as an omission.** On a small task most categories will not fire, so an unexplained gap looks like something you forgot rather than something you checked.
 
-**Build after, never before.** Each round is built once the previous one is answered. That is the whole point of the gate: a narrowed scope deletes questions further down, and a chosen mechanism changes what the integration round can even ask. A full set drafted in advance and released one heading at a time has wasted every gate.
+**Settled is not a round.** A category whose answer was already settled in conversation produces no round, however squarely it falls inside your altitude.
 
-**Risky first.** A decision that is risky or irreversible is presented in the first round that runs, whatever category it belongs to. Reversal cost outranks the declared order, and burying such a decision behind a boundary question defeats the reason the sequence exists at all.
+- **Say what was settled.** Restate it in one line as you skip the round, so he can see you took the same thing from the discussion that he did.
+- **File it as inherited, not as yours.** It belongs in your plan's inherited-context section, under its pre-planning-discussion part, with his reason — never in Confirmed Decisions, which holds what this plan decided.
+- **It is not Zone A.** Zone A is a call with no judgment in it that you make yourself. He made this one.
+- **Re-asking has a cost.** Presenting a settled matter as options invites him to re-decide what he already decided, and teaches him that answering you does not stick.
+- **Zone E is the exception.** Reversal cost triggers it, not uncertainty, so a risky or irreversible action is still presented unless he settled that exact action in those terms — "we discussed it" is not the same as "he agreed to delete it".
 
-**Within a round, most regret first.** Where a round holds more than one decision, lead with the one [USER-NAME] would most regret getting wrong — unless another's answer changes what it even asks, in which case dependency wins, because that is a constraint rather than a preference.
+**Build after, never before.** Each round is built only once the previous one is answered.
+
+- **That is the whole point of the gate.** A narrowed scope deletes questions further down, and a chosen mechanism changes what the integration round can even ask.
+- **A pre-drafted set wastes every gate.** Releasing a full block one heading at a time is not gating — it only looks like it.
+
+**Risky first.** A decision that is risky or irreversible is presented in the first round that runs, whatever category it belongs to.
+
+- **Reversal cost outranks the declared order.** The category sequence is a default, and this is the one thing that overrides it.
+- **Burying it defeats the sequence.** A risky decision sitting behind a boundary question is exactly what the ordering exists to prevent.
+
+**Within a round, most regret first.** Where a round holds more than one decision, order them before presenting.
+
+- **Lead with the most regret.** The decision [USER-NAME] would most regret getting wrong goes first.
+- **Unless dependency overrides it.** If another decision's answer changes what this one even asks, that one leads — a constraint outranks a preference.

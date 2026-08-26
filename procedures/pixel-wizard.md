@@ -79,7 +79,7 @@ Fill the [Project Info]([path-to-agent-memory-coding-skill]/plan-templates/high-
 
 This is where the thinking happens - NOT in the plan document. Follow the investigation checklist below IN ORDER. Each step from 3-6 produces decision items for the WAIT Options form.
 
-**First, if launched as a sub-plan**: read and follow the [Subplan Handoff component]([path-to-agent-memory-coding-skill]/components/subplan-handoff-read.md). It tells you what you inherited, what you may not reopen, and where to find the payload if none was passed. Record it under `## INHERITED CONTEXT` before investigating anything. *(The Visual Design Gate at Step 2 already checks the handoff for the design reference — this is the full read.)*
+**First, if anything was settled before you started** — whether launched as a sub-plan or handed a design already agreed in conversation: read and follow the [Inherited Context component]([path-to-agent-memory-coding-skill]/components/subplan-handoff-read.md). It tells you what you inherited, what you may not reopen, and where to find it when no payload was passed. Record it before investigating anything. *(The Visual Design Gate at Step 2 already checks the handoff for the design reference — this is the full read.)*
 
 Invoke the `/wait-options-coding` command procedure to guide collecting decisions — run the command; its format rules are not in context. It governs *how* to present a decision, not which decisions are yours: **this procedure's opening states what Level 1v collects decisions about** — re-read it before building the form.
 

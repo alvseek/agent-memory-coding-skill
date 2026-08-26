@@ -2,7 +2,7 @@
 
 Shared investigation checklist for the planning wizards. **This is a component, not a standalone skill** — a wizard's investigation step invokes it by reading and following this file. It produces **findings**: what exists, what could be done, and what would break. Turning findings into a decision form is the Planning Decision component's job, which your procedure reads separately.
 
-*Consumed by `/quick-wizard` and `/high-wizard`, which share an investigation shape. Wizards with a different one — `/pixel-wizard` (visual framework check), `/council-of-wizards` (feature decomposition), `/forge-of-covenant` (7Q exploration) — keep their own variant. Any wizard that can be launched as a sub-plan reads the parent's handoff in its own procedure before reaching this checklist; that read is a precondition to investigating, not a step within it.*
+*Consumed by `/quick-wizard` and `/high-wizard`, which share an investigation shape. Wizards with a different one — `/pixel-wizard` (visual framework check), `/council-of-wizards` (feature decomposition), `/forge-of-covenant` (7Q exploration) — keep their own variant. A leaf wizard reads whatever was settled before it started — a parent's handoff, or a pre-planning discussion — in its own procedure before reaching this checklist; that read is a precondition to investigating, not a step within it.*
 
 ---
 
