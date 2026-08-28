@@ -41,7 +41,7 @@ Get current date for file naming:
 Create the covenant plan folder and copy the template as `grand-plan.md` inside it:
 ```
 mkdir -p ./plans/[YYYY-MM-DD]-[project]-forge-of-covenant
-cp {source} ./plans/[YYYY-MM-DD]-[project]-forge-of-covenant/grand-plan.md
+cp [path-to-agent-memory-coding-skill]/plan-templates/forge-of-covenant-plan-template.md ./plans/[YYYY-MM-DD]-[project]-forge-of-covenant/grand-plan.md
 ```
 
 ### Step 4: Fill Project Header

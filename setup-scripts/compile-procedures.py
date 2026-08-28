@@ -6,12 +6,18 @@ files, so an installed slash command never points at a path the agent cannot rea
 - **Components** (``[label](.../components/X.md)``) are INLINED at the reference point — the
   link becomes its label text and the component body is inserted right after, so caller
   params written into the sentence survive.
-- **Templates** (``[label](.../plan-templates|templates/X.md[#anchor])`` or the backtick
-  code-path form) are inlined ONCE as a bottom ``## Templates`` appendix, collected
-  TRANSITIVELY (a template referencing another template pulls it in too); every reference is
-  rewritten to an in-doc anchor.
-- **Runtime refs are left alone**: ``[AGENT-MEMORY-PATH]/...`` (where memory lives) and
-  ``[path-to-agent-memory-coding-skill]/scripts/*.sh`` (executables the agent runs).
+- **Templates are NOT inlined.** Every template in this repo is *copied to disk* by the
+  procedure that references it, so what the agent needs is a path, not the text: a plan
+  template becomes a plan file, a doc template becomes a doc. Inlining one hands over the
+  content and takes away the source, which is why ``cp {source} ...`` had nothing to
+  substitute. References are left exactly as authored and resolve at run time.
+- **Runtime refs are left alone**: ``[AGENT-MEMORY-PATH]/...`` (where memory lives),
+  ``[path-to-agent-memory-coding-skill]/fleet-scripts/*.sh`` (executables the agent runs),
+  and template paths under ``plan-templates/`` and ``templates/``.
+
+Templates are still *resolved* at compile time: a reference naming a template that does not
+exist is reported, and fails the build under ``--strict``. A dangling path is the one failure
+this stage still exists to catch.
 
 Output name == source name, so ``/wait-options`` stays ``/wait-options``.
 
@@ -46,18 +52,6 @@ _TEMPLATE_DIRNAMES = ("plan-templates", "templates")
 _COMPONENT_LINK = re.compile(r"\[([^\]]*)\]\([^)\n]*/components/([a-z-]+)\.md\)")
 # A template reference anywhere (link or backtick code-path form) → its bare name.
 _TPL_REF = re.compile(r"/(?:plan-templates|templates)/([a-z-]+)\.md")
-
-# Final rewrite: template refs → in-doc anchors. Applied in this order (anchored form first).
-# `[^)\n]*` — never cross a newline; the shell equivalents were line-scoped by construction.
-_TPL_ANCHOR_LINK = re.compile(
-    r"\]\([^)\n]*/(?:plan-templates|templates)/[a-z-]+\.md#([a-z0-9-]+)\)"
-)
-_TPL_PLAIN_LINK = re.compile(
-    r"\]\([^)\n]*/(?:plan-templates|templates)/([a-z-]+)\.md\)"
-)
-_TPL_CODE_PATH = re.compile(
-    r"`\[path-to-agent-memory-coding-skill\]/(?:plan-templates|templates)/([a-z-]+)\.md`"
-)
 
 
 @dataclass
@@ -122,11 +116,6 @@ def find_template(name: str, root: Path) -> Path | None:
         if candidate.is_file():
             return candidate
     return None
-
-
-def titlecase(name: str) -> str:
-    """``high-wizard-plan-template`` -> ``High Wizard Plan Template`` (the heading anchor)."""
-    return " ".join(w[:1].upper() + w[1:] for w in name.replace("-", " ").split())
 
 
 def template_names_in(text: str) -> list[str]:
@@ -209,34 +198,6 @@ def collect_templates(text: str, root: Path) -> tuple[list[str], list[str]]:
     return order, missing
 
 
-def template_appendix(order: list[str], root: Path) -> str:
-    """The bottom ``## Templates`` section holding each referenced template's body."""
-    out: list[str] = ["", "---", "", "## Templates", ""]
-    out.append("*Inlined at compile time — the procedure above references these by anchor.*")
-
-    for name in order:
-        out += ["", f"### {titlecase(name)}", ""]
-        path = find_template(name, root)
-        if path is None:
-            out.append(f"> [compile: template {name}.md not found]")
-            continue
-        body = _lines(_read(path))
-        # Drop the template's own H1 title — the `### <Name>` heading above replaces it.
-        if body and body[0].startswith("# "):
-            body = body[1:]
-        out += body
-
-    return _emit(out)
-
-
-def rewrite_template_refs(text: str) -> str:
-    """Rewrite every template reference to the in-doc anchor its appendix heading creates."""
-    text = _TPL_ANCHOR_LINK.sub(r"](#\1)", text)
-    text = _TPL_PLAIN_LINK.sub(r"](#\1)", text)
-    text = _TPL_CODE_PATH.sub(r"[\1](#\1)", text)
-    return text
-
-
 def compile_one(src: Path, out_dir: Path, root: Path) -> Report:
     """Compile a single procedure into ``out_dir``."""
     report = Report(name=src.stem, out_path=out_dir / src.name)
@@ -245,13 +206,12 @@ def compile_one(src: Path, out_dir: Path, root: Path) -> Report:
     report.components = used
     report.missing_components = missing
 
+    # Templates are resolved but never inlined — the agent copies them by path.
     order, missing_templates = collect_templates(text, root)
     report.templates = order
     report.missing_templates = missing_templates
-    if order:
-        text += template_appendix(order, root)
 
-    report.out_path.write_text(rewrite_template_refs(text), encoding="utf-8", newline="\n")
+    report.out_path.write_text(text, encoding="utf-8", newline="\n")
     return report
 
 
@@ -276,7 +236,7 @@ def compile_all(
     if verbose:
         print(
             f"Compiling {len(sources)} procedures "
-            f"(inlining components + templates) -> {out_dir} ..."
+            f"(inlining components, resolving templates) -> {out_dir} ..."
         )
 
     reports: list[Report] = []

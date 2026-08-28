@@ -79,8 +79,8 @@ Scan existing files in the scope-aware folder to check if a file already covers 
 ### Step 5A: Create New Context File
 
 1. Copy the [Project Context Template]([path-to-agent-memory-coding-skill]/templates/project-context-template.md) to the scope-aware path: `[scope-folder]/[theme].md`
-   - Shared: `cp {source} [AGENT-MEMORY-PATH]/shared-memory/[project-name]/context/[theme].md`
-   - Private: `cp {source} [AGENT-MEMORY-PATH]/agent-[domain]/knowledge-base/[project-name]/[theme].md`
+   - Shared: `cp [path-to-agent-memory-coding-skill]/templates/project-context-template.md [AGENT-MEMORY-PATH]/shared-memory/[project-name]/context/[theme].md`
+   - Private: `cp [path-to-agent-memory-coding-skill]/templates/project-context-template.md [AGENT-MEMORY-PATH]/agent-[domain]/knowledge-base/[project-name]/[theme].md`
 2. Fill the YAML frontmatter:
    - `project`: the project name from Step 1
    - `tags`: relevant feature/module tags for selective loading (e.g., `[environment, setup, vm, gcloud]`)

@@ -35,7 +35,7 @@ Get current date for file naming:
 Create the council plan folder and copy the template as `core-plan.md` inside it:
 ```
 mkdir -p ./plans/[YYYY-MM-DD]-[project]-[feature]
-cp {source} ./plans/[YYYY-MM-DD]-[project]-[feature]/core-plan.md
+cp [path-to-agent-memory-coding-skill]/plan-templates/council-of-wizards-plan-template.md ./plans/[YYYY-MM-DD]-[project]-[feature]/core-plan.md
 ```
 
 ### Step 4: Fill Feature Info

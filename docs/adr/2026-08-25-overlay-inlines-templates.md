@@ -2,7 +2,7 @@
 
 **Date**: 2026-08-25
 
-**Status**: Accepted
+**Status**: Superseded by [ADR-019: Templates Are Copied, Not Inlined](2026-08-28-templates-are-copied-not-inlined.md) — its *Known Divergence* rested on the claim that this repo has no fetch channel, which was false: the installer registers `[path-to-agent-memory-coding-skill]`, and `fleet-scripts/*.sh` already resolved through it.
 
 **Extends**: ADR-017 (*Composed Instruction Artifacts — Inline by Default, Separate When Materialized*), in the memory core — `control-files/docs/adr/2026-08-25-composed-artifact-inlining.md`.
 

@@ -69,7 +69,7 @@ Get current date for file naming:
 ### Step 4: Copy Template
 
 Copy the template file to the `/plans` folder with the final name:
-`cp {source} ./plans/[YYYY-MM-DD]-[project]-[theme].md`
+`cp [path-to-agent-memory-coding-skill]/plan-templates/high-wizard-plan-template.md ./plans/[YYYY-MM-DD]-[project]-[theme].md`
 
 ### Step 5: Fill Project Info
 

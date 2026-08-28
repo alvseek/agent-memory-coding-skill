@@ -1,4 +1,4 @@
-"""compile-procedures — component inlining, template appendix, and anchor rewriting.
+"""compile-procedures — component inlining and template resolution.
 
 Lives beside the tool it tests. The tool (``setup-scripts/compile-procedures.py``) has a
 hyphen in its name, so it is loaded by file path rather than imported as a module.
@@ -17,6 +17,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 _SCRIPT = ROOT / "setup-scripts" / "compile-procedures.py"
+
+# The installer registers this in the global instructions file, so a reference rooted at it
+# resolves at run time. It is what makes leaving a template path in the output safe.
+_PLACEHOLDER = "[path-to-agent-memory-coding-skill]"
 
 _spec = importlib.util.spec_from_file_location("overlay_compile", _SCRIPT)
 cc = importlib.util.module_from_spec(_spec)
@@ -83,7 +87,12 @@ def test_real_tree_has_no_unresolved_references(tmp_path: Path) -> None:
 
 
 def test_compiled_output_is_self_contained(tmp_path: Path) -> None:
-    """An installed command must never *link* to a dev-time file the agent cannot reach.
+    """An installed command must never *link* to a file the agent cannot reach.
+
+    Components are inlined, so no component link may survive. Template references DO
+    survive — the agent copies a template by path, so inlining one would hand over the
+    content and take away the source — but only in placeholder-rooted form, which the
+    installer registers and the agent can resolve. A bare relative dev-time path could not.
 
     Asserted as reference forms rather than bare substrings: procedure prose legitimately
     contains example paths like ``src/components/Modal.tsx``, which are not references.
@@ -91,9 +100,9 @@ def test_compiled_output_is_self_contained(tmp_path: Path) -> None:
     for report in cc.compile_all(ROOT, tmp_path, verbose=False):
         text = report.out_path.read_text(encoding="utf-8")
         assert not cc._COMPONENT_LINK.search(text), report.name
-        assert not cc._TPL_PLAIN_LINK.search(text), report.name
-        assert not cc._TPL_ANCHOR_LINK.search(text), report.name
-        assert not cc._TPL_CODE_PATH.search(text), report.name
+        for line in text.splitlines():
+            for m in cc._TPL_REF.finditer(line):
+                assert line[: m.start()].endswith(_PLACEHOLDER), f"{report.name}: {line}"
 
 
 def test_output_is_lf_only(tmp_path: Path) -> None:
@@ -166,7 +175,13 @@ def test_missing_component_is_reported_not_silent(tmp_path: Path) -> None:
 # ----------------------------------------------------------------------- templates
 
 
-def test_templates_are_collected_transitively_and_rewritten_to_anchors(tmp_path: Path) -> None:
+def test_templates_are_resolved_but_never_inlined(tmp_path: Path) -> None:
+    """Discovery still walks templates transitively; nothing is copied into the output.
+
+    A template is an artifact the procedure *copies to disk*, so the agent needs its path.
+    Inlining one hands over the content and takes away the source — which is exactly how
+    ``cp {source} ...`` ended up with nothing to substitute.
+    """
     repo = _mkrepo(
         tmp_path / "repo",
         procedures={"p": "Shape it per [the plan](x/plan-templates/outer-template.md).\n"},
@@ -178,33 +193,34 @@ def test_templates_are_collected_transitively_and_rewritten_to_anchors(tmp_path:
     report = _compile(repo, tmp_path / "out")[0]
     text = report.out_path.read_text(encoding="utf-8")
 
-    assert report.templates == ["outer-template", "inner-template"]  # discovery order
-    assert "Shape it per [the plan](#outer-template)." in text  # rewritten to an in-doc anchor
-    assert "## Templates" in text
-    assert "### Outer Template" in text and "### Inner Template" in text  # titlecased headings
-    assert "OUTER BODY" in text and "INNER BODY" in text
-    assert "# Outer\n" not in text  # the template's own H1 is dropped for the ### heading
+    assert report.templates == ["outer-template", "inner-template"]  # discovery order, transitive
+    assert "Shape it per [the plan](x/plan-templates/outer-template.md)." in text  # untouched
+    assert "## Templates" not in text  # the appendix is gone
+    assert "OUTER BODY" not in text and "INNER BODY" not in text  # no body reaches the output
 
 
-def test_backtick_code_path_template_reference_becomes_a_link(tmp_path: Path) -> None:
+def test_backtick_code_path_template_reference_is_left_alone(tmp_path: Path) -> None:
+    ref = "`[path-to-agent-memory-coding-skill]/templates/tpl-one.md`"
     repo = _mkrepo(
         tmp_path / "repo",
-        procedures={"p": "See `[path-to-agent-memory-coding-skill]/templates/tpl-one.md` here.\n"},
-        templates={"t1": "# T1\n\nT1 BODY\n"},
+        procedures={"p": f"See {ref} here.\n"},
+        templates={"tpl-one": "# T1\n\nT1 BODY\n"},
     )
-    assert "See [tpl-one](#tpl-one) here." in _first_text(repo, tmp_path / "out")
+    assert f"See {ref} here." in _first_text(repo, tmp_path / "out")
 
 
-def test_anchored_template_reference_keeps_its_anchor(tmp_path: Path) -> None:
+def test_anchored_template_reference_keeps_its_path_and_anchor(tmp_path: Path) -> None:
+    ref = "x/templates/tpl-one.md#some-section"
     repo = _mkrepo(
         tmp_path / "repo",
-        procedures={"p": "Jump to [a section](x/templates/tpl-one.md#some-section).\n"},
-        templates={"t1": "# T1\n\nT1 BODY\n"},
+        procedures={"p": f"Jump to [a section]({ref}).\n"},
+        templates={"tpl-one": "# T1\n\nT1 BODY\n"},
     )
-    assert "Jump to [a section](#some-section)." in _first_text(repo, tmp_path / "out")
+    assert f"Jump to [a section]({ref})." in _first_text(repo, tmp_path / "out")
 
 
-def test_missing_template_is_reported_and_visible_in_the_output(tmp_path: Path) -> None:
+def test_missing_template_is_reported(tmp_path: Path) -> None:
+    """A dangling template path is the one failure this stage still exists to catch."""
     repo = _mkrepo(
         tmp_path / "repo",
         procedures={"p": "Per [gone](x/templates/gone.md).\n"},
@@ -212,10 +228,10 @@ def test_missing_template_is_reported_and_visible_in_the_output(tmp_path: Path) 
     )
     report = cc.compile_all(repo, tmp_path / "out", verbose=False)[0]
     assert report.missing_templates == ["gone"]
-    assert "[compile: template gone.md not found]" in report.out_path.read_text(encoding="utf-8")
+    assert not report.clean  # this is what `--strict` fails CI on
 
 
-def test_procedure_without_templates_gets_no_appendix(tmp_path: Path) -> None:
+def test_procedure_with_no_references_is_copied_verbatim(tmp_path: Path) -> None:
     repo = _mkrepo(tmp_path / "repo", procedures={"p": "Nothing to inline here.\n"})
     report = cc.compile_all(repo, tmp_path / "out", verbose=False)[0]
     assert report.templates == []
@@ -227,7 +243,3 @@ def test_procedure_without_templates_gets_no_appendix(tmp_path: Path) -> None:
 
 def test_strict_passes_on_the_real_tree(tmp_path: Path) -> None:
     assert cc.main(["--strict", "--quiet", "--out", str(tmp_path)]) == 0
-
-
-def test_titlecase_builds_the_heading_anchor() -> None:
-    assert cc.titlecase("high-wizard-plan-template") == "High Wizard Plan Template"

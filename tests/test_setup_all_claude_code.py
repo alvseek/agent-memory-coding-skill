@@ -26,6 +26,10 @@ cc = si._cc
 _MANIFEST = ".agent-memory-coding-skill-manifest"
 _SIBLING_MANIFEST = ".agent-memory-manifest"
 
+# registered by the installer in the global instructions file, so a reference rooted at it
+# resolves at run time — which is what makes an installed template path safe.
+_PLACEHOLDER = "[path-to-agent-memory-coding-skill]"
+
 # overlay commands every healthy tree carries — asserted by presence, not exact count, so a
 # newly-added or renamed procedure doesn't break the suite.
 _KNOWN = {"awaken-coder", "high-wizard", "map-orientation", "wait-options-coding", "push-project"}
@@ -51,14 +55,20 @@ def test_installed_command_matches_the_compiled_output(tmp_path: Path) -> None:
 
 
 def test_installed_command_carries_no_dev_time_reference(tmp_path: Path) -> None:
-    """The installed command is the compiled one — self-contained, not the raw source."""
+    """The installed command is the compiled one — no component link, no unrooted path.
+
+    A template path is not a dev-time reference: the agent copies templates by path, and the
+    installer registers ``[path-to-agent-memory-coding-skill]`` so a rooted one resolves. An
+    *unrooted* template path would not, which is what this checks for.
+    """
     target = tmp_path / "commands"
     installed, _ = si.install(target, root=ROOT, output_dir=tmp_path / "out")
     for name in installed:
         text = (target / f"{name}.md").read_text(encoding="utf-8")
         assert not cc._COMPONENT_LINK.search(text), name
-        assert not cc._TPL_PLAIN_LINK.search(text), name
-        assert not cc._TPL_CODE_PATH.search(text), name
+        for line in text.splitlines():
+            for m in cc._TPL_REF.finditer(line):
+                assert line[: m.start()].endswith(_PLACEHOLDER), f"{name}: {line}"
 
 
 def test_reinstall_cleans_stale_and_is_idempotent(tmp_path: Path) -> None:

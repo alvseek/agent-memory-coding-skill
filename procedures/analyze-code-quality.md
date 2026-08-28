@@ -41,7 +41,7 @@ Read the [Code Quality Analysis Template]([path-to-agent-memory-coding-skill]/pl
 
 - **Standalone mode** (no `embedded_mode` arg): Copy the template to a working document at the project's plans folder, then fill its Analysis Info section.
   ```
-  cp {source} ./plans/[YYYY-MM-DD]-[project]-code-quality-analysis.md
+  cp [path-to-agent-memory-coding-skill]/plan-templates/code-quality-analysis-template.md ./plans/[YYYY-MM-DD]-[project]-code-quality-analysis.md
   ```
   Fill the **Analysis Info** section (Project, Date, Agent, Scope, Quality Standard). This working doc IS the standalone audit trail.
 

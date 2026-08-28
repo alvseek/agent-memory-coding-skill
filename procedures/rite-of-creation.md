@@ -35,7 +35,7 @@ Get current date for file naming:
 Create the rite plan folder and copy the template as `core-plan.md` inside it:
 ```
 mkdir -p ./plans/[YYYY-MM-DD]-[project]-rite-of-creation
-cp {source} ./plans/[YYYY-MM-DD]-[project]-rite-of-creation/core-plan.md
+cp [path-to-agent-memory-coding-skill]/plan-templates/rite-of-creation-plan-template.md ./plans/[YYYY-MM-DD]-[project]-rite-of-creation/core-plan.md
 ```
 
 ### Step 4: Fill Project Vision
