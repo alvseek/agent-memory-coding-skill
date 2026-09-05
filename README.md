@@ -36,10 +36,27 @@ python setup-scripts/setup-all-claude-code.py
 
 On Windows, double-click (or run) `setup-scripts\setup-all-claude-code.bat` — a thin wrapper that finds Python and runs the same installer. Requires Python 3; no other dependencies.
 
-Both target `~/.claude/commands/` but keep **separate manifests** (core = `.agent-memory-manifest`, overlay = `.agent-memory-coding-skill-manifest`), so re-running either one cleans up only its own commands. Codex (`setup-all-codex.sh`) and Antigravity (`setup-all-antigravity.sh`) installers are provided too.
+Both target `~/.claude/commands/` but keep **separate manifests** (core = `.agent-memory-manifest`, overlay = `.agent-memory-coding-skill-manifest`), so re-running either one cleans up only its own commands.
+
+Codex and Antigravity consume the same procedures as **Agent Skills**, which they both read as a folder holding a `SKILL.md` with `name` and `description` frontmatter:
+
+```bash
+python setup-scripts/setup-all-codex.py         # -> ~/.agents/skills/
+python setup-scripts/setup-all-antigravity.py   # -> ~/.gemini/config/skills/
+```
+
+Each honours `AGENT_MEMORY_TARGET_DIR`, keeps its own manifest, and registers `[path-to-agent-memory-coding-skill]` in that platform's global instructions file (`~/.codex/AGENTS.md`, `~/.gemini/GEMINI.md`) so the script and template paths inside an installed procedure resolve.
+
+A skill is **model-invoked** rather than typed: the agent sees only each skill's name and description until a request looks like a match, then reads the body. So ask for a procedure in your own words — *"use the quick-wizard skill"* — rather than typing a slash command as you would in Claude Code.
 
 ## Status
 
 Extracted from the memory core on **2026-08-06** (Phase 2 of the memory-core / coding-skill decoupling — see [ADR-012](https://github.com/alvseek/agent-memory-system) in the core repo). Wrapping this overlay as a 2nd-layer **MCP server** is the target delivery model but a **separate future project** — this repo is currently the procedure content that such a server will serve.
 
 See [MIGRATION.md](MIGRATION.md) for the move details.
+
+## License
+
+Licensed under the [Apache License 2.0](LICENSE) — the same license the memory core carries, so a coding agent's two halves are under one set of terms. Attribution and the license notice travel with the work; see [NOTICE](NOTICE).
+
+The procedures here are markdown that an agent *executes*, so the license covers them as source: copying a procedure into your own fleet, adapting it, or shipping it inside a commercial product is all permitted, provided you keep the notice.

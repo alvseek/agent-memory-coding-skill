@@ -3,6 +3,8 @@ name = "agent-memory-coding-skill"
 version = "0.1.0"
 description = "agent-memory-coding-skill — the coding/repo overlay procedures (wizards, doc-gen, QA, fleet) and their compile/install tooling, composing on top of the agent-memory core."
 readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
 authors = [
     { name = "Alviandi Widiasto", email = "alviandi@msn.com" }
 ]
