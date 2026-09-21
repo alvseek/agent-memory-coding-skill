@@ -39,8 +39,11 @@ from pathlib import Path
 _ROOT = Path(__file__).resolve().parents[1]
 
 # Installed folders are prefixed so a skill directory shared with the memory core stays
-# legible, and so each installer's manifest claims an unambiguous set.
-FOLDER_PREFIX = "agent-memory-"
+# legible, and so each installer's manifest claims an unambiguous set. The overlay uses its own
+# ``agent-coding-`` prefix rather than the core's ``agent-memory-`` one: the two installers write
+# into the same skills directory, and sharing a prefix would let a same-named procedure from
+# either side silently clobber the other's folder.
+FOLDER_PREFIX = "agent-coding-"
 
 # Both platforms cap the description; Antigravity documents 1024 characters. Staying inside the
 # smaller published number keeps one emitter correct for both.

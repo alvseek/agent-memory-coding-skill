@@ -49,6 +49,16 @@ def _install(tmp_path: Path):
     return target, out, installed, removed
 
 
+def test_folder_prefix_is_the_overlay_prefix() -> None:
+    """The overlay's folder prefix must differ from the memory core's ``agent-memory-`` one.
+
+    Both installers write into the same skills directory, so sharing a prefix would let a
+    same-named core procedure silently clobber an overlay folder (manifests guard deletion,
+    not overwrite). Pinned literally so a well-meaning "consistency" rename fails loudly.
+    """
+    assert sk.FOLDER_PREFIX == "agent-coding-"
+
+
 def _frontmatter_lines(skill_md: Path) -> list[str]:
     text = skill_md.read_text(encoding="utf-8")
     assert text.startswith("---\n"), f"{skill_md}: no opening frontmatter fence"
