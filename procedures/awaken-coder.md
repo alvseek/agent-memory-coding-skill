@@ -2,7 +2,18 @@
 
 Orchestrating overlay for **coding agents** (working in a repo). It composes the memory-core awakening with repo/environment context: the core loads central memory; this overlay adds coding-scoped reasoning, localization, orientation map, fleet, and task-system.
 
-**Delivery**: as a local skill/command (Claude Code CLI) or an MCP prompt (`agent-memory-coding-skill` server). Either way, the composition is agent-side — this overlay *invokes* the core `/awaken-agent`; it never reaches into the core repo/server directly.
+**Delivery**: as a local skill/command (Claude Code CLI) or an MCP prompt (`agent-memory-coding-skill` server). Either way, the composition is agent-side — this overlay *invokes* the core; it never reaches into the core repo/server directly.
+
+## Core access
+
+Every handoff to the core in these instructions exists in two forms, and `[CORE-ACCESS]` fixes which one this machine uses:
+
+- **`markdown`** — invoke the installed command, exactly as written.
+- **`mcp`** — do not invoke the installed command. Fetch the procedure by name from the served core and follow what it returns, passing the argument the command would have taken (a domain, a mode). The installed commands are the file form, and they would write files where the store keeps records.
+
+`[CORE-ACCESS]` decides even when the installed commands are also present, which under `mcp` they are.
+
+Applies to every core procedure these instructions name: `awaken-agent`, `update-memory`, `wrap-up`, `push-memory`, `pull-memory`, `wait-options`.
 
 ## Arguments
 
