@@ -110,6 +110,24 @@ def test_sibling_core_command_is_never_deleted(tmp_path: Path) -> None:
     assert moved.read_text(encoding="utf-8") == "core-owned\n"  # untouched
 
 
+def test_any_sibling_manifest_protects_its_commands(tmp_path: Path) -> None:
+    """A command claimed by ANY sibling (here the fleet) survives an overlay reinstall."""
+    target = tmp_path / "commands"
+    out = tmp_path / "out"
+    si.install(target, root=ROOT, output_dir=out)
+
+    fleet_owned = target / "fleet-owned.md"
+    fleet_owned.write_text("fleet\n", encoding="utf-8")
+    manifest = target / _MANIFEST
+    manifest.write_text(
+        manifest.read_text(encoding="utf-8") + "fleet-owned.md\n", encoding="utf-8"
+    )
+    (target / ".agent-memory-fleet-manifest").write_text("fleet-owned.md\n", encoding="utf-8")
+
+    si.install(target, root=ROOT, output_dir=out)
+    assert fleet_owned.exists()  # protected by the second sibling manifest
+
+
 def test_install_writes_lf_manifest(tmp_path: Path) -> None:
     target = tmp_path / "commands"
     si.install(target, root=ROOT, output_dir=tmp_path / "out")
