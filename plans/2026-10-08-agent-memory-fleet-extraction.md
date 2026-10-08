@@ -47,12 +47,12 @@ The fleet's runtime **data** (`fleet-agents.md`, `fleet-map.csv`) stays in the c
 - [MIGRATION.md](../MIGRATION.md) - the overlay's own extraction note, the pattern the fleet repo mirrors
 
 ### **SUCCESS CRITERIA**
-- [ ] `agent-memory-fleet` is created (public, Apache-2.0), compiles clean under `--strict`, and installs its four procedures (`setup-fleet`, `load-fleet`, `ask-agent`, `delegate-agent`) as skills/commands on all four harnesses, with green CI.
-- [ ] The overlay no longer contains the fleet files and references the fleet exactly once: the `hermod-fleet` pointer in `awaken-coder`.
-- [ ] `[CODING-ACCESS]`/`[CODING-MCP-URL]` and `[FLEET-ACCESS]`/`[FLEET-MCP-URL]` are declared and stamped per harness; the `awaken-coder` pointer and the fleet's awaken prompt resolve through them.
-- [ ] The installers protect all three manifests (no cross-repo deletion on reinstall).
-- [ ] Cross-repo periphery updated: core `check-core-invariant.sh` list + `ARCHITECTURE.md`/`README.md`, the store's `mcp-boundary-strategy.md` + `context-index.md` + `orientation-map.md`, and the overlay's `README.md`/`MIGRATION.md`/`NOTICE`/`pyproject.toml`.
-- [ ] All repos' test suites green; no unresolved references.
+- [x] `agent-memory-fleet` is created (public, Apache-2.0), compiles clean under `--strict`, and installs its four procedures (`setup-fleet`, `load-fleet`, `ask-agent`, `delegate-agent`) as skills/commands on all four harnesses, with green CI.
+- [x] The overlay no longer contains the fleet files and references the fleet exactly once: the `hermod-fleet` pointer in `awaken-coder`.
+- [x] `[CODING-ACCESS]`/`[CODING-MCP-URL]` and `[FLEET-ACCESS]`/`[FLEET-MCP-URL]` are declared and stamped per harness; the `awaken-coder` pointer and the fleet's awaken prompt resolve through them.
+- [x] The installers protect all three manifests (no cross-repo deletion on reinstall).
+- [x] Cross-repo periphery updated: core `check-core-invariant.sh` list + `ARCHITECTURE.md`/`README.md`, the store's `mcp-boundary-strategy.md` + `context-index.md` + `orientation-map.md`, and the overlay's `README.md`/`MIGRATION.md`/`NOTICE`/`pyproject.toml`.
+- [x] All repos' test suites green; no unresolved references.
 
 ---
 
@@ -503,22 +503,22 @@ I have to use this document as my **ONLY** source of truth to execute and track 
 ## **QUALITY REVIEW**
 *Filled by procedure Step 16 (delegated to `/analyze-code-quality` in embedded mode) after all execution phases are complete. **Static** review — answers "is the code clean?".*
 
-- **Scope**: [Files reviewed — from Execution Log, reconciled against `git diff --name-only`]
-- **Quality Standard**: [quality-standard.md found / not found — dimensions applied]
-- **Findings**: [Issues found, or "No findings — implementation meets quality dimensions"]
-- **Fixed**: [What was fixed from approved findings, or "N/A"]
+- **Scope**: the extraction's changed files across the family: `agent-memory-fleet` (tooling, 4 procedures, `fleet-scripts/`, templates, docs), `agent-memory-coding-skill` (installers, tests, `awaken-coder.md`, docs, ADR, plan), `agent-memory-system` (`check-core-invariant.sh`, `ARCHITECTURE.md`, `README.md`), and the store (`mcp-boundary-strategy.md`, `context-index.md`, `orientation-map.md`). `git diff --name-only` matched the Execution Log; no unreported files.
+- **Quality Standard**: no `quality-standard.md` found in any touched repo, so freeform dimensions were applied (correctness, consistency, dead code, naming honesty).
+- **Findings**: (1) the copied tooling still printed and described "overlay" where it now means the fleet (installer headers, "stale overlay skills/commands", docstrings) — a naming-honesty defect. (2) Residual descriptive drift remains in deeper docstrings (a few "this overlay" phrases and the Antigravity cap rationale that referenced "sixteen of this overlay's compiled procedures", which does not apply to a four-procedure repo). (3) The plan file's line endings flip on each edit (CRLF/LF), making noisy diffs.
+- **Fixed**: Finding 1, across all five `setup-scripts/*.py` (headers, "fleet skills/commands/procedures", "Source (fleet)", "Compile the repo"). Findings 2 and 3 are recorded as debts rather than fixed now: 2 is prose-only and does not change behaviour, 3 is a hygiene issue to normalize before archiving.
 
 ---
 
 ## **QA HANDOFF**
 *Filled by procedure Step 17 after Quality Review is resolved. This plan is **not** runtime-verified — this section records the plan for that verification, which happens in a QA session with the stack up.*
 
-- **Scope**: [Modules touched — mapped from Execution Log scope]
-- **QA instrument**: [Set up (map + bench) / NOT SET UP — auto-skipped]
+- **Scope**: `agent-memory-fleet` procedures + `fleet-scripts/fleet-common.sh` + installers; `agent-memory-coding-skill` installers + `awaken-coder.md`; core `check-core-invariant.sh` + docs; store context docs.
+- **QA instrument**: NOT SET UP — no `qa/qa-map.md` and no bench in any touched repo (they are procedures-plus-tooling repos); auto-skipped.
 - **Integration coverage**: NONE — no `qa/qa-map.md` and no built bench (this repo has no runtime stack). The cross-boundary checks run as the installer temp-dir tests (Phase 3, 5.4) and the end-to-end manual pass (Phase 6.3); confirm before implementation.
-- **Checklist**: [`qa/checklists/{feature}.md`, or "none — skipped, reason"]
-- **Coverage split**: [N automated (named tests) / N manual — of which N are UI-bound]
-- **Runtime verification**: **NOT DONE.** Next action: [`/run-qa-test --checklist qa/checklists/{feature}.md` once the stack is up | set up the instrument first: `/map-qa-instrument create` → `/build-qa-bench`]
+- **Checklist**: none — skipped, the QA instrument is not set up (a `qa/` bench would have to be built first: `/map-qa-instrument create` then `/build-qa-bench`).
+- **Coverage split**: 39 automated tests per repo (the two sibling repos) for compile/install/cleanup/layer-access; the handoffs are verified manually (3 handoffs), none UI-bound.
+- **Runtime verification**: **NOT DONE.** Next action: run `/awaken-coder` in a roster-bearing project (e.g. aquazone), confirm the `hermod-fleet` pointer, then `/load-fleet` and `/ask-agent`.
 
 > Do not read a filled checklist as a passed one. This section says a verification *plan* exists, nothing more.
 
