@@ -66,6 +66,6 @@ The value is `markdown` (installed) or `mcp` (served). A pointer names the **cap
 
 ---
 
-**Full context**: [High Wizard plan](../../plans/2026-10-08-agent-memory-fleet-extraction.md)
+**Full context**: [High Wizard plan](../../plans/completed/2026-10-08-agent-memory-fleet-extraction.md)
 
 ---
