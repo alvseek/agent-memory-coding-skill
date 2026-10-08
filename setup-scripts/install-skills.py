@@ -59,6 +59,11 @@ _PATH_DEF_UUID = "9f3c2a1e-7b4d-4e6a-8c1f-2d5e9a3b6c7f"
 # this UUID is provenance, matching the path-definition convention above.
 _ENV_DEF_UUID = "e2a7c9d4-5b1f-4e83-a6d2-9c7b3f8e1a5d"
 
+# Marks the coding-layer access declaration ([CODING-ACCESS] / [CODING-MCP-URL]) this installer
+# writes: how the coding overlay is reached. UUID-guarded like the others, so re-runs never
+# duplicate the line.
+_CODING_ACCESS_UUID = "45a0bd66-0b97-4f36-91ae-44daf6d052cd"
+
 # sys.platform -> the name the compiled core memory prints on its Operating System line.
 _OS_NAMES = {"win32": "Windows", "linux": "Linux", "darwin": "macOS"}
 
@@ -279,7 +284,8 @@ def register_env(instructions_file: Path) -> str:
         f"- **Operating System**: {os_name}\n"
         "- **Claude Code Bash Tool**: Runs in **Git Bash** (NOT CMD or PowerShell)\n"
         "  - Use Unix-style commands: `cp`, `rm`, `ls`, `mkdir`, `cat`, `grep`\n"
-        "  - Use forward slashes: `/c/Users/username/.claude/` (not `C:\\Users\\username\\.claude\\`)\n"
+        "  - Use forward slashes: `/c/Users/username/.claude/` "
+        "(not `C:\\Users\\username\\.claude\\`)\n"
         '  - Use Unix conditionals: `test -f file && echo "exists"` (not `if exist file`)\n'
         "  - CMD syntax like `if exist ... (echo) else (echo)` will FAIL\n"
         f"- **[CORE-ACCESS]** = `{mode}` (which form of the memory core this machine uses: "
@@ -292,6 +298,40 @@ def register_env(instructions_file: Path) -> str:
     with instructions_file.open("a", encoding="utf-8", newline="\n") as fh:
         fh.write(block)
     return f"  Registered [CORE-ACCESS] = {mode} ([CORE-MCP-URL] = {url}) + OS/bash notes"
+
+
+def register_layer_access(instructions_file: Path, layer: str, uuid: str) -> str:
+    """Define ``[<LAYER>-ACCESS]`` / ``[<LAYER>-MCP-URL]`` in a platform's global instructions file.
+
+    The declaration names how one repo's *layer* is reached: ``markdown`` for installed
+    commands/skills, ``mcp`` for procedures served over a connected server. A caller reads the
+    target layer's declaration, so each layer's own installer writes it. UUID-guarded so re-runs
+    cannot duplicate the line.
+    """
+    if not instructions_file.is_file():
+        return (
+            f"  NOTE: {instructions_file} not found - could not register\n"
+            f"        [{layer}-ACCESS]. Run the memory-core setup for this platform first,\n"
+            "        then re-run this installer."
+        )
+    marker = f"**[{layer}-ACCESS]**"
+    if marker in instructions_file.read_text(encoding="utf-8"):
+        return f"  [{layer}-ACCESS] already registered - skipped."
+
+    mode = os.environ.get(f"{layer}_ACCESS", "markdown")
+    url = os.environ.get(f"{layer}_MCP_URL", "<unset>")
+    label = layer.lower()
+    block = (
+        "\n"
+        f"- **[{layer}-ACCESS]** = `{mode}` (which form the {label} layer this machine uses: "
+        "`markdown` for the installed commands/skills, `mcp` for the procedures served over a "
+        "connected server)\n"
+        f"- **[{layer}-MCP-URL]** = `{url}` (the endpoint the served {label} layer is reached at)"
+        f"  <!-- overlay-{label}-access-def {uuid} -->\n"
+    )
+    with instructions_file.open("a", encoding="utf-8", newline="\n") as fh:
+        fh.write(block)
+    return f"  Registered [{layer}-ACCESS] = {mode} ([{layer}-MCP-URL] = {url})"
 
 
 def run(
@@ -321,6 +361,7 @@ def run(
     print(f"Successfully installed {len(installed)} overlay skills!\n")
     print(register_path(instructions_file))
     print(register_env(instructions_file))
+    print(register_layer_access(instructions_file, "CODING", _CODING_ACCESS_UUID))
     print("\nInstalled overlay skills:")
     for name in installed:
         print(f"  {FOLDER_PREFIX}{name}")

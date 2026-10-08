@@ -137,3 +137,19 @@ def test_missing_claude_md_is_reported_not_created(tmp_path: Path) -> None:
     message = si._register_overlay_path(claude_md, ROOT)
     assert "could not register" in message
     assert not claude_md.exists()
+
+
+def test_coding_layer_access_registration_is_idempotent(tmp_path: Path) -> None:
+    """The coding-layer declaration is written once, uuid-guarded, even across re-runs."""
+    claude_md = tmp_path / "CLAUDE.md"
+    claude_md.write_text("# Global instructions\n", encoding="utf-8", newline="\n")
+
+    first = si._register_layer_access(claude_md, "CODING", si._CODING_ACCESS_UUID)
+    body = claude_md.read_text(encoding="utf-8")
+    assert "Registered" in first
+    assert "**[CODING-ACCESS]**" in body
+    assert body.count(si._CODING_ACCESS_UUID) == 1
+
+    second = si._register_layer_access(claude_md, "CODING", si._CODING_ACCESS_UUID)
+    assert "already registered" in second
+    assert claude_md.read_text(encoding="utf-8").count(si._CODING_ACCESS_UUID) == 1
