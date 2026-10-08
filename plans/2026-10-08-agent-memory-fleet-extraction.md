@@ -401,82 +401,82 @@ I have to use this document as my **ONLY** source of truth to execute and track 
   - **Result**: The overlay publishes the delivery-agnostic reader rule.
 
 ### Phase 3: Harden the installers (before the move)
-- [ ] **Step 3.1**: Generalize cleanup to a list of sibling manifests
-  - **Implementation Log**: [on completion]
-  - **Testing Log**: [on completion]
-  - **Success Criteria**: [Pass/Fail]
-  - **Tech Debts**: [or "None"]
-  - **Result**: [on completion]
-- [ ] **Step 3.2**: Apply the same in the fleet copies
-  - **Implementation Log**: [on completion]
-  - **Testing Log**: [on completion]
-  - **Success Criteria**: [Pass/Fail]
-  - **Tech Debts**: [or "None"]
-  - **Result**: [on completion]
+- [x] **Step 3.1**: Generalize cleanup to a list of sibling manifests
+  - **Implementation Log**: Changed `cleanup` in the overlay's `install-skills.py` and `_cleanup` in `setup-all-claude-code.py` to take `sibling_manifests: list[Path]` and union every sibling's claimed names. Updated the signatures and call sites (`install`, `run`, and all four per-platform installers): codex/antigravity/opencode now pass `[CORE_MANIFEST_NAME, FLEET_MANIFEST_NAME]`, claude passes `_SIBLING_MANIFEST_NAMES`.
+  - **Testing Log**: added a test that a name claimed by the *second* sibling (fleet) survives; `uv run ruff check` clean; `uv run pytest -q` 39 passed.
+  - **Success Criteria**: Pass.
+  - **Tech Debts**: None.
+  - **Result**: No overlay installer deletes a fleet-owned command.
+- [x] **Step 3.2**: Apply the same in the fleet copies
+  - **Implementation Log**: Carried the list-based cleanup into the fleet's `install-skills.py` and `setup-all-claude-code.py`; the fleet's siblings are core + coding (`[".agent-memory-manifest", ".agent-memory-coding-skill-manifest"]` and the per-platform equivalents).
+  - **Testing Log**: same tests in the fleet repo; `uv run ruff check` clean; `uv run pytest -q` 39 passed; `compile-procedures.py --strict` clean.
+  - **Success Criteria**: Pass.
+  - **Tech Debts**: None.
+  - **Result**: All three installers protect all three manifests.
 
 ### Phase 4: Relocate the fleet capability
-- [ ] **Step 4.1**: Move the procedures and author `load-fleet`
-  - **Implementation Log**: [on completion]
-  - **Testing Log**: [on completion]
-  - **Success Criteria**: [Pass/Fail]
-  - **Tech Debts**: [or "None"]
-  - **Result**: [on completion]
-- [ ] **Step 4.2**: Move the scripts and templates; repoint references
-  - **Implementation Log**: [on completion]
-  - **Testing Log**: [on completion]
-  - **Success Criteria**: [Pass/Fail]
-  - **Tech Debts**: [or "None"]
-  - **Result**: [on completion]
-- [ ] **Step 4.3**: Fix the dead template path
-  - **Implementation Log**: [on completion]
-  - **Testing Log**: [on completion]
-  - **Success Criteria**: [Pass/Fail]
-  - **Tech Debts**: [or "None"]
-  - **Result**: [on completion]
-- [ ] **Step 4.4**: Switch the awaken prompt to read CODING-ACCESS
-  - **Implementation Log**: [on completion]
-  - **Testing Log**: [on completion]
-  - **Success Criteria**: [Pass/Fail]
-  - **Tech Debts**: [or "None"]
-  - **Result**: [on completion]
-- [ ] **Step 4.5**: Install the fleet repo
-  - **Implementation Log**: [on completion]
-  - **Testing Log**: [on completion]
-  - **Success Criteria**: [Pass/Fail]
-  - **Tech Debts**: [or "None"]
-  - **Result**: [on completion]
+- [x] **Step 4.1**: Move the procedures and author `load-fleet`
+  - **Implementation Log**: Copied `setup-fleet.md`, `ask-agent.md`, `delegate-agent.md` into `agent-memory-fleet/procedures/`; authored `load-fleet.md`, which reads the roster and reports the roster plus the fleet commands, and states the layer-access reader rule.
+  - **Testing Log**: 4 procedures present; read-through confirms `load-fleet` covers the roster read and command surfacing the overlay's Steps 4/6 used to do (the strict compile is verified at 4.2, once the template has moved).
+  - **Success Criteria**: Pass.
+  - **Tech Debts**: None.
+  - **Result**: The fleet owns its four procedures.
+- [x] **Step 4.2**: Move the scripts and templates; repoint references
+  - **Implementation Log**: Copied `fleet-scripts/*` and `templates/{fleet-agents-template.md,fleet-map-template.csv}` into the fleet repo; repointed `[path-to-agent-memory-coding-skill]` to `[path-to-agent-memory-fleet]` in the three moved procedures; removed the now-redundant `.gitkeep` files.
+  - **Testing Log**: `grep` shows no `agent-memory-coding-skill` reference remains in the fleet; `compile-procedures.py --strict` → 4 procedures, clean.
+  - **Success Criteria**: Pass.
+  - **Tech Debts**: None.
+  - **Result**: Every reference resolves inside the fleet repo.
+- [x] **Step 4.3**: Fix the dead template path
+  - **Implementation Log**: `fleet-common.sh` now resolves the map template as `$(dirname "$0")/../templates/fleet-map-template.csv` instead of the non-existent store path.
+  - **Testing Log**: a Git-Bash smoke call copied the template from the repo (header shaped), where the old path fell through to the inline echo.
+  - **Success Criteria**: Pass.
+  - **Tech Debts**: None.
+  - **Result**: The template is used when present.
+- [x] **Step 4.4**: Switch the awaken prompt to read CODING-ACCESS
+  - **Implementation Log**: `build_awaken_prompt` reads `CODING_ACCESS` (default `markdown`); under `markdown` it emits `Execute /awaken-coder <domain>`, under `mcp` it emits a fetch line naming `[CODING-MCP-URL]`.
+  - **Testing Log**: a Git-Bash smoke showed `Execute /awaken-coder backend-django` by default and the served fetch line with `CODING_ACCESS=mcp`.
+  - **Success Criteria**: Pass.
+  - **Tech Debts**: the fleet now depends on the coding overlay being installed/served, as decision 13 chose.
+  - **Result**: A spawned agent receives the full coding awakening instruction.
+- [x] **Step 4.5**: Install the fleet repo
+  - **Implementation Log**: populated the fleet tests' `_KNOWN` with the four procedures and restored the non-empty assertions relaxed in Step 1.2.
+  - **Testing Log**: `uv run ruff check` clean; `uv run pytest -q` 39 passed; `compile-procedures.py --strict` → 4 procedures.
+  - **Success Criteria**: Pass.
+  - **Tech Debts**: None.
+  - **Result**: The fleet operates from its own repo.
 
 ### Phase 5: Overlay cleanup and reinstall
-- [ ] **Step 5.1**: Remove the fleet files from the overlay
-  - **Implementation Log**: [on completion]
-  - **Testing Log**: [on completion]
-  - **Success Criteria**: [Pass/Fail]
-  - **Tech Debts**: [or "None"]
-  - **Result**: [on completion]
-- [ ] **Step 5.2**: Replace `awaken-coder`'s fleet step with the pointer
-  - **Implementation Log**: [on completion]
-  - **Testing Log**: [on completion]
-  - **Success Criteria**: [Pass/Fail]
-  - **Tech Debts**: [or "None"]
-  - **Result**: [on completion]
-- [ ] **Step 5.3**: Update the overlay docs
-  - **Implementation Log**: [on completion]
-  - **Testing Log**: [on completion]
-  - **Success Criteria**: [Pass/Fail]
-  - **Tech Debts**: [or "None"]
-  - **Result**: [on completion]
-- [ ] **Step 5.4**: Reinstall the overlay and prove no cross-deletion
-  - **Implementation Log**: [on completion]
-  - **Testing Log**: [on completion]
-  - **Success Criteria**: [Pass/Fail]
-  - **Tech Debts**: [or "None"]
-  - **Result**: [on completion]
-- [ ] **Step 5.5**: Run the overlay suite
-  - **Implementation Log**: [on completion]
-  - **Testing Log**: [on completion]
-  - **Success Criteria**: [Pass/Fail]
-  - **Tech Debts**: [or "None"]
-  - **Result**: [on completion]
+- [x] **Step 5.1**: Remove the fleet files from the overlay
+  - **Implementation Log**: Deleted `procedures/{setup-fleet,ask-agent,delegate-agent}.md`, the `fleet-scripts/` directory (4 scripts), and `templates/{fleet-agents-template.md,fleet-map-template.csv}`.
+  - **Testing Log**: the only `fleet` matches left in the tree are the regenerated `output/` (gitignored) and the plan itself; `compile-procedures.py --strict` resolves (35 procedures).
+  - **Success Criteria**: Pass.
+  - **Tech Debts**: None.
+  - **Result**: The overlay tree is fleet-free except the pointer.
+- [x] **Step 5.2**: Replace `awaken-coder`'s fleet step with the pointer
+  - **Implementation Log**: Step 4 is now "Orientation map + fleet pointer": when the roster exists it emits one line naming the capability (`hermod-fleet`), resolved via `[FLEET-ACCESS]`; the Step 6 fleet report bullet is gone. The `## Layer access` section (Step 2.3) carries the rule.
+  - **Testing Log**: `grep -i fleet procedures/awaken-coder.md` shows only the pointer and the Layer-access section; a project with no roster shows nothing.
+  - **Success Criteria**: Pass.
+  - **Tech Debts**: None.
+  - **Result**: `awaken-coder` behavior is preserved through the pointer.
+- [x] **Step 5.3**: Update the overlay docs
+  - **Implementation Log**: `README.md` fleet bullet now points at the sibling repo; `MIGRATION.md` gained a "Later move — the fleet (2026-10-08)" section; `NOTICE` and `pyproject.toml` dropped "fleet" from their capability lists.
+  - **Testing Log**: `grep -i fleet` in the overlay docs reflects the sibling/pointer only.
+  - **Success Criteria**: Pass.
+  - **Tech Debts**: None.
+  - **Result**: The overlay documents fleet as a sibling capability.
+- [x] **Step 5.4**: Reinstall the overlay and prove no cross-deletion
+  - **Implementation Log**: Ran the fleet installers, then reinstalled the overlay on all four harnesses. The overlay's list-based cleanup protects the fleet manifest.
+  - **Testing Log**: OpenCode skills show `agent-coding-{ask-agent,delegate-agent,setup-fleet}` removed and all four `agent-fleet-*` surviving; the three manifests (`.agent-memory-opencode-manifest`, `.agent-memory-coding-skill-opencode-manifest`, `.agent-memory-fleet-opencode-manifest`) coexist; `[CODING-ACCESS]` and `[FLEET-ACCESS]` are registered in the harness instruction files.
+  - **Success Criteria**: Pass.
+  - **Tech Debts**: None.
+  - **Result**: The hazard is closed in practice.
+- [x] **Step 5.5**: Run the overlay suite
+  - **Implementation Log**: ran ruff, pytest, and the strict compile.
+  - **Testing Log**: `uv run ruff check` clean; `uv run pytest -q` 39 passed; `compile-procedures.py --strict` → 35 procedures.
+  - **Success Criteria**: Pass.
+  - **Tech Debts**: None.
+  - **Result**: Overlay green.
 
 ### Phase 6: Cross-repo periphery and verification
 - [ ] **Step 6.1**: Update the core repo

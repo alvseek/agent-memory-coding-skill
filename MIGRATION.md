@@ -4,6 +4,13 @@ The procedures under [`procedures/`](procedures/) were **moved out of** the memo
 (`agent-memory-system` / `control-files/procedures/`) into this standalone overlay repo as part of
 **Phase 2** of the memory-core / coding-skill decoupling (ADR-012).
 
+## Later move — the fleet (2026-10-08)
+
+The **fleet** procedures (`ask-agent`, `delegate-agent`, `setup-fleet`), scripts (`fleet-scripts/`),
+and templates were moved **out** of this overlay into the sibling repo
+[`agent-memory-fleet`](https://github.com/alvseek/agent-memory-fleet) (`hermod-fleet`). The overlay
+keeps exactly one pointer to it, in `awaken-coder`. See that repo's `MIGRATION.md`.
+
 ## What moved
 
 31 add-on procedures relocated from `control-files/procedures/` — wizards, doc-gen, QA, fleet,

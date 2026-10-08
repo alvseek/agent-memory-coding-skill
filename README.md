@@ -18,7 +18,7 @@ This repo holds every coding- and repository-oriented procedure that sits **on t
 - **Doc-gen**: `generate-readme`, `generate-docs`, `generate-architecture-docs`, `generate-domain-docs`, `generate-flow-docs`, `discovery-contract`
 - **QA**: `analyze-code-quality`, `generate-standard`, `pixel-wizard`, `setup-qa-visual-instrument` — plus the QA instrument pipeline: `map-qa-instrument` (audit) → `build-qa-bench` (rig, runbooks, playbook) → `integration-test` (fixtures + integration tests, built and run) → `run-qa-test` (system-level runtime proof), with `qa-status` reporting readiness and debt, and `generate-qa-checklist` producing the per-feature checklist a wizard hands off at its QA Handoff step
 - **Repo / integration**: `map-orientation`, `localize-context`, `update-project-context`, `load-project-context`, `pull-all`/`pull-project`, `push-all`/`push-project`
-- **Fleet**: `ask-agent`, `delegate-agent`, `setup-fleet` (+ `fleet-scripts/` and fleet templates) — agent-to-agent consult/delegate via Claude-Code session spawn/resume (a mechanism a chat agent can't use, so it's an overlay capability)
+- **Fleet** (moved out 2026-10-08): lives in the sibling repo [`agent-memory-fleet`](https://github.com/alvseek/agent-memory-fleet) (`hermod-fleet`). `awaken-coder` surfaces a one-line pointer to it — the commands, scripts, and templates are no longer here.
 
 > **`push-memory`/`pull-memory`** live in the memory **core** (moved 2026-08-07) — persisting the memory store is the memory server's own job; the overlay's `push-all`/`pull-all` compose `/push-project` (overlay) + the core's `/push-memory`.
 
