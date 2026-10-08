@@ -15,6 +15,18 @@ Every handoff to the core in these instructions exists in two forms, and `[CORE-
 
 Applies to every core procedure these instructions name: `awaken-agent`, `update-memory`, `wrap-up`, `push-memory`, `pull-memory`, `wait-options`.
 
+## Layer access
+
+A handoff to another layer resolves through that layer's **access declaration**, which the caller reads:
+
+- `[CORE-ACCESS]` / `[CORE-MCP-URL]`: how the memory core (`munnin`) is reached.
+- `[CODING-ACCESS]` / `[CODING-MCP-URL]`: how this coding overlay (`hermod-coding`) is reached.
+- `[FLEET-ACCESS]` / `[FLEET-MCP-URL]`: how the fleet (`hermod-fleet`) is reached.
+
+Each value is `markdown` (the layer is installed as local commands/skills) or `mcp` (the layer is served as procedures over a connected server). An **absent** declaration means `markdown`. Name the target layer's capability, then resolve the invocation form from its declaration: invoke the installed command under `markdown`, or fetch the served procedure under `mcp`.
+
+The `## Core access` rule above is this same rule applied to the core, kept separate because the core is the layer every handoff falls back to.
+
 ## Arguments
 
 `[domain]` — the agent domain to awaken (e.g. `invintiry`, `aquazone`).

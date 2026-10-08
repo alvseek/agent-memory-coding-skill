@@ -381,24 +381,24 @@ I have to use this document as my **ONLY** source of truth to execute and track 
   - **Result**: Tooling adapted and green.
 
 ### Phase 2: Access declarations (coding first)
-- [ ] **Step 2.1**: Stamp `[CODING-ACCESS]` / `[CODING-MCP-URL]` from the overlay
-  - **Implementation Log**: [on completion]
-  - **Testing Log**: [on completion]
-  - **Success Criteria**: [Pass/Fail]
-  - **Tech Debts**: [or "None"]
-  - **Result**: [on completion]
-- [ ] **Step 2.2**: Stamp `[FLEET-ACCESS]` / `[FLEET-MCP-URL]` from the fleet
-  - **Implementation Log**: [on completion]
-  - **Testing Log**: [on completion]
-  - **Success Criteria**: [Pass/Fail]
-  - **Tech Debts**: [or "None"]
-  - **Result**: [on completion]
-- [ ] **Step 2.3**: Publish the reader rule
-  - **Implementation Log**: [on completion]
-  - **Testing Log**: [on completion]
-  - **Success Criteria**: [Pass/Fail]
-  - **Tech Debts**: [or "None"]
-  - **Result**: [on completion]
+- [x] **Step 2.1**: Stamp `[CODING-ACCESS]` / `[CODING-MCP-URL]` from the overlay
+  - **Implementation Log**: Added `register_layer_access(...)` and `_CODING_ACCESS_UUID` (`45a0bd66-...`) to the overlay's `setup-scripts/install-skills.py`, plus `_register_layer_access(...)` to `setup-all-claude-code.py`; both called from `run()` and `main()`. The stamp writes `[CODING-ACCESS]` / `[CODING-MCP-URL]` from `CODING_ACCESS` / `CODING_MCP_URL` (defaults `markdown` / `<unset>`), uuid-guarded. Also wrapped the pre-existing E501 that had the overlay's CI red on `main`.
+  - **Testing Log**: added idempotency tests to `tests/test_install_skills.py` and `tests/test_setup_all_claude_code.py`; `uv run ruff check` clean; `uv run pytest -q` 37 passed; a smoke render shows the two-key block written once.
+  - **Success Criteria**: Pass.
+  - **Tech Debts**: None.
+  - **Result**: The overlay stamps the coding declaration on every harness.
+- [x] **Step 2.2**: Stamp `[FLEET-ACCESS]` / `[FLEET-MCP-URL]` from the fleet
+  - **Implementation Log**: Added `register_layer_access(...)` and `_FLEET_ACCESS_UUID` (`40ab1e33-...`) to the fleet's `setup-scripts/install-skills.py`, plus `_register_layer_access(...)` to `setup-all-claude-code.py`; called from `run()` and `main()` with layer `FLEET`. Same shape as the coding stamp: env `FLEET_ACCESS` / `FLEET_MCP_URL`, defaults `markdown` / `<unset>`, uuid-guarded.
+  - **Testing Log**: added `FLEET` idempotency tests to both fleet test files; `uv run ruff check` clean; `uv run pytest -q` 37 passed; smoke render shows the fleet block written once.
+  - **Success Criteria**: Pass.
+  - **Tech Debts**: None.
+  - **Result**: The fleet stamps its own declaration.
+- [x] **Step 2.3**: Publish the reader rule
+  - **Implementation Log**: Added a `## Layer access` section to the overlay's `procedures/awaken-coder.md`: the three declarations, the rule that the caller reads the target layer's declaration, `absent` means `markdown`, and naming the capability before resolving the invocation form. `## Core access` is kept and described as the core instance of the same rule. The fleet half (stating the rule in `load-fleet` / `ask-agent`) lands in Phase 4, when those procedures exist.
+  - **Testing Log**: `uv run ruff check` clean; `uv run pytest -q` 37 passed; `compile-procedures.py --strict` → 38 procedures; `output/awaken-coder.md` carries the new section and the heading-reference test still resolves `## Core access`.
+  - **Success Criteria**: Pass (overlay half; the fleet half is completed in Phase 4).
+  - **Tech Debts**: the fleet half of the reader rule.
+  - **Result**: The overlay publishes the delivery-agnostic reader rule.
 
 ### Phase 3: Harden the installers (before the move)
 - [ ] **Step 3.1**: Generalize cleanup to a list of sibling manifests
