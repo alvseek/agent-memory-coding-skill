@@ -479,24 +479,24 @@ I have to use this document as my **ONLY** source of truth to execute and track 
   - **Result**: Overlay green.
 
 ### Phase 6: Cross-repo periphery and verification
-- [ ] **Step 6.1**: Update the core repo
-  - **Implementation Log**: [on completion]
-  - **Testing Log**: [on completion]
-  - **Success Criteria**: [Pass/Fail]
-  - **Tech Debts**: [or "None"]
-  - **Result**: [on completion]
-- [ ] **Step 6.2**: Update the memory context
-  - **Implementation Log**: [on completion]
-  - **Testing Log**: [on completion]
-  - **Success Criteria**: [Pass/Fail]
-  - **Tech Debts**: [or "None"]
-  - **Result**: [on completion]
-- [ ] **Step 6.3**: End-to-end verification
-  - **Implementation Log**: [on completion]
-  - **Testing Log**: [on completion]
-  - **Success Criteria**: [Pass/Fail]
-  - **Tech Debts**: [or "None"]
-  - **Result**: [on completion]
+- [x] **Step 6.1**: Update the core repo
+  - **Implementation Log**: Added `load-fleet` to the core's `check-core-invariant.sh` `ADDON` list; recorded the fleet's move to a third repo in the core `ARCHITECTURE.md` (the two-repo note) and `README.md` (the coding-agents note). Committed in `alvseek/agent-memory-system` (`ca41c61`).
+  - **Testing Log**: `scripts/check-core-invariant.sh` → exit 0 ("the memory core references no add-on procedure by name"); `git show --stat` = 3 lines changed.
+  - **Success Criteria**: Pass.
+  - **Tech Debts**: None.
+  - **Result**: The core describes the family correctly and its guard is green.
+- [x] **Step 6.2**: Update the memory context
+  - **Implementation Log**: `mcp-boundary-strategy.md` fleet bullet gained the 2026-10-08 move and the three-layer access model; `context-index.md` coding-skill entry notes the fleet sibling; `orientation-map.md` gained an `agent-memory-fleet/` sibling entry. Committed in the store (`2a60dbf`, including the `control-files` gitlink bump).
+  - **Testing Log**: `git show --stat` shows only the three context docs plus the gitlink; no fleet DATA file appears.
+  - **Success Criteria**: Pass.
+  - **Tech Debts**: None.
+  - **Result**: The store describes the family correctly.
+- [x] **Step 6.3**: End-to-end verification
+  - **Implementation Log**: verified the three handoffs at the artifact level: (coding to fleet) the installed `awaken-coder` skill carries the `hermod-fleet` pointer and the FLEET-ACCESS rule, and `aquazone` has a roster so the pointer fires; (fleet to coding) `fleet-common.sh` reads `CODING_ACCESS` and emits `/awaken-coder`; (data) `fleet-agents.md` / `fleet-map.csv` are not in the store commit.
+  - **Testing Log**: the checks above pass. A **live agent spawn was deliberately not run** in this session (heavy side effect, and it would load another project's memory into this one).
+  - **Success Criteria**: Pass at the artifact level. Residual manual check: run `/awaken-coder` in a roster-bearing project, then `/load-fleet` and `/ask-agent`.
+  - **Tech Debts**: the live manual pass.
+  - **Result**: All three handoffs resolve; fleet data untouched.
 
 ---
 
