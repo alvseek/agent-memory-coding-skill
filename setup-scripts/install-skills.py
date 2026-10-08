@@ -31,6 +31,7 @@ no stale artifact from an earlier compile can slip into the installed set.
 from __future__ import annotations
 
 import importlib.util
+import os
 import re
 import shutil
 import sys
@@ -52,6 +53,14 @@ _DESCRIPTION_LIMIT = 1024
 # Marks the overlay-path definition in a platform's global instructions file so re-runs never
 # duplicate it. Same UUID the Claude Code installer uses — it is the same definition.
 _PATH_DEF_UUID = "9f3c2a1e-7b4d-4e6a-8c1f-2d5e9a3b6c7f"
+
+# Marks the environment declarations this installer writes when the core markdown is absent.
+# The guard is the [CORE-ACCESS] declaration itself, so a core-provided block is never duplicated;
+# this UUID is provenance, matching the path-definition convention above.
+_ENV_DEF_UUID = "e2a7c9d4-5b1f-4e83-a6d2-9c7b3f8e1a5d"
+
+# sys.platform -> the name the compiled core memory prints on its Operating System line.
+_OS_NAMES = {"win32": "Windows", "linux": "Linux", "darwin": "macOS"}
 
 _MD_NOISE = re.compile(r"[*_`]|\[([^\]]*)\]\([^)]*\)")
 _SKIP_LINE = re.compile(r"^\s*(#|[-*>|]|\d+\.|```|---)")
@@ -243,6 +252,48 @@ def register_path(instructions_file: Path, overlay_root: Path = _ROOT) -> str:
     return f"  Registered [path-to-agent-memory-coding-skill] = {path_value}"
 
 
+def register_env(instructions_file: Path) -> str:
+    """Ensure the environment declarations Hermod relies on are present.
+
+    ``[CORE-ACCESS]`` and ``[CORE-MCP-URL]`` are the overlay's: they decide markdown-vs-mcp for
+    the overlay's own handoffs, and the OS + bash notes are what its shell scripts assume. The
+    core's compiled memory supplies them when it is installed, so this writes them **only when
+    they are absent** — the guard is the declaration itself, never the overlay's UUID, so a
+    core-provided block is never duplicated. Values come from the same env vars the core's
+    ``write-to-*`` scripts use (``CORE_ACCESS`` / ``CORE_MCP_URL``).
+    """
+    if not instructions_file.is_file():
+        return (
+            f"  NOTE: {instructions_file} not found — could not register the environment\n"
+            "        declarations. Run the memory-core setup for this platform first (it creates\n"
+            "        the file), then re-run this installer."
+        )
+    if "**[CORE-ACCESS]**" in instructions_file.read_text(encoding="utf-8"):
+        return "  [CORE-ACCESS] / [CORE-MCP-URL] already present — skipped."
+
+    mode = os.environ.get("CORE_ACCESS", "markdown")
+    url = os.environ.get("CORE_MCP_URL", "<unset>")
+    os_name = _OS_NAMES.get(sys.platform, sys.platform or "Unknown")
+    block = (
+        "\n"
+        f"- **Operating System**: {os_name}\n"
+        "- **Claude Code Bash Tool**: Runs in **Git Bash** (NOT CMD or PowerShell)\n"
+        "  - Use Unix-style commands: `cp`, `rm`, `ls`, `mkdir`, `cat`, `grep`\n"
+        "  - Use forward slashes: `/c/Users/username/.claude/` (not `C:\\Users\\username\\.claude\\`)\n"
+        '  - Use Unix conditionals: `test -f file && echo "exists"` (not `if exist file`)\n'
+        "  - CMD syntax like `if exist ... (echo) else (echo)` will FAIL\n"
+        f"- **[CORE-ACCESS]** = `{mode}` (which form of the memory core this machine uses: "
+        "`markdown` for the installed commands, `mcp` for the procedures served over a connected "
+        "server)\n"
+        f"- **[CORE-MCP-URL]** = `{url}` (the endpoint the served core is reached at; only the "
+        "layer that opens the connection acts on this, never the agent)"
+        f"  <!-- overlay-env-def {_ENV_DEF_UUID} -->\n"
+    )
+    with instructions_file.open("a", encoding="utf-8", newline="\n") as fh:
+        fh.write(block)
+    return f"  Registered [CORE-ACCESS] = {mode} ([CORE-MCP-URL] = {url}) + OS/bash notes"
+
+
 def run(
     platform: str,
     target_dir: Path,
@@ -269,6 +320,7 @@ def run(
 
     print(f"Successfully installed {len(installed)} overlay skills!\n")
     print(register_path(instructions_file))
+    print(register_env(instructions_file))
     print("\nInstalled overlay skills:")
     for name in installed:
         print(f"  {FOLDER_PREFIX}{name}")
