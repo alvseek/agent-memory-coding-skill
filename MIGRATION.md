@@ -11,6 +11,17 @@ and templates were moved **out** of this overlay into the sibling repo
 [`agent-memory-fleet`](https://github.com/alvseek/agent-memory-fleet) (`hermod-fleet`). The overlay
 keeps exactly one pointer to it, in `awaken-coder`. See that repo's `MIGRATION.md`.
 
+## Later move — the wizards (2026-10-09)
+
+The **wizard + QA + implement-plan cluster** was moved **out** of this overlay into the sibling repo
+[`agent-memory-wizards`](https://github.com/alvseek/agent-memory-wizards) (`hermod-wizards`):
+the six wizard protocols, `implement-plan`, the QA pipeline, `wait-options-coding`, their components,
+the plan templates, and three templates. The overlay keeps the shell (`awaken-coder`,
+`project-wrap-up`, `dockerize`, push/pull) and the project / doc surface. Nothing calls the wizards
+layer, so it declares no access; it reads only the core. The three doc generators now fall back to
+the core `/wait-options` on their ambiguous-scope branch. See that repo's `MIGRATION.md` and the
+overlay's `docs/adr/2026-10-09-hermod-wizards-extraction.md`.
+
 ## What moved
 
 31 add-on procedures relocated from `control-files/procedures/` — wizards, doc-gen, QA, fleet,

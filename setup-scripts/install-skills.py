@@ -161,10 +161,10 @@ def build_skill(name: str, text: str) -> str:
 def cleanup(target_dir: Path, manifest: Path, sibling_manifests: list[Path]) -> int:
     """Remove previously installed overlay skills, per the overlay manifest.
 
-    Never removes a folder that any sibling manifest also claims. All three installers (core,
-    coding, fleet) write into one skills directory, so a stale entry, a procedure that moved
-    between repos in an earlier session, must not delete a skill another installer owns. This is
-    what makes the installers order-independent; the more siblings, the more it matters.
+    Never removes a folder that any sibling manifest also claims. All four installers (core,
+    coding, fleet, wizards) write into one skills directory, so a stale entry, a procedure that
+    moved between repos in an earlier session, must not delete a skill another installer owns.
+    This is what makes the installers order-independent; the more siblings, the more it matters.
     """
     if not manifest.exists():
         return 0

@@ -2,7 +2,7 @@
 
 The **coding/repo add-on overlay** for the [agent-memory](https://github.com/alvseek/agent-memory-system) framework.
 
-This repo holds every coding- and repository-oriented procedure that sits **on top of** the memory core: wizards, doc generation, QA, project localization, and push/pull. A coding agent installs the memory core **plus** this overlay; a plain chat agent installs the core alone.
+This repo holds the coding- and repository-oriented procedures that sit **on top of** the memory core: the coding shell (awaken/wrap-up), doc generation, project context + localization, and push/pull. The wizards + QA moved to [`agent-memory-wizards`](https://github.com/alvseek/agent-memory-wizards) (2026-10-09), and the fleet to [`agent-memory-fleet`](https://github.com/alvseek/agent-memory-fleet) (2026-10-08). A coding agent installs the memory core **plus** this overlay; a plain chat agent installs the core alone.
 
 ## Relationship to the memory core
 
@@ -14,9 +14,9 @@ This repo holds every coding- and repository-oriented procedure that sits **on t
 
 - **Awakening overlay**: `awaken-coder.md` (composes the core awaken), `localized-memory-workflow.md` (repo-authoritative localized memory behavior)
 - **Lifecycle**: `project-wrap-up.md` (composes the core `/wrap-up`, then push + map-orientation)
-- **Wizards**: `high-wizard`, `quick-wizard`, `council-of-wizards`, `rite-of-creation`, `forge-of-covenant`, `implement-plan`
+- **Wizards** (moved out 2026-10-09): the wizard protocols + `implement-plan` now live in the sibling repo [`agent-memory-wizards`](https://github.com/alvseek/agent-memory-wizards) (`hermod-wizards`).
 - **Doc-gen**: `generate-readme`, `generate-docs`, `generate-architecture-docs`, `generate-domain-docs`, `generate-flow-docs`, `discovery-contract`
-- **QA**: `analyze-code-quality`, `generate-standard`, `pixel-wizard`, `setup-qa-visual-instrument` — plus the QA instrument pipeline: `map-qa-instrument` (audit) → `build-qa-bench` (rig, runbooks, playbook) → `integration-test` (fixtures + integration tests, built and run) → `run-qa-test` (system-level runtime proof), with `qa-status` reporting readiness and debt, and `generate-qa-checklist` producing the per-feature checklist a wizard hands off at its QA Handoff step
+- **QA** (moved out 2026-10-09): the QA pipeline (`analyze-code-quality`, `generate-standard`, `pixel-wizard`, `setup-qa-visual-instrument`, `map-qa-instrument`, `build-qa-bench`, `integration-test`, `run-qa-test`, `qa-status`, `generate-qa-checklist`) now lives in [`agent-memory-wizards`](https://github.com/alvseek/agent-memory-wizards) (`hermod-wizards`).
 - **Repo / integration**: `map-orientation`, `localize-context`, `update-project-context`, `load-project-context`, `pull-all`/`pull-project`, `push-all`/`push-project`
 - **Fleet** (moved out 2026-10-08): lives in the sibling repo [`agent-memory-fleet`](https://github.com/alvseek/agent-memory-fleet) (`hermod-fleet`). `awaken-coder` surfaces a one-line pointer to it — the commands, scripts, and templates are no longer here.
 

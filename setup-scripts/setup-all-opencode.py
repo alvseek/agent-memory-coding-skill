@@ -10,7 +10,7 @@ With skills, the agent reaches for them on its own.
 
 Installed folders carry the overlay's ``agent-coding-`` prefix — deliberately distinct from
 the core's ``agent-memory-`` one — so the skill catalog stays legible and each installer's
-manifest claims an unambiguous set: that prefix separation is what keeps the 38 overlay skills
+manifest claims an unambiguous set: that prefix separation is what keeps the 18 overlay skills
 from crowding anything else out, and keeps a same-named core procedure from ever sharing (and
 clobbering) an overlay folder.
 
@@ -46,6 +46,7 @@ _spec.loader.exec_module(_skills)
 MANIFEST_NAME = ".agent-memory-coding-skill-opencode-manifest"
 CORE_MANIFEST_NAME = ".agent-memory-opencode-manifest"
 FLEET_MANIFEST_NAME = ".agent-memory-fleet-opencode-manifest"
+WIZARDS_MANIFEST_NAME = ".agent-memory-wizards-opencode-manifest"
 
 
 def _config_base() -> Path:
@@ -98,7 +99,7 @@ def main(argv: list[str] | None = None) -> int:
         platform="OpenCode",
         target_dir=target,
         manifest_name=MANIFEST_NAME,
-        sibling_manifest_names=[CORE_MANIFEST_NAME, FLEET_MANIFEST_NAME],
+        sibling_manifest_names=[CORE_MANIFEST_NAME, FLEET_MANIFEST_NAME, WIZARDS_MANIFEST_NAME],
         instructions_file=base / "AGENTS.md",
     )
     if legacy_removed:

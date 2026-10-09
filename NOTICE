@@ -2,10 +2,14 @@ agent-memory-coding-skill
 Copyright 2026 Alviandi Widiasto (alvseek)
 
 This product — the coding and repository procedures of the agent-memory
-framework (wizards, documentation generation, QA, and project context),
-together with their compile and install tooling — is licensed under the Apache
-License, Version 2.0. See the LICENSE file at the root of this repository, or
-http://www.apache.org/licenses/LICENSE-2.0
+framework (the coding shell, documentation generation, project context and
+localization, and push/pull), together with their compile and install tooling —
+is licensed under the Apache License, Version 2.0. See the LICENSE file at the
+root of this repository, or http://www.apache.org/licenses/LICENSE-2.0
+
+The wizard and QA procedures live in a sibling repo, agent-memory-wizards, and
+the fleet procedures in agent-memory-fleet; both carry their own NOTICE under
+the same license.
 
 This overlay composes on top of the agent-memory memory core
 (agent-memory-system), a separate repository that carries its own NOTICE under
