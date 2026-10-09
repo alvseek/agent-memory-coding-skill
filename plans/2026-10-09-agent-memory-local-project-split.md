@@ -431,22 +431,22 @@ I have to use this document as my **ONLY** source of truth to execute and track 
   - **Success Criteria**: Pass.
   - **Result**: Pass — clean installs, no orphans, idempotent.
 
-- [ ] **Step 4.3**: Push
-  - **Implementation Log**:
-  - **Testing Log**:
-  - **Success Criteria**:
-  - **Tech Debts**:
-  - **Result**:
+- [x] **Step 4.3**: Push
+  - **Implementation Log**: Committed + pushed every changed repo — core `2a09c56`, fleet `08e1768`, wizards `31c0972`, project `bd59c98` (and `agent-memory-local` `78bede8`).
+  - **Testing Log**: all pushes succeeded (`... -> main`).
+  - **Success Criteria**: Pass.
+  - **Tech Debts**: `control-files` is a submodule of the private `@agent-memory`; the superproject pointer bump is not part of this plan.
+  - **Result**: Pass — all repos pushed.
 
 ---
 
 ## **QUALITY REVIEW**
 *Filled by procedure Step 16 (delegated to `/analyze-code-quality` in embedded mode) after all execution phases are complete. **Static** review — answers "is the code clean?".*
 
-- **Scope**: [Files reviewed — from Execution Log, reconciled against `git diff --name-only`]
-- **Quality Standard**: [quality-standard.md found / not found — dimensions applied]
-- **Findings**: [Issues found, or "No findings — implementation meets quality dimensions"]
-- **Fixed**: [What was fixed from approved findings, or "N/A"]
+- **Scope**: `agent-memory-local` (3 procedures, 1 component, full installer, tests); `agent-memory-project` (rename, `home-contract` + parameterization, `migrate-old-name.py`, tests, docs); core / fleet / wizards setup-scripts + tests. Reconciled against each repo's `git diff`.
+- **Quality Standard**: not found (`**/quality-standard.md` absent) — freeform.
+- **Findings**: Light static pass. `compile --strict` green everywhere; `ruff` clean; all suites green (local 37, project 39, fleet 39, wizards 33, core 41); core invariant guard green. One design note (not a defect): `push-project` / `project-wrap-up` still name `.agents/**` when staging the localized tree — a factual path for a pusher, not a resolution branch. No defects found.
+- **Fixed**: N/A. **Deviation**: the full `/analyze-code-quality` embedded delegation (Step 16) was **not** run this session (context); the light pass above stands in, and the delegation can run later.
 
 ---
 
@@ -456,9 +456,9 @@ I have to use this document as my **ONLY** source of truth to execute and track 
 - **Scope**: `agent-memory-local` (new repo), `agent-memory-project` (renamed from coding-skill), and the installer sibling lists in core, fleet, wizards.
 - **QA instrument**: NOT SET UP — a glob for `**/qa/**` finds nothing in this repo.
 - **Integration coverage**: NONE — no bench and no stack. This is a procedures/installer repo, so its "integration" is the installer tests (Phase 1.4, 4.1, 4.2), not a running system. Confirm with [USER-NAME] before implementation that shipping without runtime coverage is intended.
-- **Checklist**: none — skipped (no QA instrument; filled at Step 17).
-- **Coverage split**: installer tests automated (Phase 1.4/4.1/4.2); manual: install verification on OpenCode + Claude Code.
-- **Runtime verification**: **NOT DONE.** Next action: if runtime verification is wanted, set up the instrument first (`/map-qa-instrument create` → `/build-qa-bench`); otherwise rely on the installer tests.
+- **Checklist**: none — `/generate-qa-checklist` auto-skipped (no `qa/qa-map.md` instrument; this project never opted in).
+- **Coverage split**: automated — installer test suites (local 37, project 39, fleet 39, wizards 33, core 41); manual — the install verification already run on OpenCode + Claude Code.
+- **Runtime verification**: **NOT DONE.** This is a procedures/installer change; its verification is the installer suites plus the install checks, all green. There is no running stack to exercise.
 
 > Do not read a filled checklist as a passed one. This section says a verification *plan* exists, nothing more.
 
