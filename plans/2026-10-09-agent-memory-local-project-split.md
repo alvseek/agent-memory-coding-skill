@@ -405,34 +405,31 @@ I have to use this document as my **ONLY** source of truth to execute and track 
   - **Result**: Pass — lineage recorded in both repos.
 
 ### Phase 3: Cross-repo wiring
-- [ ] **Step 3.1**: Update sibling lists
-  - **Implementation Log**:
-  - **Testing Log**:
-  - **Success Criteria**:
-  - **Tech Debts**:
-  - **Result**:
+- [x] **Step 3.1**: Update sibling lists
+  - **Implementation Log**: Renamed `coding-skill` → `project` and added `local` in every sibling list: core (`control-files/procedures/setup-scripts/setup-all-claude-code.py`, `setup-all-opencode.py`, `control-files/setup-scripts/uninstall-opencode.py`), fleet (all four `setup-all-*.py`), wizards (`setup-all-opencode.py`). Also corrected the core OpenCode sibling's missing `-opencode-` suffix. Updated the affected tests.
+  - **Testing Log**: fleet `pytest` **39 passed**; wizards **33 passed** (after updating the sibling-set assertion to include `local`); core **41 passed**; `check-core-invariant.sh` green.
+  - **Success Criteria**: Pass.
+  - **Tech Debts**: none.
+  - **Result**: Pass — order-independent installs hold with five layers.
 
-- [ ] **Step 3.2**: Cross-refs and placeholders in fleet/wizards
-  - **Implementation Log**:
-  - **Testing Log**:
-  - **Success Criteria**:
-  - **Tech Debts**:
-  - **Result**:
+- [x] **Step 3.2**: Cross-refs and placeholders in fleet/wizards
+  - **Implementation Log**: Swept `*.md` across core, fleet, and wizards for the old repo name/placeholder (excluding frozen `plans/completed` and the MIGRATION lineage notes, which keep the old name on purpose). Updated README/ARCHITECTURE and `load-fleet`.
+  - **Testing Log**: grep shows only the intentional historical mentions.
+  - **Success Criteria**: Pass.
+  - **Tech Debts**: none.
+  - **Result**: Pass.
 
-### Phase 4: Verify
-- [ ] **Step 4.1**: Tests
-  - **Implementation Log**:
-  - **Testing Log**:
-  - **Success Criteria**:
-  - **Tech Debts**:
-  - **Result**:
+- [x] **Step 4.1**: Tests
+  - **Implementation Log**: Ran every suite — `agent-memory-local` 37, `agent-memory-project` 39, `agent-memory-fleet` 39, `agent-memory-wizards` 33, core `control-files` 41; `ruff` clean throughout.
+  - **Testing Log**: all green.
+  - **Success Criteria**: Pass.
+  - **Result**: Pass.
 
-- [ ] **Step 4.2**: Install verification
-  - **Implementation Log**:
-  - **Testing Log**:
-  - **Success Criteria**:
-  - **Tech Debts**:
-  - **Result**:
+- [x] **Step 4.2**: Install verification
+  - **Implementation Log**: Ran `migrate-old-name.py` (removed 35/18/35/35 stale entries across the four harness dirs and deleted the old manifests), then installed all five layers for **OpenCode** and **Claude Code**.
+  - **Testing Log**: OpenCode skills dir carries 5 layers — `agent-memory` 17, `agent-project` 16, `agent-local` 3, `agent-fleet` 4, `agent-wizards` 17 — with **0 `agent-coding-*` orphans**; a second project install left the manifest unchanged (idempotent); Claude Code carries the project's `awaken-coder` command and the local lane's commands.
+  - **Success Criteria**: Pass.
+  - **Result**: Pass — clean installs, no orphans, idempotent.
 
 - [ ] **Step 4.3**: Push
   - **Implementation Log**:
