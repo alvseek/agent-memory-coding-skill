@@ -1,4 +1,4 @@
-"""Install the agent-memory-coding-skill OVERLAY procedures as ``~/.claude/commands/``.
+"""Install the agent-memory-project OVERLAY procedures as ``~/.claude/commands/``.
 
 Compiles the coding/repo overlay procedures (wizards, doc-gen, QA, fleet, map-orientation,
 localize-context, wait-options, push/pull, project-wrap-up, awaken-coder) via
@@ -27,15 +27,15 @@ from pathlib import Path
 # Repo root (this script lives at setup-scripts/setup-all-claude-code.py).
 _ROOT = Path(__file__).resolve().parents[1]
 
-_MANIFEST_NAME = ".agent-memory-coding-skill-manifest"
+_MANIFEST_NAME = ".agent-memory-project-manifest"
 _SIBLING_MANIFEST_NAMES = [".agent-memory-manifest", ".agent-memory-fleet-manifest"]
 
 # Marks the overlay-path definition line in the global CLAUDE.md so re-runs never duplicate it.
 _PATH_DEF_UUID = "9f3c2a1e-7b4d-4e6a-8c1f-2d5e9a3b6c7f"
 
-# Marks the coding-layer access declaration ([CODING-ACCESS] / [CODING-MCP-URL]) this installer
+# Marks the coding-layer access declaration ([PROJECT-ACCESS] / [PROJECT-MCP-URL]) this installer
 # writes. UUID-guarded so re-runs never duplicate the line.
-_CODING_ACCESS_UUID = "45a0bd66-0b97-4f36-91ae-44daf6d052cd"
+_PROJECT_ACCESS_UUID = "45a0bd66-0b97-4f36-91ae-44daf6d052cd"
 
 
 def _load(name: str, path: Path):
@@ -79,7 +79,7 @@ def _cleanup(target_dir: Path, manifest: Path, sibling_manifests: list[Path]) ->
 
 
 def _register_overlay_path(claude_md: Path, overlay_root: Path) -> str:
-    """Define ``[path-to-agent-memory-coding-skill]`` in the global CLAUDE.md (idempotent).
+    """Define ``[path-to-agent-memory-project]`` in the global CLAUDE.md (idempotent).
 
     The overlay's procedures reference their scripts via that placeholder, and only this
     installer knows where the standalone repo was cloned — so it registers the definition
@@ -92,20 +92,20 @@ def _register_overlay_path(claude_md: Path, overlay_root: Path) -> str:
     if not claude_md.is_file():
         return (
             f"  NOTE: {claude_md} not found — could not register\n"
-            "        [path-to-agent-memory-coding-skill]. Run the memory-core setup first\n"
+            "        [path-to-agent-memory-project]. Run the memory-core setup first\n"
             "        (it creates CLAUDE.md), then re-run this installer."
         )
     if _PATH_DEF_UUID in claude_md.read_text(encoding="utf-8"):
-        return "  [path-to-agent-memory-coding-skill] already registered in CLAUDE.md — skipped."
+        return "  [path-to-agent-memory-project] already registered in CLAUDE.md — skipped."
 
     path_value = overlay_root.as_posix()
     line = (
-        f"\n- **[path-to-agent-memory-coding-skill]** = `{path_value}`"
+        f"\n- **[path-to-agent-memory-project]** = `{path_value}`"
         f"  <!-- overlay-path-def {_PATH_DEF_UUID} -->\n"
     )
     with claude_md.open("a", encoding="utf-8", newline="\n") as fh:
         fh.write(line)
-    return f"  Registered [path-to-agent-memory-coding-skill] = {path_value}"
+    return f"  Registered [path-to-agent-memory-project] = {path_value}"
 
 
 def _register_layer_access(claude_md: Path, layer: str, uuid: str) -> str:
@@ -182,7 +182,7 @@ def main(argv: list[str] | None = None) -> int:
         os.environ.get("AGENT_MEMORY_TARGET_DIR") or Path.home() / ".claude" / "commands"
     )
 
-    print("=== Setup agent-memory-coding-skill OVERLAY Slash Commands ===\n")
+    print("=== Setup agent-memory-project OVERLAY Slash Commands ===\n")
     print(f"Source (overlay): {_ROOT / 'output'}")
     print(f"Target:           {target}\n")
 
@@ -203,7 +203,7 @@ def main(argv: list[str] | None = None) -> int:
     print(_register_overlay_path(Path.home() / ".claude" / "CLAUDE.md", _ROOT))
     print(
         _register_layer_access(
-            Path.home() / ".claude" / "CLAUDE.md", "CODING", _CODING_ACCESS_UUID
+            Path.home() / ".claude" / "CLAUDE.md", "PROJECT", _PROJECT_ACCESS_UUID
         )
     )
     print("\nInstalled overlay commands:")

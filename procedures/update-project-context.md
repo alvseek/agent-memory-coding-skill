@@ -53,7 +53,7 @@ Based on the confirmed scope, the subsequent steps will use the matching path:
 - **Shared scope**: `[AGENT-MEMORY-PATH]/shared-memory/[project-name]/context/`
 - **Private scope**: `[AGENT-MEMORY-PATH]/agent-[domain]/knowledge-base/[project-name]/`
 
-> **Storage location (localized-home resolution)**: apply `/localize-context`'s Localized Home Resolution for this project. If its central map has `home: project` (**localized**) → **shared** context resolves to `<project-root>/docs/`, **private** to `<project-root>/.agents/knowledge/`. Otherwise (**central**) → the `shared-memory/[project-name]/context/` + `agent-[domain]/knowledge-base/[project-name]/` defaults above. Use the resolved dir for every scope-aware step below (folder check, create, index).
+> **Storage location**: resolve the shared/private dirs via the [HOME contract component]([path-to-agent-memory-project]/components/home-contract.md). `CONTEXT_DIR` and `KNOWLEDGE_DIR` are the active values (central by default; a localized project's values are resolved by `agent-memory-local`). Use the resolved dirs for every scope-aware step below (folder check, create, index).
 
 > **Move operation**: If the user has asked to **move** an existing private entry to shared (e.g., "move X to shared", "promote X to shared"), skip the rest of this procedure and follow the [Move-to-Shared Sub-Flow](#move-to-shared-sub-flow) section below.
 
@@ -78,9 +78,9 @@ Scan existing files in the scope-aware folder to check if a file already covers 
 
 ### Step 5A: Create New Context File
 
-1. Copy the [Project Context Template]([path-to-agent-memory-coding-skill]/templates/project-context-template.md) to the scope-aware path: `[scope-folder]/[theme].md`
-   - Shared: `cp [path-to-agent-memory-coding-skill]/templates/project-context-template.md [AGENT-MEMORY-PATH]/shared-memory/[project-name]/context/[theme].md`
-   - Private: `cp [path-to-agent-memory-coding-skill]/templates/project-context-template.md [AGENT-MEMORY-PATH]/agent-[domain]/knowledge-base/[project-name]/[theme].md`
+1. Copy the [Project Context Template]([path-to-agent-memory-project]/templates/project-context-template.md) to the scope-aware path: `[scope-folder]/[theme].md`
+   - Shared: `cp [path-to-agent-memory-project]/templates/project-context-template.md [AGENT-MEMORY-PATH]/shared-memory/[project-name]/context/[theme].md`
+   - Private: `cp [path-to-agent-memory-project]/templates/project-context-template.md [AGENT-MEMORY-PATH]/agent-[domain]/knowledge-base/[project-name]/[theme].md`
 2. Fill the YAML frontmatter:
    - `project`: the project name from Step 1
    - `tags`: relevant feature/module tags for selective loading (e.g., `[environment, setup, vm, gcloud]`)

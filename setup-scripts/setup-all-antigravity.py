@@ -1,4 +1,4 @@
-"""Install the agent-memory-coding-skill OVERLAY procedures as Antigravity **Agent Skills**.
+"""Install the agent-memory-project OVERLAY procedures as Antigravity **Agent Skills**.
 
 Replaces the old ``setup-all-antigravity.sh``, which wrote flat markdown into
 ``~/.gemini/workflows`` — wrong on three counts: that is not where Antigravity looks, workflows
@@ -34,7 +34,7 @@ _skills = importlib.util.module_from_spec(_spec)
 sys.modules["overlay_install_skills"] = _skills
 _spec.loader.exec_module(_skills)
 
-MANIFEST_NAME = ".agent-memory-coding-skill-antigravity-manifest"
+MANIFEST_NAME = ".agent-memory-project-antigravity-manifest"
 CORE_MANIFEST_NAME = ".agent-memory-antigravity-manifest"
 FLEET_MANIFEST_NAME = ".agent-memory-fleet-antigravity-manifest"
 

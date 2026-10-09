@@ -41,10 +41,10 @@ _ROOT = Path(__file__).resolve().parents[1]
 
 # Installed folders are prefixed so a skill directory shared with the memory core stays
 # legible, and so each installer's manifest claims an unambiguous set. The overlay uses its own
-# ``agent-coding-`` prefix rather than the core's ``agent-memory-`` one: the two installers write
+# ``agent-project-`` prefix rather than the core's ``agent-memory-`` one: the two installers write
 # into the same skills directory, and sharing a prefix would let a same-named procedure from
 # either side silently clobber the other's folder.
-FOLDER_PREFIX = "agent-coding-"
+FOLDER_PREFIX = "agent-project-"
 
 # Both platforms cap the description; Antigravity documents 1024 characters. Staying inside the
 # smaller published number keeps one emitter correct for both.
@@ -59,10 +59,10 @@ _PATH_DEF_UUID = "9f3c2a1e-7b4d-4e6a-8c1f-2d5e9a3b6c7f"
 # this UUID is provenance, matching the path-definition convention above.
 _ENV_DEF_UUID = "e2a7c9d4-5b1f-4e83-a6d2-9c7b3f8e1a5d"
 
-# Marks the coding-layer access declaration ([CODING-ACCESS] / [CODING-MCP-URL]) this installer
+# Marks the coding-layer access declaration ([PROJECT-ACCESS] / [PROJECT-MCP-URL]) this installer
 # writes: how the coding overlay is reached. UUID-guarded like the others, so re-runs never
 # duplicate the line.
-_CODING_ACCESS_UUID = "45a0bd66-0b97-4f36-91ae-44daf6d052cd"
+_PROJECT_ACCESS_UUID = "45a0bd66-0b97-4f36-91ae-44daf6d052cd"
 
 # sys.platform -> the name the compiled core memory prints on its Operating System line.
 _OS_NAMES = {"win32": "Windows", "linux": "Linux", "darwin": "macOS"}
@@ -231,7 +231,7 @@ def install(
 
 
 def register_path(instructions_file: Path, overlay_root: Path = _ROOT) -> str:
-    """Define ``[path-to-agent-memory-coding-skill]`` in a platform's global instructions file.
+    """Define ``[path-to-agent-memory-project]`` in a platform's global instructions file.
 
     The overlay's procedures reach their scripts and templates through that placeholder, and only
     this installer knows where the standalone repo was cloned — so it registers the definition
@@ -244,20 +244,20 @@ def register_path(instructions_file: Path, overlay_root: Path = _ROOT) -> str:
     if not instructions_file.is_file():
         return (
             f"  NOTE: {instructions_file} not found — could not register\n"
-            "        [path-to-agent-memory-coding-skill]. Run the memory-core setup for this\n"
+            "        [path-to-agent-memory-project]. Run the memory-core setup for this\n"
             "        platform first (it creates the file), then re-run this installer."
         )
     if _PATH_DEF_UUID in instructions_file.read_text(encoding="utf-8"):
-        return "  [path-to-agent-memory-coding-skill] already registered — skipped."
+        return "  [path-to-agent-memory-project] already registered — skipped."
 
     path_value = Path(overlay_root).as_posix()
     line = (
-        f"\n- **[path-to-agent-memory-coding-skill]** = `{path_value}`"
+        f"\n- **[path-to-agent-memory-project]** = `{path_value}`"
         f"  <!-- overlay-path-def {_PATH_DEF_UUID} -->\n"
     )
     with instructions_file.open("a", encoding="utf-8", newline="\n") as fh:
         fh.write(line)
-    return f"  Registered [path-to-agent-memory-coding-skill] = {path_value}"
+    return f"  Registered [path-to-agent-memory-project] = {path_value}"
 
 
 def register_env(instructions_file: Path) -> str:
@@ -345,7 +345,7 @@ def run(
     instructions_file: Path,
 ) -> int:
     """Shared ``main()`` body for a platform entry point."""
-    print(f"=== Setup agent-memory-coding-skill OVERLAY {platform} Skills ===\n")
+    print(f"=== Setup agent-memory-project OVERLAY {platform} Skills ===\n")
     print(f"Source (overlay): {_ROOT / 'output'}")
     print(f"Target:           {target_dir}\n")
 
@@ -364,7 +364,7 @@ def run(
     print(f"Successfully installed {len(installed)} overlay skills!\n")
     print(register_path(instructions_file))
     print(register_env(instructions_file))
-    print(register_layer_access(instructions_file, "CODING", _CODING_ACCESS_UUID))
+    print(register_layer_access(instructions_file, "PROJECT", _PROJECT_ACCESS_UUID))
     print("\nInstalled overlay skills:")
     for name in installed:
         print(f"  {FOLDER_PREFIX}{name}")

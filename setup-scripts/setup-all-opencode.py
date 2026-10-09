@@ -1,4 +1,4 @@
-"""Install the agent-memory-coding-skill OVERLAY procedures as OpenCode **Agent Skills**.
+"""Install the agent-memory-project OVERLAY procedures as OpenCode **Agent Skills**.
 
 OpenCode discovers global skills as folders holding a ``SKILL.md`` with ``name`` and
 ``description`` frontmatter in ``~/.config/opencode/skills/`` (``$XDG_CONFIG_HOME/opencode/skills/``
@@ -8,7 +8,7 @@ skills fit this overlay better than slash commands here. Commands have to be typ
 no user is going to type ``/map-qa-instrument`` from memory, so the procedures would sit idle.
 With skills, the agent reaches for them on its own.
 
-Installed folders carry the overlay's ``agent-coding-`` prefix — deliberately distinct from
+Installed folders carry the overlay's ``agent-project-`` prefix — deliberately distinct from
 the core's ``agent-memory-`` one — so the skill catalog stays legible and each installer's
 manifest claims an unambiguous set: that prefix separation is what keeps the 18 overlay skills
 from crowding anything else out, and keeps a same-named core procedure from ever sharing (and
@@ -43,7 +43,7 @@ _skills = importlib.util.module_from_spec(_spec)
 sys.modules["overlay_install_skills"] = _skills
 _spec.loader.exec_module(_skills)
 
-MANIFEST_NAME = ".agent-memory-coding-skill-opencode-manifest"
+MANIFEST_NAME = ".agent-memory-project-opencode-manifest"
 CORE_MANIFEST_NAME = ".agent-memory-opencode-manifest"
 FLEET_MANIFEST_NAME = ".agent-memory-fleet-opencode-manifest"
 WIZARDS_MANIFEST_NAME = ".agent-memory-wizards-opencode-manifest"

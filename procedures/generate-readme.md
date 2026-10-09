@@ -40,7 +40,7 @@ Bare discovers; you generate one at a time.
 
 ### Step 2: Copy Template
 
-1. Read the [README Template]([path-to-agent-memory-coding-skill]/templates/readme-template.md)
+1. Read the [README Template]([path-to-agent-memory-project]/templates/readme-template.md)
 2. Copy it to the target location
 3. Update the `# [Project Name]` heading with the actual project/module name
 4. Keep the `doc_type: 7q-readme` frontmatter — the orientation map keys on it (map-orientation C5)

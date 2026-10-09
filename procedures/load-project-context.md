@@ -23,7 +23,7 @@ Scan **both** locations for project context files:
 
 2. **Shared layer**: Scan `[AGENT-MEMORY-PATH]/shared-memory/` for project subfolders. For each project subfolder, check if `context/context-index.md` exists, and if so read it.
 
-> **Storage location (localized-home resolution)**: apply `/localize-context`'s Localized Home Resolution per project. For a **localized** project (central map `home: project`) → read shared from `<project-root>/docs/`, private from `<project-root>/.agents/knowledge/`; otherwise read the central `shared-memory/[project]/context/` + `agent-[domain]/knowledge-base/[project]/` locations above. (Scope markers `[shared]`/`[private]` unchanged.)
+> **Storage location**: read shared from `CONTEXT_DIR` and private from `KNOWLEDGE_DIR`, resolved via the [HOME contract component]([path-to-agent-memory-project]/components/home-contract.md) (central by default; a localized project's values are resolved by `agent-memory-local`). (Scope markers `[shared]`/`[private]` unchanged.)
 
 **Silent skip**: If either folder is missing or empty for a given project, skip it without error. Only present what exists.
 

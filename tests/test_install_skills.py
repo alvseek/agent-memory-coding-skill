@@ -25,7 +25,7 @@ sk = importlib.util.module_from_spec(_spec)
 sys.modules["overlay_install_skills"] = sk
 _spec.loader.exec_module(sk)
 
-_MANIFEST = ".agent-memory-coding-skill-codex-manifest"
+_MANIFEST = ".agent-memory-project-codex-manifest"
 _SIBLING_MANIFESTS = [".agent-memory-codex-manifest", ".agent-memory-fleet-codex-manifest"]
 
 # Antigravity documents 1024; staying inside the smaller published cap keeps one emitter
@@ -56,7 +56,7 @@ def test_folder_prefix_is_the_overlay_prefix() -> None:
     same-named core procedure silently clobber an overlay folder (manifests guard deletion,
     not overwrite). Pinned literally so a well-meaning "consistency" rename fails loudly.
     """
-    assert sk.FOLDER_PREFIX == "agent-coding-"
+    assert sk.FOLDER_PREFIX == "agent-project-"
 
 
 def _frontmatter_lines(skill_md: Path) -> list[str]:
@@ -189,12 +189,12 @@ def test_coding_layer_access_registration_is_idempotent(tmp_path: Path) -> None:
     instructions = tmp_path / "AGENTS.md"
     instructions.write_text("# Global instructions\n", encoding="utf-8", newline="\n")
 
-    first = sk.register_layer_access(instructions, "CODING", sk._CODING_ACCESS_UUID)
+    first = sk.register_layer_access(instructions, "PROJECT", sk._PROJECT_ACCESS_UUID)
     body = instructions.read_text(encoding="utf-8")
     assert "Registered" in first
-    assert "**[CODING-ACCESS]**" in body
-    assert body.count(sk._CODING_ACCESS_UUID) == 1
+    assert "**[PROJECT-ACCESS]**" in body
+    assert body.count(sk._PROJECT_ACCESS_UUID) == 1
 
-    second = sk.register_layer_access(instructions, "CODING", sk._CODING_ACCESS_UUID)
+    second = sk.register_layer_access(instructions, "PROJECT", sk._PROJECT_ACCESS_UUID)
     assert "already registered" in second
-    assert instructions.read_text(encoding="utf-8").count(sk._CODING_ACCESS_UUID) == 1
+    assert instructions.read_text(encoding="utf-8").count(sk._PROJECT_ACCESS_UUID) == 1

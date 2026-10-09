@@ -73,11 +73,11 @@ Default to `flowchart` unless C4 clearly fits (Mermaid's C4 support is newer/les
 ### Step 4: Compute placement (LCA)
 
 - **architecture-map** (project-wide) → project root `docs/architecture/{project}.md`.
-- **architecture-overview** → follow the [Compute Doc Placement component]([path-to-agent-memory-coding-skill]/components/compute-doc-placement.md) with **lens** = `architecture`, **scope files** = the subsystem's file paths, **name** = the subsystem.
+- **architecture-overview** → follow the [Compute Doc Placement component]([path-to-agent-memory-project]/components/compute-doc-placement.md) with **lens** = `architecture`, **scope files** = the subsystem's file paths, **name** = the subsystem.
 
 ### Step 5: Fill the doc
 
-1. Copy [architecture-doc-template.md]([path-to-agent-memory-coding-skill]/templates/architecture-doc-template.md) to the target path.
+1. Copy [architecture-doc-template.md]([path-to-agent-memory-project]/templates/architecture-doc-template.md) to the target path.
 2. Set `doc_type` per altitude (`architecture-map` or `architecture-overview`), update `scope:` + the `# Architecture: …` heading.
 3. Remove the Convention preamble block.
 4. Fill from the synthesis:
@@ -91,7 +91,7 @@ Default to `flowchart` unless C4 clearly fits (Mermaid's C4 support is newer/les
 
 ### Step 6: Present for review
 
-Follow the [Present Doc For Review component]([path-to-agent-memory-coding-skill]/components/present-doc-for-review.md) — **show** the diagram + prose; state the **altitude** (map vs overview).
+Follow the [Present Doc For Review component]([path-to-agent-memory-project]/components/present-doc-for-review.md) — **show** the diagram + prose; state the **altitude** (map vs overview).
 
 > **Vector export** (optional): extract the fenced Mermaid block to `{scope}.mmd` and run `mmdc -i {scope}.mmd -o {scope}.svg` (or `.pdf`).
 

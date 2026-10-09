@@ -44,7 +44,7 @@ Bare discovers; you generate one deep-dive at a time. The /generate-docs orchest
 2. **Infer the relationships**: how contexts integrate — the DDD patterns: upstream/downstream (U/D), shared kernel, customer/supplier, conformist, anti-corruption layer (ACL), open-host service (OHS). Read cross-context references / imports / shared types. `[CONFIRM]` where the pattern is a design intention code doesn't spell out; `[NOT FOUND]` where an integration is expected but unclear.
 3. **Build the diagram**: a Mermaid `flowchart` — contexts as nodes, edges labelled with the DDD pattern + direction.
 4. **Place**: root `docs/domain/context-map.md` (project-wide; lives in the project tree).
-5. **Fill**: copy [domain-context-map-template.md]([path-to-agent-memory-coding-skill]/templates/domain-context-map-template.md), set `doc_type: domain-context-map`, fill the diagram + contexts + relationships + links to each context's ERD (note contexts lacking one). Fill-from-code, no fiction, typed markers.
+5. **Fill**: copy [domain-context-map-template.md]([path-to-agent-memory-project]/templates/domain-context-map-template.md), set `doc_type: domain-context-map`, fill the diagram + contexts + relationships + links to each context's ERD (note contexts lacking one). Fill-from-code, no fiction, typed markers.
 6. **Review**: show the map, group markers, state placement, note which contexts still lack a deep-dive ERD. **Done** — skip Steps 2–6.
 
 ### Step 1B: Resolve the context (deep-dive)
@@ -78,11 +78,11 @@ When in doubt, default to `erDiagram`.
 
 ### Step 4: Compute placement (LCA)
 
-Follow the [Compute Doc Placement component]([path-to-agent-memory-coding-skill]/components/compute-doc-placement.md) with **lens** = `domain`, **scope files** = the entity files in scope, **name** = the model/scope name. (Data models often sit higher than flows — a model shared across modules lands at their common ancestor.)
+Follow the [Compute Doc Placement component]([path-to-agent-memory-project]/components/compute-doc-placement.md) with **lens** = `domain`, **scope files** = the entity files in scope, **name** = the model/scope name. (Data models often sit higher than flows — a model shared across modules lands at their common ancestor.)
 
 ### Step 5: Fill the doc
 
-1. Copy [domain-doc-template.md]([path-to-agent-memory-coding-skill]/templates/domain-doc-template.md) to the target path.
+1. Copy [domain-doc-template.md]([path-to-agent-memory-project]/templates/domain-doc-template.md) to the target path.
 2. Update the `domain:` frontmatter and the `# Domain: …` heading with the scope name. **Keep `doc_type: domain`** — the map keys on it.
 3. Remove the Convention preamble block (the blockquote marked "delete after reading").
 4. Fill from the extracted model:
@@ -96,7 +96,7 @@ Follow the [Compute Doc Placement component]([path-to-agent-memory-coding-skill]
 
 ### Step 6: Present for review
 
-Follow the [Present Doc For Review component]([path-to-agent-memory-coding-skill]/components/present-doc-for-review.md) — **show** the ERD + prose.
+Follow the [Present Doc For Review component]([path-to-agent-memory-project]/components/present-doc-for-review.md) — **show** the ERD + prose.
 
 > **Vector export** (optional): extract the fenced Mermaid block to `{scope}.mmd` and run `mmdc -i {scope}.mmd -o {scope}.svg` (or `.pdf`). Prefer SVG/PDF over PNG for dense diagrams.
 

@@ -1,4 +1,4 @@
-"""Install the agent-memory-coding-skill OVERLAY procedures as Codex **Agent Skills**.
+"""Install the agent-memory-project OVERLAY procedures as Codex **Agent Skills**.
 
 Replaces the old ``setup-all-codex.sh``. That script had the right target and the right shape —
 Codex's documented user scope really is ``$HOME/.agents/skills``, not the ``~/.codex/skills``
@@ -34,7 +34,7 @@ _skills = importlib.util.module_from_spec(_spec)
 sys.modules["overlay_install_skills"] = _skills
 _spec.loader.exec_module(_skills)
 
-MANIFEST_NAME = ".agent-memory-coding-skill-codex-manifest"
+MANIFEST_NAME = ".agent-memory-project-codex-manifest"
 CORE_MANIFEST_NAME = ".agent-memory-codex-manifest"
 FLEET_MANIFEST_NAME = ".agent-memory-fleet-codex-manifest"
 

@@ -20,7 +20,7 @@ _SCRIPT = ROOT / "setup-scripts" / "compile-procedures.py"
 
 # The installer registers this in the global instructions file, so a reference rooted at it
 # resolves at run time. It is what makes leaving a template path in the output safe.
-_PLACEHOLDER = "[path-to-agent-memory-coding-skill]"
+_PLACEHOLDER = "[path-to-agent-memory-project]"
 
 _spec = importlib.util.spec_from_file_location("overlay_compile", _SCRIPT)
 cc = importlib.util.module_from_spec(_spec)
@@ -200,7 +200,7 @@ def test_templates_are_resolved_but_never_inlined(tmp_path: Path) -> None:
 
 
 def test_backtick_code_path_template_reference_is_left_alone(tmp_path: Path) -> None:
-    ref = "`[path-to-agent-memory-coding-skill]/templates/tpl-one.md`"
+    ref = "`[path-to-agent-memory-project]/templates/tpl-one.md`"
     repo = _mkrepo(
         tmp_path / "repo",
         procedures={"p": f"See {ref} here.\n"},

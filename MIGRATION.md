@@ -41,3 +41,23 @@ memory and completed plans across the framework. These are **append-only archiva
 **left as-is** (framework convention already accepts broken links in `plans/completed/`). Only
 **active** cross-references (per-agent memory files, `new-agent-template`, README/ARCHITECTURE, the
 orientation map) are repointed — see the core repo's Phase 3 work.
+
+## Later move — localization, and the rename to `agent-memory-project` (2026-10-09)
+
+The **localization lane** (`localize-context`, `localized-memory-workflow`, and the
+`## Localized Home Resolution` rule) was moved **out** into the sibling repo
+[`agent-memory-local`](https://github.com/alvseek/agent-memory-local) (`hermod-local`), which also
+owns the new `load-local-context` reader. This overlay was renamed
+**`agent-memory-coding-skill` → `agent-memory-project`** and made **central-only**: its procedures no
+longer resolve `home: project` themselves; they operate on the `HOME` contract
+(`components/home-contract.md`, central default), and `agent-memory-local` resolves the localized
+override. `awaken-coder` hands off to `/load-local-context` when it detects a localized project
+(`.agents/` at cwd). The repo had already split twice (fleet 2026-10-08, wizards 2026-10-09); it is
+now **four repos**: project, local, fleet, wizards.
+
+The rename changed the installed identity: folder prefix `agent-coding-` → `agent-project-`,
+manifest `.agent-memory-coding-skill-*` → `.agent-memory-project-*`, placeholder
+`[path-to-agent-memory-coding-skill]` → `[path-to-agent-memory-project]`. Run
+`setup-scripts/migrate-old-name.py` once to clear the pre-rename installs, then re-run the
+platform installers. See `agent-memory-local`'s `MIGRATION.md` and
+`docs/adr/2026-10-09-hermod-local-project-split.md`.

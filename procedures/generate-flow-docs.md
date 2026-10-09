@@ -44,7 +44,7 @@ Bare discovers; you generate one deep-dive at a time. The /generate-docs orchest
 2. **Infer the chains**: how one flow's outcome hands off to the next — an emitted event another flow consumes, a success redirect into another entrypoint, shared state. `[CONFIRM]` inferred chains; `[NOT FOUND]` where a handoff is expected but unclear.
 3. **Build the diagram**: a Mermaid `flowchart` — flows as nodes, edges labelled with the handoff (`then` / `triggers` / `emits …`).
 4. **Place**: root `docs/flows/journey-map.md` (project-wide; lives in the project tree).
-5. **Fill**: copy [flow-journey-map-template.md]([path-to-agent-memory-coding-skill]/templates/flow-journey-map-template.md), set `doc_type: flow-journey-map`, fill the diagram + named journeys + links to each flow's deep-dive (note flows lacking one). Fill-from-code, no fiction, typed markers.
+5. **Fill**: copy [flow-journey-map-template.md]([path-to-agent-memory-project]/templates/flow-journey-map-template.md), set `doc_type: flow-journey-map`, fill the diagram + named journeys + links to each flow's deep-dive (note flows lacking one). Fill-from-code, no fiction, typed markers.
 6. **Review**: show the map, group markers, state placement, note which flows still lack a deep-dive doc. **Done** — skip Steps 2–6.
 
 ### Step 1B: Resolve the target flow (deep-dive)
@@ -81,11 +81,11 @@ When in doubt, default to `sequenceDiagram`.
 
 ### Step 4: Compute placement (LCA)
 
-Follow the [Compute Doc Placement component]([path-to-agent-memory-coding-skill]/components/compute-doc-placement.md) with **lens** = `flows`, **scope files** = every code participant the flow runs through (exclude externals like third-party APIs), **name** = the flow name. (Localization only governs where the orientation map that later indexes the doc lives, not the doc itself.)
+Follow the [Compute Doc Placement component]([path-to-agent-memory-project]/components/compute-doc-placement.md) with **lens** = `flows`, **scope files** = every code participant the flow runs through (exclude externals like third-party APIs), **name** = the flow name. (Localization only governs where the orientation map that later indexes the doc lives, not the doc itself.)
 
 ### Step 5: Fill the doc
 
-1. Copy [flow-doc-template.md]([path-to-agent-memory-coding-skill]/templates/flow-doc-template.md) to the target path.
+1. Copy [flow-doc-template.md]([path-to-agent-memory-project]/templates/flow-doc-template.md) to the target path.
 2. Update the `flow:` frontmatter and the `# Flow: ...` heading with the flow's name. **Keep `doc_type: flow`** — the orientation map keys on it.
 3. Remove the Convention preamble block (the blockquote marked "delete after reading").
 4. Fill from the trace:
@@ -101,7 +101,7 @@ Follow the [Compute Doc Placement component]([path-to-agent-memory-coding-skill]
 
 ### Step 6: Present for review
 
-Follow the [Present Doc For Review component]([path-to-agent-memory-coding-skill]/components/present-doc-for-review.md) — **show** the diagram + prose.
+Follow the [Present Doc For Review component]([path-to-agent-memory-project]/components/present-doc-for-review.md) — **show** the diagram + prose.
 
 > **Vector export** (optional): to produce a sharable image, extract the fenced Mermaid block to `{flow}.mmd` and run `mmdc -i {flow}.mmd -o {flow}.svg` (or `.pdf`). Prefer SVG/PDF over PNG for dense diagrams.
 

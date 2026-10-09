@@ -2,7 +2,7 @@
 
 Maintain a per-project index of orientation artifacts (READMEs, architecture docs, flow diagrams, ADRs, sub-project maps) with staleness + role tracking.
 
-Map file: `shared-memory/[PROJECT-NAME]/context/orientation-map.md`. Format: [orientation-map-template.md]([path-to-agent-memory-coding-skill]/templates/orientation-map-template.md).
+Map file: `shared-memory/[PROJECT-NAME]/context/orientation-map.md`. Format: [orientation-map-template.md]([path-to-agent-memory-project]/templates/orientation-map-template.md).
 
 ---
 
@@ -22,13 +22,7 @@ Map file: `shared-memory/[PROJECT-NAME]/context/orientation-map.md`. Format: [or
 
 1. **Identify project** — match cwd against known project mappings (`shared-memory/[project]/` existence + `shared-memory/integrations/external-integrations.md` task-system mapping). If a project-name arg is passed, use it. If neither: skip silently.
 2. **Compute central map path** — `[AGENT-MEMORY-PATH]/shared-memory/[PROJECT-NAME]/context/orientation-map.md`. Record `CENTRAL_MAP_EXISTS`.
-3. **Resolve localized home** — apply the /localize-context rule:
-   - `CENTRAL_MAP_EXISTS` **and** its frontmatter has `home: project` → the project is **localized**. Set:
-     - `MAP_PATH` = `<project-root>/<localized_path>` (default `docs/orientation-map.md`; `project-root` = cwd)
-     - `CONTEXT_DIR` = `<project-root>/docs/`
-     - `SOURCE_OF_TRUTH` = project
-     - `MAP_EXISTS` = whether `MAP_PATH` exists. If the stub says localized but `MAP_PATH` is missing → report *"[PROJECT] is localized but `docs/orientation-map.md` isn't here — wrong cwd, or the bundle isn't checked out."* and exit.
-   - else → central defaults: `MAP_PATH` = the central map path, `CONTEXT_DIR` = `[AGENT-MEMORY-PATH]/shared-memory/[PROJECT-NAME]/context/`, `SOURCE_OF_TRUTH` = central, `MAP_EXISTS` = `CENTRAL_MAP_EXISTS`.
+3. **Resolve the home** — apply the [HOME contract component]([path-to-agent-memory-project]/components/home-contract.md). `MAP_PATH` and `CONTEXT_DIR` are the active values (central by default; a localized project's values are resolved by `agent-memory-local`). `SOURCE_OF_TRUTH` = `project` when a localized home is active, else `central`. `MAP_EXISTS` = whether `MAP_PATH` exists (a localized project whose `MAP_PATH` is missing is caught by `agent-memory-local`'s reachability guard).
 
 > **All mode blocks below operate on the resolved `MAP_PATH` / `CONTEXT_DIR`.** Where a block names `shared-memory/[PROJECT-NAME]/context/orientation-map.md`, read it as `MAP_PATH` — identical for non-localized projects, in-project `docs/` for localized ones.
 
@@ -173,7 +167,7 @@ Use `head -20` / first 500 chars only. Do NOT read full file content.
 
 ### C6: Write map (+ sub-maps)
 
-Copy [orientation-map-template.md]([path-to-agent-memory-coding-skill]/templates/orientation-map-template.md) to the map path. Populate frontmatter:
+Copy [orientation-map-template.md]([path-to-agent-memory-project]/templates/orientation-map-template.md) to the map path. Populate frontmatter:
 
 ```yaml
 ---
@@ -286,7 +280,7 @@ Used by **Load Mode L2** when reading entries:
 - **/awaken-agent** — calls `/map-orientation` (bare, load-only) after project detection.
 - **/wrap-up** — calls `/map-orientation --session-touched [paths]` for orientation docs the session touched. Silent no-op if map missing.
 - **/update-project-context** — preferred path when a session DISCOVERED an entry's status is wrong. Direct edit; mtime check picks it up on next awakening.
-- **/localize-context** — graduates a consenting project's map + structural context into its own repo (`docs/`). Sets the central map's `home: project` frontmatter that the Prelude resolves. After localization, all modes here operate on the in-project `MAP_PATH` transparently.
+- **agent-memory-local** — owns localization: it graduates a consenting project's map + structural context into its own repo (`docs/`) and resolves the localized `MAP_PATH`/`CONTEXT_DIR` this procedure reads. All modes here operate on the in-project values transparently.
 - **/discovery-contract** — the four doc generators' bare **discovery mode** reads this map (per-entry `status`, via the resolved `MAP_PATH`) to mark units documented-vs-not. A doc on disk that is absent from the map surfaces there as a staleness flag (→ `--rescan`).
 
 ---

@@ -23,16 +23,16 @@ _spec.loader.exec_module(si)
 # with the compiler's own reference patterns, with no dependence on test import order.
 cc = si._cc
 
-_MANIFEST = ".agent-memory-coding-skill-manifest"
+_MANIFEST = ".agent-memory-project-manifest"
 _SIBLING_MANIFEST = ".agent-memory-manifest"
 
 # registered by the installer in the global instructions file, so a reference rooted at it
 # resolves at run time — which is what makes an installed template path safe.
-_PLACEHOLDER = "[path-to-agent-memory-coding-skill]"
+_PLACEHOLDER = "[path-to-agent-memory-project]"
 
 # overlay commands every healthy tree carries — asserted by presence, not exact count, so a
 # newly-added or renamed procedure doesn't break the suite.
-_KNOWN = {"awaken-coder", "map-orientation", "localize-context", "push-project"}
+_KNOWN = {"awaken-coder", "map-orientation", "push-project"}
 
 
 def test_installs_the_full_command_set(tmp_path: Path) -> None:
@@ -58,7 +58,7 @@ def test_installed_command_carries_no_dev_time_reference(tmp_path: Path) -> None
     """The installed command is the compiled one — no component link, no unrooted path.
 
     A template path is not a dev-time reference: the agent copies templates by path, and the
-    installer registers ``[path-to-agent-memory-coding-skill]`` so a rooted one resolves. An
+    installer registers ``[path-to-agent-memory-project]`` so a rooted one resolves. An
     *unrooted* template path would not, which is what this checks for.
     """
     target = tmp_path / "commands"
@@ -162,12 +162,12 @@ def test_coding_layer_access_registration_is_idempotent(tmp_path: Path) -> None:
     claude_md = tmp_path / "CLAUDE.md"
     claude_md.write_text("# Global instructions\n", encoding="utf-8", newline="\n")
 
-    first = si._register_layer_access(claude_md, "CODING", si._CODING_ACCESS_UUID)
+    first = si._register_layer_access(claude_md, "PROJECT", si._PROJECT_ACCESS_UUID)
     body = claude_md.read_text(encoding="utf-8")
     assert "Registered" in first
-    assert "**[CODING-ACCESS]**" in body
-    assert body.count(si._CODING_ACCESS_UUID) == 1
+    assert "**[PROJECT-ACCESS]**" in body
+    assert body.count(si._PROJECT_ACCESS_UUID) == 1
 
-    second = si._register_layer_access(claude_md, "CODING", si._CODING_ACCESS_UUID)
+    second = si._register_layer_access(claude_md, "PROJECT", si._PROJECT_ACCESS_UUID)
     assert "already registered" in second
-    assert claude_md.read_text(encoding="utf-8").count(si._CODING_ACCESS_UUID) == 1
+    assert claude_md.read_text(encoding="utf-8").count(si._PROJECT_ACCESS_UUID) == 1
