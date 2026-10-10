@@ -266,7 +266,10 @@ def test_seam_marker_is_swapped_for_backend_ops(tmp_path: Path) -> None:
 
 
 def test_seam_unresolved_op_is_reported(tmp_path: Path) -> None:
-    repo = _mkrepo(tmp_path / "repo", procedures={"p": "Do it (**§ missing-op**).\n\n## Storage Mechanics\n\nx\n"})
+    repo = _mkrepo(
+        tmp_path / "repo",
+        procedures={"p": "Do it (**§ missing-op**).\n\n## Storage Mechanics\n\nx\n"},
+    )
     _write(repo / "storage-backends" / "markdown.md", _BACKEND)  # defines only § do-thing
     report = cc.compile_all(repo, tmp_path / "out", verbose=False)[0]
     assert report.unresolved_ops == ["missing-op"]
@@ -302,7 +305,8 @@ def test_every_storage_op_resolves_on_the_real_tree(tmp_path: Path) -> None:
 def test_db_checklist_covers_every_referenced_op(tmp_path: Path) -> None:
     """Every `§ op` a procedure references is listed in db.md, so the deferred backend's
     TODO stays complete as procedures change."""
-    listed = set(cc._OP_RE.findall((ROOT / "storage-backends" / "db.md").read_text(encoding="utf-8")))
+    db_md = (ROOT / "storage-backends" / "db.md").read_text(encoding="utf-8")
+    listed = set(cc._OP_RE.findall(db_md))
     referenced: set[str] = set()
     for report in cc.compile_all(ROOT, tmp_path, verbose=False):
         referenced.update(report.referenced_ops)
