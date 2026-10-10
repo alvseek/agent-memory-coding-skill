@@ -3,7 +3,6 @@ project: "[project-name]"
 description: "Orientation map for [project] — index of READMEs, architecture docs, flow diagrams, ADRs, and sub-project maps with staleness + role tracking."
 created: "YYYY-MM-DD"
 last_full_scan: "YYYY-MM-DD"
-# source_of_truth: project   # present only on an IN-PROJECT map after localization (default = central, omit)
 ---
 
 # Orientation Map — [project-name]
@@ -164,12 +163,3 @@ For `type: orientation-map-link` entries: if the entry passes the role filter, A
 - Remove example entries that don't apply to this project.
 - For monorepos with sub-projects: parent map references sub-maps via `type: orientation-map-link` entries. Sub-maps live in the same `context/` folder with suffix naming (`orientation-map-[subproject].md`).
 - For projects with no role split (single-role projects like undanganaku, agent-memory framework): all entries get `scope: shared`, `roles: []`. Role filtering becomes a no-op.
-
-## Localization (delete after first fill)
-
-A **consenting** project can graduate its map + structural context into its own repo via `agent-memory-local` (`/localize-context`). After graduation:
-
-- The real map lives **in the project repo** at `<project-root>/docs/orientation-map.md` with frontmatter `source_of_truth: project`. Entry paths are **project-root-relative**.
-- Structural context moves **flat** to `<project-root>/docs/` (no `context/` subfolder); the root `AGENTS.md` gets a prose pointer to the map.
-- The **central** `shared-memory/[project]/context/orientation-map.md` becomes a thin **stub** with frontmatter `home: project` + `localized_path: docs/orientation-map.md`. It holds no real entries — it is the breadcrumb + machine-branch signal `agent-memory-local` keys off.
-- **Two lanes**: code-describing artifacts → `docs/` (this map + structural context); **work-product memory** (episodic + project-scoped knowledge) → `.agents/` (opt-in). **Identity** (reasoning / emotion / RAS), **general** knowledge, and business / relationship memory stay fleet-private and central.

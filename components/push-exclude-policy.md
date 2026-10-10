@@ -6,7 +6,7 @@ Some repos must never be auto-committed or pushed. **This is a component, not a 
 
 ---
 
-**Before pushing, consult the project's push-exclude list** — `push-policy.md` in the project's shared context dir (central default `[AGENT-MEMORY-PATH]/shared-memory/[project]/context/`; a localized project's value is resolved by `agent-memory-local`).
+**Before pushing, consult the project's push-exclude list** — `push-policy.md` in the shared context dir (`CONTEXT_DIR`, per the HOME contract).
 
 Repos and submodules listed there are **vendored / third-party / read-only**: never commit or push them, and do not count their state against completion. Report each as `skipped (excluded)` so the skip is visible rather than silent. An absent file means no exclusions — push everything in scope as normal.
 

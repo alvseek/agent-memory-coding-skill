@@ -33,7 +33,7 @@ Tool calls visible (git commands); capture per-repo commit hashes + user-files-l
 - Workarounds, configs, or decisions specific to the current project?
 - New credentials, URLs, API endpoints, infrastructure details?
 
-**YES to any** → run `/update-project-context` for the material (it resolves central vs localized home itself). Run it **before** the memory wrap-up below, so the core `/update-memory` promotion pre-scan catches the write and records it in the episodic **Promotions** field. **NO to all** → skip silently.
+**YES to any** → run `/update-project-context` for the material (it operates on the injected home). Run it **before** the memory wrap-up below, so the core `/update-memory` promotion pre-scan catches the write and records it in the episodic **Promotions** field. **NO to all** → skip silently.
 
 **Then — the memory update**: Execute **`/update-memory`**, passing `fresh` through if present. Capture its results (mode, gate decisions, episodic entry, carry-forward count, promotions, emotional status) as data for Step 5, together with the **`Tech Debts` + `Next Steps`** it hands up from the sub-episode just written (the return contract `/update-episodic` declares). Print nothing here — it all folds into Step 5.
 
@@ -49,7 +49,7 @@ Silent no-op if no map exists or no orientation docs touched. Capture refresh co
 
 ### Step 4: Push Everything Steps 2–3 Wrote (silent) — MANDATORY
 
-Execute **`/push-all <mode>`** — one call covering the agent-memory store and the working project together. Invoking `/project-wrap-up` IS the authorization to commit + push. Its memory half captures the episodic / emotional / reasoning / knowledge writes that the Step 1 project push ran too early to include; its project half captures the project memory files Steps 2–3 just wrote (localized `.agents/**` plus refreshed `docs/` orientation and context docs). In the default `agent` mode both leaves stage only this agent's own work (never a blanket `git add -A`), leaving other agents' in-flight memory and the user's project changes untouched; `all` mode pushes both full trees.
+Execute **`/push-all <mode>`** — one call covering the agent-memory store and the working project together. Invoking `/project-wrap-up` IS the authorization to commit + push. Its memory half captures the episodic / emotional / reasoning / knowledge writes that the Step 1 project push ran too early to include; its project half captures the project memory, orientation, and context files Steps 2–3 just wrote. In the default `agent` mode both leaves stage only this agent's own work (never a blanket `git add -A`), leaving other agents' in-flight memory and the user's project changes untouched; `all` mode pushes both full trees.
 
 > **Why the project is pushed twice, and why that is not redundant.** Step 1 exists so a merge request can open without waiting for the memory update. Step 4 exists because Steps 2–3 write more files after that. Collapsing them into a single push at either end breaks the completion gate: push only at the start and the memory written afterwards is never saved, so the gate reports INCOMPLETE every run; push only at the end and the early merge request Step 1 exists for never happens.
 
@@ -76,7 +76,7 @@ Orientation map: [refreshed N entries / no-op: reason]
 Push — agent work only (every agent-work path must be ✅):
 - [project/submodule]: ✅ [commit-hash] pushed (project work) — [N user file(s) left for user / no user files left]
 - agent-memory: ✅ [commit-hash] pushed (memory) / no changes
-- [project memory files]: ✅ pushed with memory (localized .agents/docs)   ← only if the project is localized
+- [project memory files]: ✅ pushed with memory   ← only if Steps 2–3 wrote project files
 - [excluded repo]: ⏭️ skipped (excluded — vendored/read-only)   ← only if the project has exclusions
 
 📋 Open items going forward:

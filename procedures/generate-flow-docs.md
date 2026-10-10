@@ -81,7 +81,7 @@ When in doubt, default to `sequenceDiagram`.
 
 ### Step 4: Compute placement (LCA)
 
-Follow the [Compute Doc Placement component]([path-to-agent-memory-project]/components/compute-doc-placement.md) with **lens** = `flows`, **scope files** = every code participant the flow runs through (exclude externals like third-party APIs), **name** = the flow name. (Localization only governs where the orientation map that later indexes the doc lives, not the doc itself.)
+Follow the [Compute Doc Placement component]([path-to-agent-memory-project]/components/compute-doc-placement.md) with **lens** = `flows`, **scope files** = every code participant the flow runs through (exclude externals like third-party APIs), **name** = the flow name.
 
 ### Step 5: Fill the doc
 

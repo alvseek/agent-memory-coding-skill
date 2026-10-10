@@ -29,9 +29,8 @@ Parse `$ARGUMENTS`: if the first whitespace-delimited token is `all` or `agent`,
 **Mode `all`** — full tree: in each in-scope repo, `git add -A`.
 
 **Mode `agent`** — the agent's own work only. In each in-scope project repo / owned submodule, stage **ONLY**:
-- `.agents/**` — always agent-owned (localized memory).
 - files the agent created/edited **this session** — cross-check the newest episode's `Deliverables` / `Outcomes` plus your own Write/Edit history.
-- agent-produced files from **earlier sessions still uncommitted** — identify from prior episode deliverables and `.agents/` breadcrumbs.
+- agent-produced files from **earlier sessions still uncommitted** — identify from prior episode deliverables.
 - 🚨 **NEVER `git add -A` in `agent` mode.** Stage the agent-work paths explicitly. Every other dirty file is the **user's** — leave it untouched, report it as `left for user`, never commit it.
 - ⚠️ **When the set is uncertain** (long or context-compacted session — recalled edit history may be incomplete, and the episode may miss late edits): do NOT silently drop a dirty file you can't confidently classify. Surface the ambiguous paths (whatever in `git status` you're not sure is the user's) and confirm before finishing. The completion gate can catch an agent path left *unpushed*, but it CANNOT detect an *under-inclusive* set — a missed agent file would be silently abandoned, so resolve the doubt here.
 
