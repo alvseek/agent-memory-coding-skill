@@ -14,9 +14,8 @@ files, so an installed slash command never points at a path the agent cannot rea
 - **The storage seam is composed.** A procedure carrying a ``## Storage Mechanics`` section
   is swapped onto the **markdown** backend's concrete ops (``storage-backends/markdown.md``)
   — the swap point a future db backend replaces. See ``storage-backends/README.md``.
-- **Runtime refs are left alone**: ``[AGENT-MEMORY-PATH]/...`` (where memory lives),
-  ``[path-to-agent-memory-project]/fleet-scripts/*.sh`` (executables the agent runs),
-  and template paths under ``plan-templates/`` and ``templates/``.
+- **Runtime refs are left alone**: ``[AGENT-MEMORY-PATH]/...`` (where memory lives) and
+  ``[path-to-agent-memory-project]/templates/*.md`` (files the agent copies by path).
 
 Templates are still *resolved* at compile time: a reference naming a template that does not
 exist is reported, and fails the build under ``--strict``. A dangling path is the one failure
