@@ -198,3 +198,27 @@ def test_coding_layer_access_registration_is_idempotent(tmp_path: Path) -> None:
     second = sk.register_layer_access(instructions, "PROJECT", sk._PROJECT_ACCESS_UUID)
     assert "already registered" in second
     assert instructions.read_text(encoding="utf-8").count(sk._PROJECT_ACCESS_UUID) == 1
+
+
+def test_overlay_path_is_repointed_when_the_repo_moves(tmp_path: Path) -> None:
+    """A relocated clone must replace the stale path, not skip it as 'already registered'.
+
+    The guard is the UUID, so the UUID alone would keep a path that no longer exists; the
+    value has to be rewritten when it differs.
+    """
+    instructions = tmp_path / "AGENTS.md"
+    instructions.write_text(
+        "# Global instructions\n"
+        "- **[path-to-agent-memory-project]** = `C:/Work/IM/agent-memory-old`"
+        f"  <!-- overlay-path-def {sk._PATH_DEF_UUID} -->\n",
+        encoding="utf-8",
+        newline="\n",
+    )
+    moved = tmp_path / "agent-memory-project"
+
+    result = sk.register_path(instructions, moved)
+    body = instructions.read_text(encoding="utf-8")
+    assert "Updated" in result
+    assert moved.as_posix() in body
+    assert "agent-memory-old" not in body
+    assert body.count(sk._PATH_DEF_UUID) == 1

@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import importlib.util
 import os
+import re
 import shutil
 import sys
 from pathlib import Path
@@ -78,6 +79,22 @@ def _cleanup(target_dir: Path, manifest: Path, sibling_manifests: list[Path]) ->
     return removed
 
 
+def _repoint_overlay_path(text: str, uuid: str, path_value: str) -> str:
+    """Rewrite a recorded path definition if its value has moved.
+
+    The definition is keyed by ``uuid``, so a re-run normally no-ops. A relocated or renamed
+    clone (the 2026-10-09 rename did exactly that) leaves a stale path in place, and a stale
+    placeholder resolves to a folder that no longer exists. Matching the line by its UUID and
+    replacing only the backticked value keeps the update local, and never touches a sibling
+    layer's definition.
+    """
+    pattern = re.compile(
+        rf"(?m)^(- \*\*\[path-to-agent-memory-project\]\*\* = `)[^`]*"
+        rf"(`\s*<!-- overlay-path-def {re.escape(uuid)} -->)$"
+    )
+    return pattern.sub(lambda m: m.group(1) + path_value + m.group(2), text)
+
+
 def _register_overlay_path(claude_md: Path, overlay_root: Path) -> str:
     """Define ``[path-to-agent-memory-project]`` in the global CLAUDE.md (idempotent).
 
@@ -95,10 +112,15 @@ def _register_overlay_path(claude_md: Path, overlay_root: Path) -> str:
             "        [path-to-agent-memory-project]. Run the memory-core setup first\n"
             "        (it creates CLAUDE.md), then re-run this installer."
         )
-    if _PATH_DEF_UUID in claude_md.read_text(encoding="utf-8"):
+    path_value = overlay_root.as_posix()
+    text = claude_md.read_text(encoding="utf-8")
+    if _PATH_DEF_UUID in text:
+        repointed = _repoint_overlay_path(text, _PATH_DEF_UUID, path_value)
+        if repointed != text:
+            claude_md.write_text(repointed, encoding="utf-8", newline="\n")
+            return f"  Updated [path-to-agent-memory-project] in CLAUDE.md = {path_value}"
         return "  [path-to-agent-memory-project] already registered in CLAUDE.md — skipped."
 
-    path_value = overlay_root.as_posix()
     line = (
         f"\n- **[path-to-agent-memory-project]** = `{path_value}`"
         f"  <!-- overlay-path-def {_PATH_DEF_UUID} -->\n"
