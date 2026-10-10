@@ -243,3 +243,67 @@ def test_procedure_with_no_references_is_copied_verbatim(tmp_path: Path) -> None
 
 def test_strict_passes_on_the_real_tree(tmp_path: Path) -> None:
     assert cc.main(["--strict", "--quiet", "--out", str(tmp_path)]) == 0
+
+
+# ------------------------------------------------------------------ storage seam
+
+_BACKEND = "# Backend\n\n## p\n\n### § do-thing\n\nECHO DO THING\n"
+_SEAMED = "Intro.\n\nDo the thing (**§ do-thing**).\n\n## Storage Mechanics\n\nSee backends.\n"
+
+
+def test_seam_marker_is_swapped_for_backend_ops(tmp_path: Path) -> None:
+    repo = _mkrepo(tmp_path / "repo", procedures={"p": _SEAMED})
+    _write(repo / "storage-backends" / "markdown.md", _BACKEND)
+    report = cc.compile_all(repo, tmp_path / "out", verbose=False)[0]
+    text = report.out_path.read_text(encoding="utf-8")
+
+    assert "## Storage Mechanics" not in text  # marker header dropped
+    assert "ECHO DO THING" in text  # backend op inlined
+    assert "§ do-thing" in text  # sigil kept as provenance
+    assert report.referenced_ops == ["do-thing"]
+    assert report.unresolved_ops == []
+    assert report.clean
+
+
+def test_seam_unresolved_op_is_reported(tmp_path: Path) -> None:
+    repo = _mkrepo(tmp_path / "repo", procedures={"p": "Do it (**§ missing-op**).\n\n## Storage Mechanics\n\nx\n"})
+    _write(repo / "storage-backends" / "markdown.md", _BACKEND)  # defines only § do-thing
+    report = cc.compile_all(repo, tmp_path / "out", verbose=False)[0]
+    assert report.unresolved_ops == ["missing-op"]
+    assert not report.clean  # this is what `--strict` fails CI on
+
+
+def test_seam_without_a_backend_section_is_reported(tmp_path: Path) -> None:
+    repo = _mkrepo(tmp_path / "repo", procedures={"p": _SEAMED})
+    _write(repo / "storage-backends" / "markdown.md", "# Backend\n\n## other\n\n### § other\n\nx\n")
+    report = cc.compile_all(repo, tmp_path / "out", verbose=False)[0]
+    assert report.missing_backend
+    assert not report.clean
+
+
+def test_procedure_without_a_seam_gains_no_ops(tmp_path: Path) -> None:
+    repo = _mkrepo(tmp_path / "repo", procedures={"p": "Just prose.\n"})
+    report = cc.compile_all(repo, tmp_path / "out", verbose=False)[0]
+    assert report.referenced_ops == []
+    assert report.out_path.read_text(encoding="utf-8") == "Just prose.\n"
+
+
+def test_no_seam_marker_reaches_the_real_output(tmp_path: Path) -> None:
+    for report in cc.compile_all(ROOT, tmp_path, verbose=False):
+        assert not cc._seam.has_seam(report.out_path.read_text(encoding="utf-8")), report.name
+
+
+def test_every_storage_op_resolves_on_the_real_tree(tmp_path: Path) -> None:
+    for report in cc.compile_all(ROOT, tmp_path, verbose=False):
+        assert report.unresolved_ops == [], report.name
+        assert not report.missing_backend, report.name
+
+
+def test_db_checklist_covers_every_referenced_op(tmp_path: Path) -> None:
+    """Every `§ op` a procedure references is listed in db.md, so the deferred backend's
+    TODO stays complete as procedures change."""
+    listed = set(cc._OP_RE.findall((ROOT / "storage-backends" / "db.md").read_text(encoding="utf-8")))
+    referenced: set[str] = set()
+    for report in cc.compile_all(ROOT, tmp_path, verbose=False):
+        referenced.update(report.referenced_ops)
+    assert referenced - listed == set()

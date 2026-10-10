@@ -2,6 +2,8 @@
 
 Load project-specific context files from **both** the per-agent layer (`agent-[domain]/knowledge-base/[project]/`) and the shared layer (`shared-memory/[project]/context/`) into working memory. Supports listing all available context or loading specific files by keyword. Entries are presented with `[shared]` / `[private]` markers so the source layer is always visible.
 
+*How* the entries are physically read is delegated to the active **storage backend** (see [Storage Mechanics](#storage-mechanics)).
+
 ## Arguments
 
 `$ARGUMENTS`
@@ -17,19 +19,13 @@ Load project-specific context files from **both** the per-agent layer (`agent-[d
 
 ### Step 1: Scan Available Project Context
 
-Scan **both** locations for project context files:
+List the project context entries across **both** layers (**§ list-context-entries**). Paths resolve through the [HOME contract component]([path-to-agent-memory-project]/components/home-contract.md): the shared layer is `CONTEXT_DIR`, the private layer is `KNOWLEDGE_DIR`.
 
-1. **Per-agent (private) layer**: Scan `[AGENT-MEMORY-PATH]/agent-[domain]/knowledge-base/` for project subfolders (exclude `research/` folder — that's domain knowledge, not project context). For each project subfolder, read its `context-index.md`.
-
-2. **Shared layer**: Scan `[AGENT-MEMORY-PATH]/shared-memory/` for project subfolders. For each project subfolder, check if `context/context-index.md` exists, and if so read it.
-
-> **Storage location**: read shared from `CONTEXT_DIR` and private from `KNOWLEDGE_DIR`, resolved via the [HOME contract component]([path-to-agent-memory-project]/components/home-contract.md) (central by default; a localized project's values are resolved by `agent-memory-local`). (Scope markers `[shared]`/`[private]` unchanged.)
-
-**Silent skip**: If either folder is missing or empty for a given project, skip it without error. Only present what exists.
+**Silent skip**: If either layer is missing or empty for a given project, skip it without error. Only present what exists.
 
 For each entry found, retain its **scope marker**:
-- Entry from `agent-[domain]/knowledge-base/[project]/` → marker `[private]`
-- Entry from `shared-memory/[project]/context/` → marker `[shared]`
+- Private-layer entry → marker `[private]`
+- Shared-layer entry → marker `[shared]`
 
 If no context files are found in either layer, inform the user: "No project context files found. Use `/update-project-context` to create your first one."
 
@@ -85,9 +81,7 @@ No context files matching "[keyword]" found. Showing all available:
 
 ### Step 5: Load Selected Files
 
-Read the selected file(s) into agent context using the Read tool from their source-layer path:
-- Shared entries: `[AGENT-MEMORY-PATH]/shared-memory/[project]/context/[theme].md`
-- Private entries: `[AGENT-MEMORY-PATH]/agent-[domain]/knowledge-base/[project]/[theme].md`
+Read the selected entry or entries into agent context (**§ read-context-entry**).
 
 After loading, confirm to the user with the scope marker for each file:
 ```
@@ -97,3 +91,12 @@ Loaded [N] project context file(s):
 ```
 
 ---
+
+## Storage Mechanics
+
+The operations referenced above — **§ list-context-entries**, **§ read-context-entry** — are defined by the **active storage backend**:
+
+- **Markdown (native)** — follow `storage-backends/markdown.md` → its `load-project-context` section.
+- **DB (Hermod)** — the equivalents live in `storage-backends/db.md` → its `load-project-context` section (not yet implemented).
+
+See the seam contract at `storage-backends/README.md` for how this swap works.

@@ -35,13 +35,13 @@ The `## Core access` rule above is this same rule applied to the core, kept sepa
 
 1. **Run core awakening** — invoke the memory core `/awaken-agent [domain]` (Phase 1 identity + Phase 2 **central** memory + report). This loads identity, **universal** reasoning, emotional, knowledge, and the latest **central** episodic entry. (The core is **project-blind** — this overlay owns coding-scoped reasoning and project-context loading, in steps 2-3.)
 
-2. **Load coding reasoning** — read `[AGENT-MEMORY-PATH]/shared-memory/coding-reasoning-memory.md` into your own context (silently skip if missing — not every store has one yet). These are the reasoning patterns that only fire for a coding agent: they name repo artifacts, plan logs, foreign code, and fleet teammates, so the project-blind core does not carry them. Process them alongside the core reasoning patterns the core awakening already loaded — same lean shape, same weight.
+2. **Load coding reasoning** — load the coding-reasoning layer (**§ load-coding-reasoning**); silently skip if the store has none yet. These are the reasoning patterns that only fire for a coding agent: they name repo artifacts, plan logs, foreign code, and fleet teammates, so the project-blind core does not carry them. Process them alongside the core reasoning patterns the core awakening already loaded — same lean shape, same weight.
 
-3. **Load project context** — apply the [HOME contract component]([path-to-agent-memory-project]/components/home-contract.md): read the shared context index (`CONTEXT_DIR/context-index.md`) + the private context index (`KNOWLEDGE_DIR/context-index.md`), silently skipping whichever is missing. This is the central home by default.
+3. **Load project context** — apply the [HOME contract component]([path-to-agent-memory-project]/components/home-contract.md) to resolve the home, then load both context indexes (**§ load-context-indexes**), silently skipping whichever is missing. This is the central home by default.
 
-   **Localized detection + handoff** — if `.agents/` exists at cwd, the project is localized and its home (episodic, knowledge, map) is owned by `agent-memory-local`: run **`/load-local-context`** to load it. That read supersedes the central load above, and for memory **writes** this session follow `agent-memory-local`'s `localized-memory-workflow`. If `.agents/` is absent, the central load stands.
+   **Localized detection + handoff** — if `.agents/` exists at cwd, the project is localized and its home (episodic, knowledge, map) is owned by `agent-memory-local`: run **`/load-local-context`** to load it. That read supersedes the central load above, and for memory **writes** this session follow `agent-memory-local`'s `localized-memory-workflow`. If `.agents/` is absent, the central load stands. For a project already known to be localized, skip the detection entirely by running `agent-memory-local`'s `/awaken-local`, which runs this procedure with that check replaced by the same call.
 
-4. **Orientation map + fleet pointer** — Call `/map-orientation` (bare, load-only) to load the orientation map if it exists — never auto-create. Then, when the project has a fleet roster (`[AGENT-MEMORY-PATH]/shared-memory/[project]/fleet-agents.md` exists), the overlay's whole fleet statement is one pointer: **this project has a fleet; fleet operation is available using `hermod-fleet`.** Resolve how to reach it from `[FLEET-ACCESS]` (see [Layer access](#layer-access)). The roster itself is loaded by the fleet repo's `/load-fleet`, not here.
+4. **Orientation map + fleet pointer** — Call `/map-orientation` (bare, load-only) to load the orientation map if it exists — never auto-create. Then, when the project has a fleet roster (**§ check-fleet-roster**), the overlay's whole fleet statement is one pointer: **this project has a fleet; fleet operation is available using `hermod-fleet`.** Resolve how to reach it from `[FLEET-ACCESS]` (see [Layer access](#layer-access)). The roster itself is loaded by the fleet repo's `/load-fleet`, not here.
 
 5. **Task system check** — match the working directory to its task system and run that project's Awakening Hook: **Todoist** (`aquazone`, `invintiry`) → query `@agent-[my-domain]` + `@waiting-human`; **Jira/Linear** (`plko` / `ocx-platform`, `ocx-data`) → the Awakening Hook section in that project's context. Report counts. No matching project → skip silently.
 
@@ -53,3 +53,14 @@ The `## Core access` rule above is this same rule applied to the core, kept sepa
    - If localized: note that `agent-memory-local` superseded the central load.
 
 *(Proactive project-context loading — standing behavior for the session: when the task shifts and the **project context** index has a relevant entry (`CONTEXT_DIR/context-index.md` shared · `KNOWLEDGE_DIR/context-index.md` private), proactively load it — don't wait to be asked. Load silently, report briefly; never load everything. This is the coding half of Proactive Memory Loading; the general-knowledge + episodic half lives in the core knowledge foundation.)*
+
+---
+
+## Storage Mechanics
+
+The operations referenced above — **§ load-coding-reasoning**, **§ load-context-indexes**, **§ check-fleet-roster** — are defined by the **active storage backend**:
+
+- **Markdown (native)** — follow `storage-backends/markdown.md` → its `awaken-coder` section.
+- **DB (Hermod)** — the equivalents live in `storage-backends/db.md` → its `awaken-coder` section (not yet implemented).
+
+See the seam contract at `storage-backends/README.md` for how this swap works.

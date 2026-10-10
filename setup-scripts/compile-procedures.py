@@ -11,6 +11,9 @@ files, so an installed slash command never points at a path the agent cannot rea
   template becomes a plan file, a doc template becomes a doc. Inlining one hands over the
   content and takes away the source, which is why ``cp {source} ...`` had nothing to
   substitute. References are left exactly as authored and resolve at run time.
+- **The storage seam is composed.** A procedure carrying a ``## Storage Mechanics`` section
+  is swapped onto the **markdown** backend's concrete ops (``storage-backends/markdown.md``)
+  — the swap point a future db backend replaces. See ``storage-backends/README.md``.
 - **Runtime refs are left alone**: ``[AGENT-MEMORY-PATH]/...`` (where memory lives),
   ``[path-to-agent-memory-project]/fleet-scripts/*.sh`` (executables the agent runs),
   and template paths under ``plan-templates/`` and ``templates/``.
@@ -34,6 +37,7 @@ Usage: python setup-scripts/compile-procedures.py [--out DIR] [--quiet]
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import re
 import shutil
 import sys
@@ -54,6 +58,54 @@ _COMPONENT_LINK = re.compile(r"\[([^\]]*)\]\([^)\n]*/components/([a-z-]+)\.md\)"
 _TPL_REF = re.compile(r"/(?:plan-templates|templates)/([a-z-]+)\.md")
 
 
+# ---------------------------------------------------------------- storage seam
+
+
+def _load_seam():
+    """Import the vendored seam module (definitions live once in storage-backends/)."""
+    spec = importlib.util.spec_from_file_location(
+        "overlay_seam", _ROOT / "storage-backends" / "seam.py"
+    )
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+_seam = _load_seam()
+
+# `§ op` — the abstract op reference/definition token used across the seam.
+_OP_RE = re.compile(r"§\s*([a-z][a-z0-9-]*)")
+_OP_DEF_RE = re.compile(r"^#{1,6}\s*§\s*([a-z][a-z0-9-]*)", re.MULTILINE)
+
+
+def _read_markdown_backend(root: Path) -> str | None:
+    """The markdown backend doc for this repo, or None when it is not present."""
+    path = root / "storage-backends" / "markdown.md"
+    return path.read_text(encoding="utf-8") if path.is_file() else None
+
+
+def _core_without_mechanics(text: str) -> str:
+    """The procedure text with its ``## Storage Mechanics`` section removed.
+
+    Isolates the ops the *body* references from the ops the backend *defines*.
+    """
+    lines = text.splitlines(keepends=True)
+    start = next((i for i, ln in enumerate(lines) if ln.strip() == _seam.STORAGE_MARKER), None)
+    if start is None:
+        return text
+    end = len(lines)
+    for j in range(start + 1, len(lines)):
+        if lines[j].startswith("## ") or lines[j].strip() == "---":
+            end = j
+            break
+    return "".join(lines[:start] + lines[end:])
+
+
+def _referenced_ops(text: str) -> set[str]:
+    """Ops the procedure body references (mechanics section excluded)."""
+    return set(_OP_RE.findall(_core_without_mechanics(text)))
+
+
 @dataclass
 class Report:
     """What one compiled procedure pulled in, and anything it could not resolve."""
@@ -64,10 +116,18 @@ class Report:
     templates: list[str] = field(default_factory=list)
     missing_components: list[str] = field(default_factory=list)
     missing_templates: list[str] = field(default_factory=list)
+    referenced_ops: list[str] = field(default_factory=list)
+    unresolved_ops: list[str] = field(default_factory=list)
+    missing_backend: bool = False
 
     @property
     def clean(self) -> bool:
-        return not self.missing_components and not self.missing_templates
+        return not (
+            self.missing_components
+            or self.missing_templates
+            or self.unresolved_ops
+            or self.missing_backend
+        )
 
 
 def _read(path: Path) -> str:
@@ -206,6 +266,26 @@ def compile_one(src: Path, out_dir: Path, root: Path) -> Report:
     report.components = used
     report.missing_components = missing
 
+    # Storage seam: a seamed procedure's `## Storage Mechanics` section is swapped for the
+    # markdown backend's concrete ops, so the installed command carries the mechanics.
+    if _seam.has_seam(text):
+        backend_doc = _read_markdown_backend(root)
+        if backend_doc is None:
+            report.missing_backend = True
+        else:
+            report.referenced_ops = sorted(_referenced_ops(text))
+            try:
+                section = _seam.compose_backend_section(backend_doc, src.stem, used)
+            except KeyError:
+                report.missing_backend = True
+            else:
+                report.unresolved_ops = sorted(
+                    set(report.referenced_ops) - set(_OP_DEF_RE.findall(section))
+                )
+                text = _seam.substitute_storage_mechanics(text, section)
+                text, from_backend, _ = inline_components(text, root / "components")
+                report.missing_components = sorted(set(missing) | set(from_backend))
+
     # Templates are resolved but never inlined — the agent copies them by path.
     order, missing_templates = collect_templates(text, root)
     report.templates = order
@@ -270,6 +350,14 @@ def main(argv: list[str] | None = None) -> int:
             print(f"  WARNING: {r.name}: component not found: {name}.md", file=sys.stderr)
         for name in r.missing_templates:
             print(f"  WARNING: {r.name}: template not found: {name}.md", file=sys.stderr)
+        if r.missing_backend:
+            print(
+                f"  WARNING: {r.name}: seam marker but no markdown backend section "
+                f"(storage-backends/markdown.md → ## {r.name})",
+                file=sys.stderr,
+            )
+        for name in r.unresolved_ops:
+            print(f"  WARNING: {r.name}: unresolved storage op: § {name}", file=sys.stderr)
     if unresolved:
         print(f"  {len(unresolved)} procedure(s) with unresolved references.", file=sys.stderr)
         if args.strict:

@@ -4,6 +4,8 @@ Maintain a per-project index of orientation artifacts (READMEs, architecture doc
 
 Map file: `shared-memory/[PROJECT-NAME]/context/orientation-map.md`. Format: [orientation-map-template.md]([path-to-agent-memory-project]/templates/orientation-map-template.md).
 
+*How* the map is physically read and written is delegated to the active **storage backend** (see [Storage Mechanics](#storage-mechanics)).
+
 ---
 
 ## Arguments
@@ -22,9 +24,9 @@ Map file: `shared-memory/[PROJECT-NAME]/context/orientation-map.md`. Format: [or
 
 1. **Identify project** — match cwd against known project mappings (`shared-memory/[project]/` existence + `shared-memory/integrations/external-integrations.md` task-system mapping). If a project-name arg is passed, use it. If neither: skip silently.
 2. **Compute central map path** — `[AGENT-MEMORY-PATH]/shared-memory/[PROJECT-NAME]/context/orientation-map.md`. Record `CENTRAL_MAP_EXISTS`.
-3. **Resolve the home** — apply the [HOME contract component]([path-to-agent-memory-project]/components/home-contract.md). `MAP_PATH` and `CONTEXT_DIR` are the active values (central by default; a localized project's values are resolved by `agent-memory-local`). `SOURCE_OF_TRUTH` = `project` when a localized home is active, else `central`. `MAP_EXISTS` = whether `MAP_PATH` exists (a localized project whose `MAP_PATH` is missing is caught by `agent-memory-local`'s reachability guard).
+3. **Resolve the home** — apply the [HOME contract component]([path-to-agent-memory-project]/components/home-contract.md). `MAP_PATH` and `CONTEXT_DIR` are the active values. `MAP_EXISTS` = whether `MAP_PATH` exists (**§ map-exists**).
 
-> **All mode blocks below operate on the resolved `MAP_PATH` / `CONTEXT_DIR`.** Where a block names `shared-memory/[PROJECT-NAME]/context/orientation-map.md`, read it as `MAP_PATH` — identical for non-localized projects, in-project `docs/` for localized ones.
+> **All mode blocks below operate on `MAP_PATH` / `CONTEXT_DIR`.** Where a block names `shared-memory/[PROJECT-NAME]/context/orientation-map.md`, read it as `MAP_PATH`.
 
 Then jump to the matching mode block below — read only that block.
 
@@ -41,7 +43,7 @@ Then jump to the matching mode block below — read only that block.
 
 ### L2: Read map + apply role filter
 
-Read the map file. For each entry, apply [Role Filter Rules](#role-filter-rules) — load only entries the current agent's role qualifies for. For each `orientation-map-link` entry that passes the filter: ALSO read the linked child map (same rules apply). If a linked child map is missing: flag the parent entry with `[child map missing — run /map-orientation --rescan when ready]` and continue.
+Read the map (**§ read-map**). For each entry, apply [Role Filter Rules](#role-filter-rules) — load only entries the current agent's role qualifies for. For each `orientation-map-link` entry that passes the filter: ALSO read the linked child map (same rules apply). If a linked child map is missing: flag the parent entry with `[child map missing — run /map-orientation --rescan when ready]` and continue.
 
 ### L3: mtime check
 
@@ -56,7 +58,7 @@ stat -c %Y "[entry-path]"
 
 ### L4: Write if changed
 
-If L3 flagged any entries: write the updated map back. Else: skip the write.
+If L3 flagged any entries: write the updated map back (**§ write-map**). Else: skip the write.
 
 ### L5: Report
 
@@ -77,7 +79,7 @@ Orientation map loaded: [MAP_PATH]
 ### C1: Branch on existence
 
 - `MAP_EXISTS = true` → confirm with [USER-NAME]: *"map already exists, did you mean `--rescan`?"* Wait for confirmation.
-- `MAP_EXISTS = false` → ensure `[CONTEXT_DIR]` exists (`mkdir -p`), continue.
+- `MAP_EXISTS = false` → ensure the context dir exists (**§ ensure-context-dir**), continue.
 
 ### C2: Scan for orientation artifacts
 
@@ -167,7 +169,7 @@ Use `head -20` / first 500 chars only. Do NOT read full file content.
 
 ### C6: Write map (+ sub-maps)
 
-Copy [orientation-map-template.md]([path-to-agent-memory-project]/templates/orientation-map-template.md) to the map path. Populate frontmatter:
+Create the map from [orientation-map-template.md]([path-to-agent-memory-project]/templates/orientation-map-template.md) (**§ create-map**). Populate frontmatter:
 
 ```yaml
 ---
@@ -207,7 +209,7 @@ Orientation map created: [MAP_PATH]
 
 ### U2: Read map
 
-Read the map file into memory.
+Read the map into memory (**§ read-map**).
 
 ### U3: Update touched entries
 
@@ -220,7 +222,7 @@ For each path in the arg:
 
 ### U4: Write updated map
 
-Write back. No report — `/wrap-up` aggregates results in its final summary.
+Write back (**§ write-map**). No report — `/wrap-up` aggregates results in its final summary.
 
 ---
 
@@ -235,7 +237,7 @@ Write back. No report — `/wrap-up` aggregates results in its final summary.
 
 ### R2: Snapshot existing state
 
-Read the current map. Capture `(path → {status, last_verified, verified_by, update_trigger, notes})` per entry — this is what we preserve.
+Read the current map (**§ read-map**). Capture `(path → {status, last_verified, verified_by, update_trigger, notes})` per entry — this is what we preserve.
 
 ### R3: Scan + classify
 
@@ -252,7 +254,7 @@ For each snapshot entry whose path was NOT scanned:
 
 ### R5: Write merged map
 
-Write back. Update `last_full_scan: [TODAY-DATE]`.
+Write back (**§ write-map**). Update `last_full_scan: [TODAY-DATE]`.
 
 ### R6: Report
 
@@ -280,7 +282,6 @@ Used by **Load Mode L2** when reading entries:
 - **/awaken-agent** — calls `/map-orientation` (bare, load-only) after project detection.
 - **/wrap-up** — calls `/map-orientation --session-touched [paths]` for orientation docs the session touched. Silent no-op if map missing.
 - **/update-project-context** — preferred path when a session DISCOVERED an entry's status is wrong. Direct edit; mtime check picks it up on next awakening.
-- **agent-memory-local** — owns localization: it graduates a consenting project's map + structural context into its own repo (`docs/`) and resolves the localized `MAP_PATH`/`CONTEXT_DIR` this procedure reads. All modes here operate on the in-project values transparently.
 - **/discovery-contract** — the four doc generators' bare **discovery mode** reads this map (per-entry `status`, via the resolved `MAP_PATH`) to mark units documented-vs-not. A doc on disk that is absent from the map surfaces there as a staleness flag (→ `--rescan`).
 
 ---
@@ -291,3 +292,14 @@ Used by **Load Mode L2** when reading entries:
 2. **Bloating the map with every markdown file.** Map covers ORIENTATION artifacts (README/architecture/flow/ADR/cross-cutting). Implementation docs, change logs, meeting notes belong elsewhere.
 3. **Flattening submodule docs into the root map when sub-map makes sense.** ≥5 docs under a sub-folder → sub-map + `orientation-map-link` from root.
 4. **Auto-creating child maps when parent's `orientation-map-link` points to missing file.** Flag the parent entry and let user trigger `--rescan` when ready.
+
+---
+
+## Storage Mechanics
+
+The operations referenced above — **§ map-exists**, **§ ensure-context-dir**, **§ read-map**, **§ write-map**, **§ create-map** — are defined by the **active storage backend**:
+
+- **Markdown (native)** — follow `storage-backends/markdown.md` → its `map-orientation` section.
+- **DB (Hermod)** — the equivalents live in `storage-backends/db.md` → its `map-orientation` section (not yet implemented).
+
+See the seam contract at `storage-backends/README.md` for how this swap works.

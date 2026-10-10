@@ -18,6 +18,7 @@ This repo holds the coding- and repository-oriented procedures that sit **on top
 - **Doc-gen**: `generate-readme`, `generate-docs`, `generate-architecture-docs`, `generate-domain-docs`, `generate-flow-docs`, `discovery-contract`
 - **QA** (moved out 2026-10-09): the QA pipeline (`analyze-code-quality`, `generate-standard`, `pixel-wizard`, `setup-qa-visual-instrument`, `map-qa-instrument`, `build-qa-bench`, `integration-test`, `run-qa-test`, `qa-status`, `generate-qa-checklist`) now lives in [`agent-memory-wizards`](https://github.com/alvseek/agent-memory-wizards) (`hermod-wizards`).
 - **Repo / integration**: `map-orientation`, `update-project-context`, `load-project-context`, `pull-all`/`pull-project`, `push-all`/`push-project`
+- **Storage backends** (`storage-backends/`): the seam the project-memory procedures delegate their mechanics to — `markdown` live, `db` declared and deferred (ADR-023).
 - **Localization** (moved out 2026-10-09): `localize-context`, `localized-memory-workflow`, and the `HOME`-resolution rule now live in [`agent-memory-local`](https://github.com/alvseek/agent-memory-local) (`hermod-local`). This repo carries only `components/home-contract.md` (the central default) and hands off to `/load-local-context`.
 - **Fleet** (moved out 2026-10-08): lives in the sibling repo [`agent-memory-fleet`](https://github.com/alvseek/agent-memory-fleet) (`hermod-fleet`). `awaken-coder` surfaces a one-line pointer to it — the commands, scripts, and templates are no longer here.
 

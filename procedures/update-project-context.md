@@ -2,6 +2,8 @@
 
 Create or update project-specific context files. Routes new entries to **shared** (`shared-memory/[project-name]/context/`, for cross-agent universal facts) or **private** (`agent-[domain]/knowledge-base/[project-name]/`, for domain-specialized facts) based on a heuristic + user confirmation. Also supports moving an existing private entry to shared.
 
+*How* the entries are physically stored is delegated to the active **storage backend** (see [Storage Mechanics](#storage-mechanics)).
+
 ## Arguments
 
 `$ARGUMENTS`
@@ -53,34 +55,25 @@ Based on the confirmed scope, the subsequent steps will use the matching path:
 - **Shared scope**: `[AGENT-MEMORY-PATH]/shared-memory/[project-name]/context/`
 - **Private scope**: `[AGENT-MEMORY-PATH]/agent-[domain]/knowledge-base/[project-name]/`
 
-> **Storage location**: resolve the shared/private dirs via the [HOME contract component]([path-to-agent-memory-project]/components/home-contract.md). `CONTEXT_DIR` and `KNOWLEDGE_DIR` are the active values (central by default; a localized project's values are resolved by `agent-memory-local`). Use the resolved dirs for every scope-aware step below (folder check, create, index).
+> **Storage location**: use the [HOME contract component]([path-to-agent-memory-project]/components/home-contract.md)'s `CONTEXT_DIR` (shared) and `KNOWLEDGE_DIR` (private). Use those dirs for every scope-aware step below (folder check, create, index).
 
 > **Move operation**: If the user has asked to **move** an existing private entry to shared (e.g., "move X to shared", "promote X to shared"), skip the rest of this procedure and follow the [Move-to-Shared Sub-Flow](#move-to-shared-sub-flow) section below.
 
-### Step 3: Check Project Folder
+### Step 3: Ensure the Project Folder
 
-Check if the project folder exists at the scope-aware path determined in Step 2:
-- **Shared scope**: `[AGENT-MEMORY-PATH]/shared-memory/[project-name]/context/`
-- **Private scope**: `[AGENT-MEMORY-PATH]/agent-[domain]/knowledge-base/[project-name]/`
+Ensure the scope-aware project folder exists (**§ ensure-context-dir**), creating it if missing. Proceed to Step 4.
 
-- **If exists**: Proceed to Step 4
-- **If not exists**: Create the folder:
-  - Shared: `mkdir -p [AGENT-MEMORY-PATH]/shared-memory/[project-name]/context`
-  - Private: `mkdir -p [AGENT-MEMORY-PATH]/agent-[domain]/knowledge-base/[project-name]`
-
-### Step 4: Determine Theme and Check Existing Files
+### Step 4: Determine Theme and Check Existing Entries
 
 Identify the theme of the context being captured (e.g., `environment-setup`, `deployment`, `auth-module`, `database-conventions`).
 
-Scan existing files in the scope-aware folder to check if a file already covers this theme:
-- **If existing file found**: Proceed to Step 5B (Update)
+List the existing entries in the scope-aware folder (**§ list-context-entries**) to check whether one already covers this theme:
+- **If an existing entry matches**: Proceed to Step 5B (Update)
 - **If no match**: Proceed to Step 5A (Create New)
 
-### Step 5A: Create New Context File
+### Step 5A: Create New Context Entry
 
-1. Copy the [Project Context Template]([path-to-agent-memory-project]/templates/project-context-template.md) to the scope-aware path: `[scope-folder]/[theme].md`
-   - Shared: `cp [path-to-agent-memory-project]/templates/project-context-template.md [AGENT-MEMORY-PATH]/shared-memory/[project-name]/context/[theme].md`
-   - Private: `cp [path-to-agent-memory-project]/templates/project-context-template.md [AGENT-MEMORY-PATH]/agent-[domain]/knowledge-base/[project-name]/[theme].md`
+1. Create the new entry from the [Project Context Template]([path-to-agent-memory-project]/templates/project-context-template.md) (**§ create-context-entry**).
 2. Fill the YAML frontmatter:
    - `project`: the project name from Step 1
    - `tags`: relevant feature/module tags for selective loading (e.g., `[environment, setup, vm, gcloud]`)
@@ -90,34 +83,21 @@ Scan existing files in the scope-aware folder to check if a file already covers 
 3. Fill the markdown sections (Purpose, Quick Reference, Details, Sources)
 4. Proceed to Step 6
 
-### Step 5B: Update Existing Context File
+### Step 5B: Update Existing Context Entry
 
-1. Read the existing file
-2. Update or append relevant content
+1. Read the existing entry (**§ read-context-entry**)
+2. Update or append the relevant content, then write it back (**§ update-context-entry**)
 3. Update the `updated:` date in YAML frontmatter to today's date
 4. Update `tags:` if new tags are relevant
 5. Proceed to Step 6
 
-### Step 6: Check 1000-Line Limit
+### Step 6: Check the Entry Size
 
-Check the file line count after writing:
-- **If under 1000 lines**: Proceed to Step 7
-- **If over 1000 lines**: The file has grown too large. Split it:
-  1. Identify distinct sub-themes within the file
-  2. Create separate files for each sub-theme (e.g., `environment-setup.md` splits into `environment-local.md` + `environment-vm.md`)
-  3. Each new file gets its own frontmatter with appropriate tags
-  4. Remove the original oversized file
-  5. Proceed to Step 7 (update index for all new files)
+Housekeeping after writing (**§ check-entry-size**): under the size cap, proceed to Step 7. Over it, split the entry into one file per distinct sub-theme (each with its own frontmatter and tags), remove the original, and index every new file in Step 7.
 
-### Step 7: Update Context Index
+### Step 7: Update the Context Index
 
-Update the scope-aware `context-index.md`:
-- **Shared**: `[AGENT-MEMORY-PATH]/shared-memory/[project-name]/context/context-index.md`
-- **Private**: `[AGENT-MEMORY-PATH]/agent-[domain]/knowledge-base/[project-name]/context-index.md`
-
-- **If the file doesn't exist**, create it with header: `# [project-name] Project Context`
-- Add or update the entry for this file
-- Format: `- [theme.md](theme.md) — description (tags: tag1, tag2, tag3)`
+Update the scope-aware context index (**§ update-context-index**) with this entry.
 
 ---
 
@@ -125,44 +105,38 @@ Update the scope-aware `context-index.md`:
 
 When the user explicitly asks to move an existing private entry to shared (e.g., "move X to shared", "promote X to shared"), follow this sub-flow instead of the normal procedure.
 
-### M.1: Identify Source File
+### M.1: Identify Source Entry
 
-Locate the private file to move:
-- Source path: `[AGENT-MEMORY-PATH]/agent-[domain]/knowledge-base/[project-name]/[theme].md`
-- Source index: `[AGENT-MEMORY-PATH]/agent-[domain]/knowledge-base/[project-name]/context-index.md`
+Locate the private entry to move (**§ list-context-entries**).
 
 If unclear which theme the user means, ask: "Which file should I move? Available private entries: [list]"
 
 ### M.2: Check Collision in Shared
 
-Check if a file with the same theme name already exists in shared:
-- `[AGENT-MEMORY-PATH]/shared-memory/[project-name]/context/[theme].md`
+List the shared entries (**§ list-context-entries**) to check whether one with the same theme already exists.
 
 - **If no collision**: Proceed to M.3
 - **If collision**: **STOP**. Present the conflict to user: "A shared file with this name already exists. Options: A) merge the content manually first, B) rename the private file before moving, C) cancel." Wait for user direction.
 
-### M.3: Write to Shared Location
+### M.3: Move to the Shared Location
 
-1. Ensure the shared folder exists:
-   `mkdir -p [AGENT-MEMORY-PATH]/shared-memory/[project-name]/context`
-2. Copy the private file content (unchanged — same template) to the shared location:
-   `cp [AGENT-MEMORY-PATH]/agent-[domain]/knowledge-base/[project-name]/[theme].md [AGENT-MEMORY-PATH]/shared-memory/[project-name]/context/[theme].md`
+Ensure the shared folder exists (**§ ensure-context-dir**), then copy the private entry's content verbatim to the shared location (**§ move-context-entry**).
 
-### M.4: Delete Private File
+### M.4: Delete the Private Entry
 
-Remove the private file:
-`rm [AGENT-MEMORY-PATH]/agent-[domain]/knowledge-base/[project-name]/[theme].md`
+Remove the private entry (**§ delete-context-entry**).
 
 ### M.5: Update Both Indexes
 
-1. **Remove entry from private index**: Edit `[AGENT-MEMORY-PATH]/agent-[domain]/knowledge-base/[project-name]/context-index.md` and delete the line referencing this theme
-2. **Add entry to shared index**: Edit `[AGENT-MEMORY-PATH]/shared-memory/[project-name]/context/context-index.md` and add the entry (create the index file with `# [project-name] Project Context` header if it doesn't exist):
-   - Format: `- [theme.md](theme.md) — description (tags: tag1, tag2, tag3)`
+Remove the entry from the private index and add it to the shared index (**§ update-context-index**).
 
-### Partial-Failure Cleanup
+---
 
-This sub-flow is **not atomic** at the filesystem level. If a step fails partway:
-- **After M.3 but before M.4**: Both files exist. Manual cleanup: delete the duplicate that shouldn't be there (usually the private one).
-- **After M.4 but before M.5**: File is moved but indexes are inconsistent. Manual cleanup: finish the index updates.
+## Storage Mechanics
 
-If any step fails, report the partial state to user and ask before retrying.
+The operations referenced above — **§ ensure-context-dir**, **§ list-context-entries**, **§ read-context-entry**, **§ create-context-entry**, **§ update-context-entry**, **§ move-context-entry**, **§ delete-context-entry**, **§ check-entry-size**, **§ update-context-index** — are defined by the **active storage backend**:
+
+- **Markdown (native)** — follow `storage-backends/markdown.md` → its `update-project-context` section.
+- **DB (Hermod)** — the equivalents live in `storage-backends/db.md` → its `update-project-context` section (not yet implemented).
+
+See the seam contract at `storage-backends/README.md` for how this swap works.
